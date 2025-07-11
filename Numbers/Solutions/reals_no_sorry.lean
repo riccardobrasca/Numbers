@@ -3,14 +3,14 @@ import Numbers.Solutions.rationals_order_no_sorry
 -- Lean already knows the absolute value (since there is an order on `MyRat`: `|x|` is defined as
 -- `max (x, -x)`.
 --See the files `Mathlib.Algebra.Order.*.Abs` for various properties
-abbrev IsCauchy (x : ℕ → MyRat) : Prop :=
+abbrev IsCauchy (x : MyNat → MyRat) : Prop :=
   ∀ ε, 0 < ε → ∃ N, ∀ p q, N ≤ p → N ≤ q → |x p - x q| ≤ ε
 
 open Finset in
-lemma IsCauchy.bounded {x : ℕ → MyRat} (hx : IsCauchy x) : ∃ B, 0 < B ∧ ∀ n, |x n| ≤ B := by
+lemma IsCauchy.bounded {x : MyNat → MyRat} (hx : IsCauchy x) : ∃ B, 0 < B ∧ ∀ n, |x n| ≤ B := by
   rcases hx 1 (by simp) with ⟨A, hA⟩
-  let S' := (range (A + 1)).image (fun n ↦ |x n|)
-  have hEmpty' : S'.Nonempty := image_nonempty.2 (nonempty_range_iff.2 (by grind))
+  let S' := (Finset.Icc 0 A).image (fun n ↦ |x n|)
+  have hEmpty' : S'.Nonempty := image_nonempty.2 (by simp)
   let M := max' _ hEmpty'
   use M + 1
   constructor
@@ -18,13 +18,13 @@ lemma IsCauchy.bounded {x : ℕ → MyRat} (hx : IsCauchy x) : ∃ B, 0 < B ∧ 
     refine le_trans (abs_nonneg (x 0)) ?_
     apply le_max'
     simp [S']
-    exact ⟨0, by linarith, rfl⟩
+    refine ⟨0, by simp, rfl⟩
   intro n
   rcases le_total n A with H | H
   · calc |x n| ≤ M := by
           apply le_max'
           simp [S']
-          exact ⟨n, by linarith, rfl⟩
+          refine ⟨n, H, rfl⟩
          _ ≤ M + 1 := by linarith
   · calc |x n| = |x A + (x n - x A)| := by ring_nf
          _ ≤ |x A| + |x n - x A| := abs_add _ _
@@ -32,7 +32,7 @@ lemma IsCauchy.bounded {x : ℕ → MyRat} (hx : IsCauchy x) : ∃ B, 0 < B ∧ 
                       gcongr
                       · apply le_max'
                         simp [S']
-                        exact ⟨A, by linarith, rfl⟩
+                        exact ⟨A, by simp, rfl⟩
                       · exact hA _ _ H rfl.le
 
 abbrev MyPrereal := {x // IsCauchy x}
@@ -42,14 +42,14 @@ namespace MyPrereal
 open MyPrereal
 
 --ignore the following
-instance funLike : FunLike MyPrereal ℕ MyRat where
+instance funLike : FunLike MyPrereal MyNat MyRat where
   coe := Subtype.val
   coe_injective' _ _ := Subtype.ext
 
 lemma prop (x : MyPrereal) : ∀ ε, 0 < ε → ∃ N, ∀ p q, N ≤ p → N ≤ q → |x p - x q| ≤ ε :=
   x.2
 
-@[simp] lemma coe_apply {x : ℕ → MyRat} (hx : IsCauchy x) (n : ℕ) :
+@[simp] lemma coe_apply {x : MyNat → MyRat} (hx : IsCauchy x) (n : MyNat) :
     (⟨x, hx⟩ : MyPrereal) n = x n := by
   rfl
 
@@ -75,13 +75,17 @@ lemma R_symm : ∀ {x y}, R x y → R y x := by
   rw [abs_sub_comm]
   exact HN n hn
 
+attribute [grind] le_of_max_le_left
+attribute [grind] le_of_max_le_right
+attribute [grind] le_trans
+
 lemma R_trans : ∀ {x y z}, R x y → R y z → R x z := by
   intro x y z hxy hyz ε hε
   rcases hxy (ε/2) (by linarith) with ⟨N, HN⟩
   rcases hyz (ε/2) (by linarith) with ⟨M, HM⟩
   use max N M
   intro n hn
-  calc |x n - z n| = |(x n - y n) + (y n - z n)| := by grind
+  calc |x n - z n| = |(x n - y n) + (y n - z n)| := by ring_nf
        _ ≤ |x n - y n| + |(y n - z n)| := abs_add_le _ _
        _ ≤ (ε/2) + (ε/2) := by grw [HN n (by grind), HM n (by grind)]
        _ ≤ ε := by simp
@@ -107,16 +111,16 @@ lemma IsCauchy.const (x : MyRat) : IsCauchy (fun _ ↦ x) := by
 instance zero : Zero MyPrereal where
   zero := ⟨0, IsCauchy.const 0⟩
 
-@[simp] lemma zero_def (n : ℕ) : (0 : MyPrereal) n = 0 := by
+@[simp] lemma zero_def (n : MyNat) : (0 : MyPrereal) n = 0 := by
   rfl
 
 instance one : One MyPrereal where
   one := ⟨1, IsCauchy.const 1⟩
 
-@[simp] lemma one_def (n : ℕ) : (1 : MyPrereal) n = 1 := by
+@[simp] lemma one_def (n : MyNat) : (1 : MyPrereal) n = 1 := by
   rfl
 
-lemma IsCauchy.neg {x : ℕ → MyRat} (hx : IsCauchy x) : IsCauchy (-x) := by
+lemma IsCauchy.neg {x : MyNat → MyRat} (hx : IsCauchy x) : IsCauchy (-x) := by
   intro ε hε
   rcases hx ε hε with ⟨N, HN⟩
   use N
@@ -128,7 +132,7 @@ lemma IsCauchy.neg {x : ℕ → MyRat} (hx : IsCauchy x) : IsCauchy (-x) := by
 instance : Neg MyPrereal where
   neg x := ⟨-x, x.2.neg⟩
 
-@[simp] lemma neg_def (x : MyPrereal) (n : ℕ) : (-x) n = -x n := by
+@[simp] lemma neg_def (x : MyPrereal) (n : MyNat) : (-x) n = -x n := by
   rfl
 
 lemma neg_quotient ⦃x x' : MyPrereal⦄ (h : x ≈ x') : -x ≈ -x' := by
@@ -138,7 +142,7 @@ lemma neg_quotient ⦃x x' : MyPrereal⦄ (h : x ≈ x') : -x ≈ -x' := by
   intro n hn
   simpa [← sub_eq_neg_add, abs_sub_comm] using HN n hn
 
-lemma IsCauchy.add {x y : ℕ → MyRat} (hx : IsCauchy x) (hy : IsCauchy y) : IsCauchy (x + y) := by
+lemma IsCauchy.add {x y : MyNat → MyRat} (hx : IsCauchy x) (hy : IsCauchy y) : IsCauchy (x + y) := by
   intro ε hε
   rcases hx (ε/2) (by linarith) with ⟨N, HN⟩
   rcases hy (ε/2) (by linarith) with ⟨M, HM⟩
@@ -155,10 +159,10 @@ instance : Add MyPrereal where
 instance : Sub MyPrereal where
   sub x y := x + -y
 
-@[simp] lemma add_def (x y : MyPrereal) (n : ℕ) : (x + y) n = x n + y n := by
+@[simp] lemma add_def (x y : MyPrereal) (n : MyNat) : (x + y) n = x n + y n := by
   rfl
 
-@[simp] lemma sub_def (x y : MyPrereal) (n : ℕ) : (x - y) n = x n - y n := by
+@[simp] lemma sub_def (x y : MyPrereal) (n : MyNat) : (x - y) n = x n - y n := by
   rfl
 
 lemma add_quotient ⦃x x' : MyPrereal⦄ (h : x ≈ x') ⦃y y' : MyPrereal⦄ (h' : y ≈ y') :
@@ -173,7 +177,7 @@ lemma add_quotient ⦃x x' : MyPrereal⦄ (h : x ≈ x') ⦃y y' : MyPrereal⦄ 
        _ ≤ ε/2 + ε/2 := by grw [HN n (by grind), HN' n (by grind)]
        _ = ε := by simp
 
-lemma IsCauchy.mul {x y : ℕ → MyRat} (hx : IsCauchy x) (hy : IsCauchy y) : IsCauchy (x * y) := by
+lemma IsCauchy.mul {x y : MyNat → MyRat} (hx : IsCauchy x) (hy : IsCauchy y) : IsCauchy (x * y) := by
   rcases hx.bounded with ⟨A, hApos, hA⟩
   rcases hy.bounded with ⟨B, hBpos, hB⟩
   intro ε hε
@@ -192,7 +196,7 @@ lemma IsCauchy.mul {x y : ℕ → MyRat} (hx : IsCauchy x) (hy : IsCauchy y) : I
 instance : Mul MyPrereal where
   mul x y := ⟨x * y, x.2.mul y.2⟩
 
-@[simp] lemma mul_def (x y : MyPrereal) (n : ℕ) : (x * y) n = x n * y n := by
+@[simp] lemma mul_def (x y : MyPrereal) (n : MyNat) : (x * y) n = x n * y n := by
   rfl
 
 lemma mul_quotient ⦃x x' : MyPrereal⦄ (h : x ≈ x') ⦃y y' : MyPrereal⦄ (h' : y ≈ y') :
@@ -242,11 +246,11 @@ lemma IsCauchy.inv {x : MyPrereal} (H : ¬(x ≈ 0)) : IsCauchy (x⁻¹) := by
 open Classical in
 noncomputable def inv (x : MyPrereal) : MyPrereal := if H : ¬(x ≈ 0) then ⟨_, IsCauchy.inv H⟩ else 0
 
-@[simp] lemma inv_def {x : MyPrereal} (H : ¬(x ≈ 0)) (n : ℕ) :
+@[simp] lemma inv_def {x : MyPrereal} (H : ¬(x ≈ 0)) (n : MyNat) :
     inv x n = (x n)⁻¹ := by
   simp [inv, H]
 
-@[simp] lemma inv_def' {x : MyPrereal} (H : ¬(x ≈ 0)) (n : ℕ) :
+@[simp] lemma inv_def' {x : MyPrereal} (H : ¬(x ≈ 0)) (n : MyNat) :
     (⟨x⁻¹, IsCauchy.inv H⟩ : MyPrereal) n = (x n)⁻¹ := by
   rfl
 
@@ -538,7 +542,7 @@ def IsNonneg (x : MyPrereal) : Prop :=
 lemma IsNonneg_of_equiv_zero {x : MyPrereal} (hx : x ≈ 0) : IsNonneg x := by
   simp [IsNonneg, hx]
 
-lemma IsNonneg_of_nonneg {x : MyPrereal} (N : ℕ) (hx : ∀ n, N ≤ n → 0 ≤ x n) : IsNonneg x := by
+lemma IsNonneg_of_nonneg {x : MyPrereal} (N : MyNat) (hx : ∀ n, N ≤ n → 0 ≤ x n) : IsNonneg x := by
   by_cases h : x ≈ 0
   · exact IsNonneg_of_equiv_zero h
   rcases pos_of_not_equiv_zero h with ⟨δ, hδpos, M, HM⟩
@@ -571,8 +575,8 @@ lemma eq_zero_of_isNonneg_of_isNonneg_neg {x : MyPrereal} (h : IsNonneg x) (h' :
   simp only [IsNonneg, H, or_false, H'] at h h'
   rcases h with ⟨δ, hδpos, N, HN⟩
   rcases h' with ⟨δ', hδ'pos, N', HN'⟩
-  specialize HN (max N N') (by grind)
-  specialize HN' (max N N') (by grind)
+  specialize HN (max N N') (by exact le_max_left N N')
+  specialize HN' (max N N') (by exact le_max_right N N')
   simp only [neg_def] at HN'
   linarith
 
@@ -784,10 +788,10 @@ lemma myRat_dense_rat (x : MyReal) {ε : MyReal} (hε : 0 < ε) : ∃ r, |x - k 
   rcases myRat_dense_rat' x hδpos with ⟨r, hr⟩
   refine ⟨r, by linarith⟩
 
-abbrev TendsTo (f : ℕ → MyReal) (x : MyReal) : Prop :=
+abbrev TendsTo (f : MyNat → MyReal) (x : MyReal) : Prop :=
   ∀ ε, 0 < ε → ∃ N, ∀ n, N ≤ n → |f n - x| ≤ ε
 
-lemma tendsTo_of_myRat_tendsTo {f : ℕ → MyReal} {x : MyReal}
+lemma tendsTo_of_myRat_tendsTo {f : MyNat → MyReal} {x : MyReal}
     (h : ∀ (ε : MyRat), 0 < ε → ∃ N, ∀ n, N ≤ n → |f n - x| ≤ k ε) : TendsTo f x := by
   intro ε hε
   rcases myRat_dense_of_pos hε with ⟨δ, hδpos, hδ⟩
@@ -795,10 +799,10 @@ lemma tendsTo_of_myRat_tendsTo {f : ℕ → MyReal} {x : MyReal}
   refine ⟨N, fun n hn ↦ ?_⟩
   linarith [HN n hn]
 
-abbrev IsConvergent (f : ℕ → MyReal) : Prop :=
+abbrev IsConvergent (f : MyNat → MyReal) : Prop :=
   ∃ x, TendsTo f x
 
-abbrev IsCauchy (f : ℕ → MyReal) : Prop :=
+abbrev IsCauchy (f : MyNat → MyReal) : Prop :=
   ∀ ε, 0 < ε → ∃ N, ∀ p q, N ≤ p → N ≤ q → |f p - f q| ≤ ε
 
 lemma tendsTo_myRat (x : MyPrereal) : TendsTo (fun n ↦ k (x n)) ⟦x⟧ := by
@@ -819,23 +823,23 @@ lemma tendsTo_myRat (x : MyPrereal) : TendsTo (fun n ↦ k (x n)) ⟦x⟧ := by
 
 section completeness
 
-lemma ex_approx_punctual (x : MyReal) (n : ℕ) :
+lemma ex_approx_punctual (x : MyReal) (n : MyNat) :
     ∃ (r : MyRat), |x - k r| < k ((MyRat.i (n+1))⁻¹) := by
   refine myRat_dense_rat' x ?_
   rw [inv_pos, ← MyRat.i_zero, MyRat.i_lt_iff]
-  linarith
+  simp
 
-lemma ex_approx (f : ℕ → MyReal) :
-    ∃ (g : ℕ → MyRat), ∀ n, |f n - k (g n)| < k ((MyRat.i (n+1))⁻¹) := by
+lemma ex_approx (f : MyNat → MyReal) :
+    ∃ (g : MyNat → MyRat), ∀ n, |f n - k (g n)| < k ((MyRat.i (n+1))⁻¹) := by
   choose g h using (fun n ↦ ex_approx_punctual (f n) n)
   refine ⟨g, h⟩
 
-noncomputable def approx (f : ℕ → MyReal) : ℕ → MyRat := (ex_approx f).choose
+noncomputable def approx (f : MyNat → MyReal) : MyNat → MyRat := (ex_approx f).choose
 
-lemma approx_spec (f : ℕ → MyReal) : ∀ n, |f n - k ((approx f) n)| < k ((MyRat.i (n+1))⁻¹) :=
+lemma approx_spec (f : MyNat → MyReal) : ∀ n, |f n - k ((approx f) n)| < k ((MyRat.i (n+1))⁻¹) :=
   (ex_approx f).choose_spec
 
-lemma archimedean (x : MyReal) : ∃ (n : ℕ), x ≤ k (MyRat.i (n + 1)) := by
+lemma archimedean (x : MyReal) : ∃ (n : MyNat), x ≤ k (MyRat.i (n + 1)) := by
   refine Quot.induction_on x ?_
   intro x
   rcases x.bounded with ⟨r, hrpos, hr⟩
@@ -846,16 +850,16 @@ lemma archimedean (x : MyReal) : ∃ (n : ℕ), x ≤ k (MyRat.i (n + 1)) := by
   simp only [MyPrereal.sub_def, coe_apply, sub_nonneg]
   refine _root_.le_trans (abs_le.1 (hr m)).2 (_root_.le_trans hn ?_)
   rw [MyRat.i_le_iff]
-  linarith
+  simp
 
-lemma archimedean0 {x : MyReal} (hx : 0 < x) : ∃ (n : ℕ), k (MyRat.i (n + 1))⁻¹ ≤ x := by
+lemma archimedean0 {x : MyReal} (hx : 0 < x) : ∃ (n : MyNat), k (MyRat.i (n + 1))⁻¹ ≤ x := by
   rcases archimedean |x⁻¹| with ⟨n, hn⟩
   refine ⟨n, ?_⟩
   rwa [abs_inv, inv_le_comm₀ (abs_pos_of_pos hx), ← k_inv, abs_of_pos hx] at hn
   rw [← k_zero, k_lt_iff, ← MyRat.i_zero, MyRat.i_lt_iff]
-  linarith
+  simp
 
-lemma approx_cauchy {f : ℕ → MyReal} (hf : IsCauchy f) : _root_.IsCauchy (approx f) := by
+lemma approx_cauchy {f : MyNat → MyReal} (hf : IsCauchy f) : _root_.IsCauchy (approx f) := by
   intro ε hε
   have : 0 < k ε := by simpa [← k_lt_iff] using hε
   rcases hf ((k ε)/3) (by linarith) with ⟨N, HN⟩
@@ -865,14 +869,16 @@ lemma approx_cauchy {f : ℕ → MyReal} (hf : IsCauchy f) : _root_.IsCauchy (ap
   have HP : k (MyRat.i (p + 1))⁻¹ ≤ k (MyRat.i (M + 1))⁻¹ := by
     refine (k_le_iff _ _).2 (inv_anti₀ ?_ ?_)
     · rw [← MyRat.i_zero, MyRat.i_lt_iff]
-      linarith
+      simp
     · rw [MyRat.i_le_iff]
+      simp only [add_le_add_iff_right]
       grind
   have HQ : k (MyRat.i (q + 1))⁻¹ ≤ k (MyRat.i (M + 1))⁻¹ := by
     refine (k_le_iff _ _).2 (inv_anti₀ ?_ ?_)
     · rw [← MyRat.i_zero, MyRat.i_lt_iff]
-      linarith
+      simp
     · rw [MyRat.i_le_iff]
+      simp only [add_le_add_iff_right]
       grind
   calc |k (approx f p - approx f q)| = |k (approx f p) - k (approx f q)| := by rw [k_sub]
        _ = |-(f p - k (approx f p)) + (f p - f q) + (f q - k (approx f q))| := by ring_nf
@@ -886,13 +892,13 @@ lemma approx_cauchy {f : ℕ → MyReal} (hf : IsCauchy f) : _root_.IsCauchy (ap
        _ = k ε := by ring
 
 noncomputable
-def IsCauchy.approx {f : ℕ → MyReal} (hf : IsCauchy f) : MyPrereal := ⟨_, approx_cauchy hf⟩
+def IsCauchy.approx {f : MyNat → MyReal} (hf : IsCauchy f) : MyPrereal := ⟨_, approx_cauchy hf⟩
 
-nonrec lemma IsCauchy.approx_spec {f : ℕ → MyReal} (hf : IsCauchy f) :
+nonrec lemma IsCauchy.approx_spec {f : MyNat → MyReal} (hf : IsCauchy f) :
     ∀ n, |f n - k (hf.approx n)| < k ((MyRat.i (n+1))⁻¹) :=
   approx_spec f
 
-theorem complete {f : ℕ → MyReal} (hf : IsCauchy f) : IsConvergent f := by
+theorem complete {f : MyNat → MyReal} (hf : IsCauchy f) : IsConvergent f := by
   let x := hf.approx
   refine ⟨⟦x⟧, ?_⟩
   intro ε hε
@@ -902,8 +908,9 @@ theorem complete {f : ℕ → MyReal} (hf : IsCauchy f) : IsConvergent f := by
   have H : k (MyRat.i (n + 1))⁻¹ ≤ k (MyRat.i (M + 1))⁻¹ := by
     refine (k_le_iff _ _).2 (inv_anti₀ ?_ ?_)
     · rw [← MyRat.i_zero, MyRat.i_lt_iff]
-      linarith
+      simp
     · rw [MyRat.i_le_iff]
+      simp only [add_le_add_iff_right]
       grind
   calc |f n - ⟦x⟧| = |f n - k (x n) + (k (x n) - ⟦x⟧)| := by ring_nf
        _ ≤ |f n - k (x n)| + |k (x n) - ⟦x⟧| := by grw [abs_add]

@@ -1,42 +1,8 @@
 import Mathlib.Tactic
-
-/-!
-
-# The integers
-
-In this file we assume all standard facts about the naturals, and then build
-the integers from scratch.
-
-The strategy is to observe that every integer can be written as `a - b`
-for `a` and `b` naturals, so we define the "pre-integers" to be `ℕ × ℕ`, the pairs
-`(a, b)` of naturals. We define an equivalence relation `≈` on `ℕ × ℕ`, with the
-idea being that `(a, b) ≈ (c, d)` if and only if `a - b = c - d`. This doesn't
-make sense yet, but the equivalent equation `a + d = b + c` does. We prove
-that this is an equivalence relation, and define the integers to be the quotient.
-
-## The ring structure on the integers
-
-We extend addition and multiplication from the naturals to the integers,
-and also define negation `-x` and subtraction `x - y`.
-We then prove that the integers are a commutative ring. The proofs are all of
-the form "reduce to a question about naturals, and then solve it using tactics
-which prove theorems about naturals".
-
-## The ordering on the integers
-
-We prove that the integers are a total order, and also that the ordering
-plays well with the ring structure.
-
--/
-
-/-!
-
-## The pre-integers
-
--/
+import Numbers.Solutions.Naturals_instances
 
 -- A term of type `MyPreint` is just a pair of natural numbers.
-abbrev MyPreint := ℕ × ℕ
+abbrev MyPreint := MyNat × MyNat
 
 namespace MyPreint
 
@@ -46,18 +12,15 @@ namespace MyPreint
 
 -/
 
-/-- The equivalence relation on pre-integers, which we'll quotient out
-by to get integers. -/
+/-- The equivalence relation on pre-integers, which we'll quotient out by to get integers. -/
 def R (x y : MyPreint) : Prop := x.1 + y.2 = x.2 + y.1
 
-/-- Useful lemma that is mathematically trivial. -/
-lemma R_def (a b c d : ℕ) : R (a,b) (c,d) ↔ a + d = b + c := by
-  rfl
+@[simp] lemma R_def (a b c d : MyNat) : R (a,b) (c,d) ↔ a + d = b + c := by rfl
 
 lemma R_refl : ∀ x, R x x := by
-  dsimp [R] --Let's unfold the definitions
+  dsimp [R]
   intro x
-  rw [add_comm] --We alreado know that addition is commutative on natural numbers!
+  grind
 
 lemma R_symm : ∀ {x y}, R x y → R y x := by
   dsimp [Symmetric, R]
@@ -67,12 +30,10 @@ lemma R_symm : ∀ {x y}, R x y → R y x := by
 lemma R_trans : ∀ {x y z}, R x y → R y z → R x z := by
   intro x y z h1 h2
   rcases x with ⟨a, b⟩
-  -- the line above introduces natural numbers `a` and `b` such that `x` is the equivalence class
-  -- of the pair `(a,b)`: they exist by definition
   rcases y with ⟨c, d⟩
-  rcases z with ⟨e, f⟩ --one can do directly `intro ⟨a, b⟩ ⟨c, d⟩ ⟨e, f⟩`
+  rcases z with ⟨e, f⟩
   dsimp [R] at *
-  linarith -- `linarith` can do easy computation automatically, see also `ring`
+  linear_combination h1 + h2
 
 /-- Enable `≈` notation for `R` and ability to quotient by it -/
 -- you can ignore this
@@ -81,11 +42,11 @@ instance R_equiv : Setoid MyPreint where
   iseqv := ⟨R_refl, R_symm, R_trans⟩
 
 -- Teach the definition of `≈` to the simplifier, so `simp` becomes more powerful
-@[simp] lemma equiv_def (a b c d : ℕ) : (a, b) ≈ (c, d) ↔ a + d = b + c := by
+@[simp] lemma equiv_def (a b c d : MyNat) : (a, b) ≈ (c, d) ↔ a + d = b + c := by
   exact R_def a b c d
 
 -- Teach the definition of `Setoid.r` to the simplifier, so `simp` becomes more powerful
-@[simp] lemma equiv_def' (a b c d : ℕ) : Setoid.r (a, b) (c, d) ↔ a + d = b + c := by
+@[simp] lemma equiv_def' (a b c d : MyNat) : Setoid.r (a, b) (c, d) ↔ a + d = b + c := by
   exact equiv_def a b c d
 
 /-!
@@ -98,7 +59,7 @@ instance R_equiv : Setoid MyPreint where
 def neg (x : MyPreint) : MyPreint := (x.2, x.1)
 
 -- teach it to the simplifier
-@[simp] lemma neg_def (a b : ℕ) : neg (a, b) = (b, a) := by
+@[simp] lemma neg_def (a b : MyNat) : neg (a, b) = (b, a) := by
   rfl
 
 lemma neg_quotient ⦃x x' : MyPreint⦄ (h : x ≈ x') : neg x ≈ neg x' := by
@@ -107,13 +68,11 @@ lemma neg_quotient ⦃x x' : MyPreint⦄ (h : x ≈ x') : neg x ≈ neg x' := by
   simp at *
   grind
 
-
-
 /-- Addition on pre-integers. -/
 @[simp] def add (x y : MyPreint) : MyPreint := (x.1 + y.1, x.2 + y.2)
 
 -- teach it to the simplifier
-@[simp] lemma add_def (a b c d : ℕ) : add (a, b) (c, d) = (a + c, b + d) := by
+@[simp] lemma add_def (a b c d : MyNat) : add (a, b) (c, d) = (a + c, b + d) := by
   rfl
 
 lemma add_quotient ⦃x x' : MyPreint⦄ (h : x ≈ x') ⦃y y' : MyPreint⦄ (h' : y ≈ y') :
@@ -123,14 +82,14 @@ lemma add_quotient ⦃x x' : MyPreint⦄ (h : x ≈ x') ⦃y y' : MyPreint⦄ (h
   rcases x' with ⟨a', b'⟩
   rcases y' with ⟨c', d'⟩
   simp at *
-  linarith
+  linear_combination h + h'
 
 /-- Multiplication on pre-integers. -/
 @[simp] def mul (x y : MyPreint) : MyPreint :=
   (x.1 * y.1 + x.2 * y.2, x.1 * y.2 + x.2 * y.1)
 
 -- teach it to the simplifier
-@[simp] lemma mul_def (a b c d : ℕ) : mul (a, b) (c, d) = (a * c + b * d, a * d + b * c) := by
+@[simp] lemma mul_def (a b c d : MyNat) : mul (a, b) (c, d) = (a * c + b * d, a * d + b * c) := by
   rfl
 
 lemma mul_quotient ⦃x x' : MyPreint⦄ (h : x ≈ x') ⦃y y' : MyPreint⦄ (h' : y ≈ y') :
@@ -140,35 +99,7 @@ lemma mul_quotient ⦃x x' : MyPreint⦄ (h : x ≈ x') ⦃y y' : MyPreint⦄ (h
   rcases x' with ⟨a', b'⟩
   rcases y' with ⟨c', d'⟩
   simp at *
-  -- `nlinarith`, a more powerful version of `linarith` works, but let's do it by hand
-  --linear_combination (↑r - ↑s) * h1 + (↑a - ↑b) * h2 -- found using `polyrith`
-  --`H1` is `h * c'`
-  have H1 : a * c' + b' * c' = b * c' + a' * c' := by
-    rw [← add_mul, ← add_mul, h]
-  --`H2` is `h * d'`
-  have H2 : b * d' + a' * d' = a * d' + b' * d' := by
-    rw [← add_mul, ← add_mul, h]
-  --`H3` is `a * h'`
-  have H3 : a * c + a * d' = a * d + a * c' := by
-    rw [← mul_add, ← mul_add, h']
-  --`H4` is `b * h'`
-  have H4 : b * d + b * c' = b * c + b * d' := by
-    rw [← mul_add, ← mul_add, h']
-  -- `H5` is `H1+H4`
-  have H5 : a * c' + b' * c' + b * d + b * c' = b * c' + a' * c' + b * c + b * d' := by
-    linarith
-  -- `H6` is `H3+H2`
-  have H6 : a * c + a * d' + b * d' + a' * d' = a * d + a * c' + a * d' + b' * d' := by
-    linarith
-  -- `H` is `H5+H6`
-  have H7 : a * c' + b' * c' + b * d + b * c' + a * c + a * d' + b * d' + a' * d' =
-      b * c' + a' * c' + b * c + b * d' + a * d + a * c' + a * d' + b' * d' := by
-    linarith
-  -- let's now simplify `H`
-  have H : b' * c' + b * d + a * c + a' * d' =
-      a' * c' + b * c + a * d + b' * d' := by
-    linarith
-  linarith
+  linear_combination (h*c')+(b*h'.symm)+(a*h')+(h.symm*d')
 
 end MyPreint
 
@@ -185,7 +116,7 @@ abbrev MyInt := Quotient R_equiv
 
 namespace MyInt
 
-@[simp] lemma Quot_eq_Quotient (a b : ℕ) : Quot.mk Setoid.r (a, b) = ⟦(a, b)⟧ := by
+@[simp] lemma Quot_eq_Quotient (a b : MyNat) : Quot.mk Setoid.r (a, b) = ⟦(a, b)⟧ := by
   rfl
 
 -- `0` notation (the equiv class of (0,0))
@@ -220,11 +151,11 @@ def mul : MyInt → MyInt → MyInt  := Quotient.map₂ MyPreint.mul mul_quotien
 -- `*` notation
 instance : Mul MyInt where mul := mul
 
-lemma mul_def (a b c d : ℕ) :
+lemma mul_def (a b c d : MyNat) :
   (⟦(a, b)⟧ : MyInt) * ⟦(c, d)⟧ = ⟦(a * c + b * d, a * d + b * c)⟧ :=
   rfl
 
-lemma add_def (a b c d : ℕ) : (⟦(a, b)⟧ : MyInt) + ⟦(c, d)⟧ = ⟦(a + c, b + d)⟧ :=
+lemma add_def (a b c d : MyNat) : (⟦(a, b)⟧ : MyInt) + ⟦(c, d)⟧ = ⟦(a + c, b + d)⟧ :=
   rfl
 
 lemma add_assoc : ∀ (x y z : MyInt), (x + y) + z = x + (y + z) := by
@@ -233,7 +164,7 @@ lemma add_assoc : ∀ (x y z : MyInt), (x + y) + z = x + (y + z) := by
   rintro ⟨a, b⟩ ⟨c, d⟩ ⟨e, f⟩
   apply Quot.sound --this just goes from "equal in the quotient" to "in relation"
   simp [Setoid.r, R]
-  ring
+  grind
 
 --The same will happen for almost everything else we want to prove!
 
@@ -259,7 +190,7 @@ macro "quot_proof₁" : tactic =>
     rintro ⟨a, b⟩
     apply Quot.sound
     simp [Setoid.r, R]
-    try ring)
+    try grind)
 
 macro "quot_proof₂" : tactic =>
   `(tactic|
@@ -269,7 +200,7 @@ macro "quot_proof₂" : tactic =>
     rintro ⟨a, b⟩ ⟨c, d⟩
     apply Quot.sound
     simp [Setoid.r, R]
-    try ring)
+    try grind)
 
 macro "quot_proof₃" : tactic =>
   `(tactic|
@@ -279,7 +210,7 @@ macro "quot_proof₃" : tactic =>
     rintro ⟨a, b⟩ ⟨c, d⟩ ⟨e, f⟩
     apply Quot.sound
     simp [Setoid.r, R]
-    try ring)
+    try grind)
 
 /-- Tactic for proving equality goals in rings defined as quotients. -/
 macro "quot_proof" : tactic =>
@@ -308,27 +239,29 @@ instance commRing : CommRing MyInt where
   neg := (- ·)
   mul_comm := by quot_proof
   neg_add_cancel := by quot_proof
-  nsmul := nsmulRec --ignore this
-  zsmul := zsmulRec --ignore this
+  nsmul := nsmulRec
+  zsmul := zsmulRec
 
 lemma zero_ne_one : (0 : MyInt) ≠ 1 := by
   simp [zero_def, one_def]
 
-lemma aux_mul_lemma (a b c d : ℕ) (h : a * d + b * c = a * c + b * d) : a = b ∨ c = d := by
+lemma aux_mul_lemma (a b c d : MyNat) (h : a * d + b * c = a * c + b * d) : a = b ∨ c = d := by
   induction a generalizing b with
   | zero =>
-    simp_all
+    simp_all [MyNat.zero_def]
     tauto
   | succ e he =>
     cases b with
     | zero =>
-      simp_all
+      simp_all [MyNat.zero_def]
     | succ f =>
       specialize he f
       simp
       apply he
-      simp [Nat.succ_mul] at h
-      linarith
+      simp [MyNat.succ_mul] at h
+      suffices e * d + f * c = e * c + f * d by
+        · rcases he this with rfl | rfl <;> grind
+      linear_combination h
 
 lemma mul_ne_zero (x y : MyInt) : x ≠ 0 → y ≠ 0 → x * y ≠ 0 := by
   refine Quot.induction_on₂ x y ?_
@@ -352,23 +285,23 @@ lemma eq_of_mul_eq_mul_right {x y z : MyInt} (hx : x ≠ 0) (h : y * x = z * x) 
 -/
 
 /-- The natural map from the naturals to the integers. -/
-def i (n : ℕ) : MyInt := ⟦(n, 0)⟧
+def i (n : MyNat) : MyInt := ⟦(n, 0)⟧
 
 -- The natural map preserves 0
-lemma i_zero : i 0 = 0 := by
+@[simp] lemma i_zero : i 0 = 0 := by
   rfl
 
 -- The natural map preserves 1
-lemma i_one : i 1 = 1 := by
+@[simp] lemma i_one : i 1 = 1 := by
   rfl
 
 -- The natural map preserves addition
-lemma i_add (a b : ℕ) : i (a + b) = i a + i b := by
+lemma i_add (a b : MyNat) : i (a + b) = i a + i b := by
   dsimp [i]
   rfl
 
 -- The natural map preserves multiplication
-lemma i_mul (a b : ℕ) : i (a * b) = i a * i b := by
+lemma i_mul (a b : MyNat) : i (a * b) = i a * i b := by
   dsimp [i]
   apply Quot.sound
   simp
@@ -386,50 +319,48 @@ lemma i_injective : Function.Injective i := by
 -/
 
 /-- We say `x ≤ y` if there's some natural `a` such that `y = x + a` -/
-def le (x y : MyInt) : Prop := ∃ a : ℕ, y = x + i a
+def le (x y : MyInt) : Prop := ∃ a : MyNat, y = x + i a
 
 -- Notation `≤` for `le`
 instance : LE MyInt where
   le := le
 
 lemma le_refl (x : MyInt) : x ≤ x := by
-  use 0 -- the idea in this proof
+  use 0
   revert x
   quot_proof₁
 
 lemma le_trans (x y z : MyInt) (h1 : x ≤ y) (h2 : y ≤ z) : x ≤ z := by
   rcases h1 with ⟨p, rfl⟩
   rcases h2 with ⟨q, rfl⟩
-  use p + q -- the idea in this proof
+  use p + q
   revert x
   quot_proof₁
 
 lemma le_antisymm (x y : MyInt) (hxy : x ≤ y) (hyx : y ≤ x) : x = y := by
   rcases hxy with ⟨p, rfl⟩
   rcases hyx with ⟨q, hq⟩
-  rw [add_assoc, left_eq_add, ← i_add, ← i_zero] at hq -- lots of ideas
-  replace hq := Nat.eq_zero_of_add_eq_zero_right (i_injective hq)
-  subst hq
-  simp [i_zero]
+  rw [add_assoc, left_eq_add, ← i_add, ← i_zero] at hq
+  simp [MyNat.eq_zero_of_add_eq_zero (i_injective hq)]
 
 lemma le_total (x y : MyInt) : x ≤ y ∨ y ≤ x := by
   rcases x with ⟨a, b⟩
   rcases y with ⟨c, d⟩
-  rcases Nat.le_total (a + d) (b + c) with (h | h) -- idea
+  rcases MyNat.le_total (a + d) (b + c) with (h | h)
   · rw [le_iff_exists_add] at h
     rcases h with ⟨e, he⟩
     left
     use e
     apply Quot.sound
     simp
-    linarith
+    linear_combination he
   · rw [le_iff_exists_add] at h
     rcases h with ⟨e, he⟩
     right
     use e
     apply Quot.sound
     simp
-    linarith
+    grind
 
 noncomputable instance linearOrder : LinearOrder MyInt where
   le := (· ≤ ·)
@@ -442,18 +373,17 @@ noncomputable instance linearOrder : LinearOrder MyInt where
 lemma zero_le_one : (0 : MyInt) ≤ 1 := by
   use 1
   rw [i_one]
-  ring
+  grind
 
 /-- The natural map from the naturals to the integers preserves and reflects `≤`. -/
-lemma i_le_iff (a b : ℕ) : i a ≤ i b ↔ a ≤ b := by
+lemma i_le_iff (a b : MyNat) : i a ≤ i b ↔ a ≤ b := by
   constructor
   · intro h
     obtain ⟨n, hn⟩ := h
     rw [← i_add] at hn
     rw [i_injective hn]
     simp
-  · intro h
-    obtain ⟨k, hk⟩ := Nat.exists_eq_add_of_le h
+  · intro ⟨k, hk⟩
     use k
     rw [← i_add, ← hk]
 
@@ -466,7 +396,7 @@ lemma i_le_iff (a b : ℕ) : i a ≤ i b ↔ a ≤ b := by
 lemma add_le_add_left (x y : MyInt) (h : x ≤ y) (z : MyInt) : z + x ≤ z + y := by
   rcases h with ⟨n, rfl⟩
   use n
-  ring
+  grind
 
 lemma mul_pos (x y : MyInt) (hx : 0 < x) (hy : 0 < y) : 0 < x * y := by
   refine Ne.lt_of_le  ?_ ?_
@@ -476,7 +406,7 @@ lemma mul_pos (x y : MyInt) (hx : 0 < x) (hy : 0 < y) : 0 < x * y := by
     simp
     use n * m
     rw [i_mul]
-    ring
+    grind
 
 instance : Nontrivial MyInt := ⟨0, 1, zero_ne_one⟩
 
@@ -488,7 +418,7 @@ instance : IsOrderedAddMonoid MyInt where
 instance : IsStrictOrderedRing MyInt :=
   IsStrictOrderedRing.of_mul_pos mul_pos
 
-lemma archimedean (x : MyInt) : ∃ (n : ℕ), x ≤ i n := by
+lemma archimedean (x : MyInt) : ∃ (n : MyNat), x ≤ i n := by
   refine Quot.induction_on x ?_
   intro ⟨a, b⟩
   refine ⟨a, b, ?_⟩

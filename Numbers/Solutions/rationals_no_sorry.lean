@@ -1,4 +1,3 @@
-import Mathlib.Tactic
 import Numbers.Solutions.integers_no_sorry
 
 /-!
@@ -308,7 +307,7 @@ macro "quot_proof₁" : tactic =>
     rintro ⟨a, b⟩
     apply Quot.sound
     simp
-    try ring)
+    try grind)
 
 macro "quot_proof₂" : tactic =>
   `(tactic|
@@ -318,7 +317,7 @@ macro "quot_proof₂" : tactic =>
     rintro ⟨a, b⟩ ⟨c, d⟩
     apply Quot.sound
     simp
-    try ring)
+    try grind)
 
 macro "quot_proof₃" : tactic =>
   `(tactic|
@@ -328,7 +327,7 @@ macro "quot_proof₃" : tactic =>
     rintro ⟨a, b⟩ ⟨c, d⟩ ⟨e, f⟩
     apply Quot.sound
     simp
-    try ring)
+    try grind)
 
 /-- Tactic for proving equality goals in rings defined as quotients.
 
@@ -412,7 +411,7 @@ instance field : Field MyRat where
 -/
 
 /-- The natural map from the naturals to the rationals. -/
-def i (n : ℕ) : MyRat := ⟦(MyInt.i n, ⟨1, by simp⟩)⟧
+def i (n : MyNat) : MyRat := ⟦(MyInt.i n, ⟨1, by simp⟩)⟧
 
 -- The natural map preserves 0
 lemma i_zero : i 0 = 0 := by
@@ -423,14 +422,14 @@ lemma i_one : i 1 = 1 := by
   rfl
 
 -- The natural map preserves addition
-lemma i_add (a b : ℕ) : i (a + b) = i a + i b := by
+lemma i_add (a b : MyNat) : i (a + b) = i a + i b := by
   apply Quot.sound
   simp [MyInt.i]
   apply Quot.sound
   simp
 
 -- The natural map preserves multiplication
-lemma i_mul (a b : ℕ) : i (a * b) = i a * i b := by
+lemma i_mul (a b : MyNat) : i (a * b) = i a * i b := by
   apply Quot.sound
   simp [MyInt.i]
   apply Quot.sound
@@ -479,12 +478,7 @@ lemma j_injective (a b : MyInt) : j a = j b ↔ a = b := by
   · rintro rfl
     rfl
 
--- All the proofs were exactly the same as the natural number case.
-
--- Finally we check that the `i` and `j` commute with the natural
--- map `↑` from `ℕ` to `MyInt`:
-
-lemma j_comp_eq_i (n : ℕ) : j (MyInt.i n) = i n := by
+lemma j_comp_eq_i (n : MyNat) : j (MyInt.i n) = i n := by
   simp [i, j, MyInt.i]
 
 -- We can now give a formula for `⟦(a, b)⟧` using `j a` and `j b`.

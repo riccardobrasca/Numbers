@@ -248,14 +248,14 @@ lemma j_le_iff (p q : MyInt) : j p ≤ j q ↔ p ≤ q := by
     ring
 
 /-- The natural map from the naturals to the rationals preserves and reflects `≤`. -/
-lemma i_le_iff (a b : ℕ) : i a ≤ i b ↔ a ≤ b := by
+lemma i_le_iff (a b : MyNat) : i a ≤ i b ↔ a ≤ b := by
   constructor
   · intro h
     rwa [← MyInt.i_le_iff, ← j_le_iff, j_comp_eq_i, j_comp_eq_i]
   · intro h
     rwa [← MyInt.i_le_iff, ← j_le_iff, j_comp_eq_i, j_comp_eq_i] at h
 
-lemma i_lt_iff (a b : ℕ) : i a < i b ↔ a < b := by
+lemma i_lt_iff (a b : MyNat) : i a < i b ↔ a < b := by
   simp [lt_iff_le_and_ne, i_le_iff, i_injective.ne_iff]
 
 /-!
@@ -292,7 +292,7 @@ lemma mul_pos (a b : MyRat) (ha : 0 < a) (hb : 0 < b) : 0 < a * b := by
 noncomputable instance : IsStrictOrderedRing MyRat :=
   IsStrictOrderedRing.of_mul_pos mul_pos
 
-lemma archimedean (x : MyRat) : ∃ (n : ℕ), x ≤ i n := by
+lemma archimedean (x : MyRat) : ∃ (n : MyNat), x ≤ i n := by
   by_cases hx : 0 ≤ x
   swap
   · refine ⟨0, ?_⟩
@@ -311,11 +311,12 @@ lemma archimedean (x : MyRat) : ∃ (n : ℕ), x ≤ i n := by
     suffices 1 ≤ d by
       · rcases this with ⟨m, rfl⟩
         rw [mul_add, mul_one, ← MyInt.i_mul, ← MyInt.i_add, MyInt.i_le_iff]
-        omega
+        exact ⟨n * m, rfl⟩
     rcases lt_iff_le_and_ne.1 hd with ⟨⟨m, rfl⟩, h2⟩
     have hm : m ≠ 0 := fun hm ↦ by simp [hm, MyInt.i_zero] at h2
-    rcases Nat.exists_eq_add_one_of_ne_zero hm with ⟨k, rfl⟩
-    exact ⟨k, by rw [zero_add, MyInt.i_add, MyInt.i_one, add_comm]⟩
+    refine ⟨m.pred, ?_⟩
+    rw [zero_add, add_comm 1, ← MyInt.i_one, ← MyInt.i_add, ← MyNat.succ_eq_add_one,
+      MyNat.succ_pred hm]
   · simp only [ne_eq, Quot_eq_Quotient, sub_def, one_mul, Quotient.eq, MyPrerat.equiv_def', ne_eq,
       Int.ne_zero_coe_mul, MyInt.i]
     simp only [ne_eq, Quotient.eq, MyPrerat.equiv_def'] at h
