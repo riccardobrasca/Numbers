@@ -1,6 +1,6 @@
-import Numbers.Solutions.integers_no_sorry
-import Numbers.Solutions.Naturals_nosorry
-import Numbers.Solutions.Naturals_instances
-import Numbers.Solutions.rationals_no_sorry
-import Numbers.Solutions.rationals_order_no_sorry
-import Numbers.Solutions.reals_no_sorry
+import Numbers.Integers
+import Numbers.Naturals
+import Numbers.NaturalsInstances
+import Numbers.Rationals
+import Numbers.RationalsOrder
+import Numbers.Reals
