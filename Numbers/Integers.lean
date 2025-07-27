@@ -7,61 +7,48 @@ namespace MyPreint
 /-- The equivalence relation on pre-integers, which we'll quotient out by to get integers. -/
 def R (x y : MyPreint) : Prop := x.1 + y.2 = x.2 + y.1
 
-@[simp] lemma R_def (a b c d : MyNat) : R (a,b) (c,d) ↔ a + d = b + c := by rfl
+@[simp, grind =] lemma R_def (a b c d : MyNat) : R (a,b) (c,d) ↔ a + d = b + c := by rfl
 
 lemma R_refl : ∀ x, R x x := by
-  grind [R_def]
+  grind
 
 lemma R_symm : ∀ {x y}, R x y → R y x := by
-  grind [R_def]
+  grind
 
 lemma R_trans : ∀ {x y z}, R x y → R y z → R x z := by
-  grind [R_def]
+  grind
 
 instance R_equiv : Setoid MyPreint where
   r := R
   iseqv := ⟨R_refl, R_symm, R_trans⟩
 
-@[simp] lemma equiv_def (a b c d : MyNat) : (a, b) ≈ (c, d) ↔ a + d = b + c := by rfl
+@[simp, grind =] lemma equiv_def (a b c d : MyNat) : (a, b) ≈ (c, d) ↔ a + d = b + c := by rfl
 
 @[simp] lemma equiv_def' (a b c d : MyNat) : Setoid.r (a, b) (c, d) ↔ a + d = b + c := by rfl
 
 /-- Negation on pre-integers. -/
 def neg (x : MyPreint) : MyPreint := (x.2, x.1)
 
-@[simp] lemma neg_def (a b : MyNat) : neg (a, b) = (b, a) := rfl
+@[simp, grind =] lemma neg_def (a b : MyNat) : neg (a, b) = (b, a) := rfl
 
-lemma neg_quotient ⦃x x' : MyPreint⦄ (h : x ≈ x') : neg x ≈ neg x' := by
-  rcases x with ⟨a, b⟩
-  rcases x' with ⟨c, d⟩
-  grind [equiv_def, neg_def]
+lemma neg_quotient ⦃x x' : MyPreint⦄ (h : x ≈ x') : neg x ≈ neg x' := by grind
 
 /-- Addition on pre-integers. -/
 @[simp] def add (x y : MyPreint) : MyPreint := (x.1 + y.1, x.2 + y.2)
 
-@[simp] lemma add_def (a b c d : MyNat) : add (a, b) (c, d) = (a + c, b + d) := rfl
+@[simp, grind =] lemma add_def (a b c d : MyNat) : add (a, b) (c, d) = (a + c, b + d) := rfl
 
 lemma add_quotient ⦃x x' : MyPreint⦄ (h : x ≈ x') ⦃y y' : MyPreint⦄ (h' : y ≈ y') :
-    add x y ≈ add x' y' := by
-  rcases x with ⟨a, b⟩
-  rcases y with ⟨c, d⟩
-  rcases x' with ⟨a', b'⟩
-  rcases y' with ⟨c', d'⟩
-  grind [equiv_def, add]
+    add x y ≈ add x' y' := by grind
 
 /-- Multiplication on pre-integers. -/
 @[simp] def mul (x y : MyPreint) : MyPreint :=
   (x.1 * y.1 + x.2 * y.2, x.1 * y.2 + x.2 * y.1)
 
-@[simp] lemma mul_def (a b c d : MyNat) : mul (a, b) (c, d) = (a * c + b * d, a * d + b * c) := rfl
+@[simp, grind =] lemma mul_def (a b c d : MyNat) : mul (a, b) (c, d) = (a * c + b * d, a * d + b * c) := rfl
 
 lemma mul_quotient ⦃x x' : MyPreint⦄ (h : x ≈ x') ⦃y y' : MyPreint⦄ (h' : y ≈ y') :
-    mul x y ≈ mul x' y' := by
-  rcases x with ⟨a, b⟩
-  rcases y with ⟨c, d⟩
-  rcases x' with ⟨a', b'⟩
-  rcases y' with ⟨c', d'⟩
-  grind [equiv_def, mul]
+    mul x y ≈ mul x' y' := by grind
 
 end MyPreint
 
@@ -180,13 +167,13 @@ lemma eq_of_mul_eq_mul_right (hx : x ≠ 0) (h : y * x = z * x) : y = z := by
 /-- The natural map from the naturals to the integers. -/
 def i : MyInt := ⟦(a, 0)⟧
 
-@[simp] lemma i_zero : i 0 = 0 := rfl
+@[simp, grind =] lemma i_zero : i 0 = 0 := rfl
 
-@[simp] lemma i_one : i 1 = 1 := rfl
+@[simp, grind =] lemma i_one : i 1 = 1 := rfl
 
-lemma i_add : i (a + b) = i a + i b := rfl
+@[grind =] lemma i_add : i (a + b) = i a + i b := rfl
 
-lemma i_mul : i (a * b) = i a * i b := by
+@[grind =] lemma i_mul : i (a * b) = i a * i b := by
   apply Quot.sound
   simp
 
@@ -208,7 +195,7 @@ lemma le_trans (h1 : x ≤ y) (h2 : y ≤ z) : x ≤ z := by
   rcases h1 with ⟨p, rfl⟩
   rcases h2 with ⟨q, rfl⟩
   use p + q
-  grind [i_add]
+  grind
 
 lemma le_antisymm (hxy : x ≤ y) (hyx : y ≤ x) : x = y := by
   rcases hxy with ⟨p, rfl⟩
@@ -268,9 +255,8 @@ lemma mul_pos (hx : 0 < x) (hy : 0 < y) : 0 < x * y := by
   · exact (mul_ne_zero hx.ne.symm hy.ne.symm).symm
   · rcases hx.le with ⟨n, rfl⟩
     rcases hy.le with ⟨m, rfl⟩
-    simp only [zero_add]
     use n * m
-    grind [i_mul]
+    grind
 
 instance : Nontrivial MyInt := ⟨0, 1, zero_ne_one⟩
 

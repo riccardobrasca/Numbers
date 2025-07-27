@@ -83,7 +83,7 @@ lemma nonneg_neg_of_not_nonneg {x : MyRat} : ¬ IsNonneg x → IsNonneg (-x) := 
     have foo : ¬ 0 < -b := by
       -- foo true because other wise you can use h to get a contradiction
       intro hb
-      exact h (-a) (-b) hb (neg_nonneg.2 ha.le) (by ring)
+      exact h (-a) (-b) hb (neg_nonneg.2 ha.le) (by grind)
     use b, (pos_of_neg_neg (lt_of_le_of_ne (by linarith) (by grind)))
     apply Quotient.eq.2
     simp [mul_comm]

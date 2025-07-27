@@ -36,9 +36,6 @@ instance : AddCancelCommMonoid MyNat where
   __ := (inferInstance : AddCommMonoid MyNat)
   add_left_cancel _ _ _ := add_left_cancel
 
-instance {A : Type*} [AddRightCancelSemigroup A] : Lean.Grind.AddRightCancel A where
-  add_right_cancel _ _ _ := add_right_cancel
-
 noncomputable instance linearOrder : LinearOrder MyNat where
   le := (· ≤ ·)
   le_refl := le_refl
@@ -121,9 +118,6 @@ lemma eq_or_eq_of_add_mul_eq_add_mul {a b c d : MyNat} (h : a * d + b * c = a * 
       simp_all [zero_def]
     | succ f =>
       simp only [succ.injEq]
-      apply he
-      suffices e * d + f * c = e * c + f * d by
-        rcases he this <;> grind
-      grind [succ_mul]
+      grind
 
 end MyNat
