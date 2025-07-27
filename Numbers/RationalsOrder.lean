@@ -313,13 +313,10 @@ lemma archimedean (x : MyRat) : ∃ (n : MyNat), x ≤ i n := by
         rw [mul_add, mul_one, ← MyInt.i_mul, ← MyInt.i_add, MyInt.i_le_iff]
         exact ⟨n * m, rfl⟩
     rcases lt_iff_le_and_ne.1 hd with ⟨⟨m, rfl⟩, h2⟩
-    have hm : m ≠ 0 := fun hm ↦ by simp [hm, MyInt.i_zero] at h2
+    have hm : m ≠ 0 := by grind
     refine ⟨m.pred, ?_⟩
-    rw [zero_add, add_comm 1, ← MyInt.i_one, ← MyInt.i_add, ← MyNat.succ_eq_add_one,
-      MyNat.succ_pred hm]
-  · simp only [ne_eq, Quot_eq_Quotient, sub_def, one_mul, Quotient.eq, MyPrerat.equiv_def', ne_eq,
-      Int.ne_zero_coe_mul, MyInt.i]
-    simp only [ne_eq, Quotient.eq, MyPrerat.equiv_def'] at h
-    grind
+    grind [MyNat.succ_pred]
+  · simp only [Quot_eq_Quotient, sub_def, Quotient.eq, MyPrerat.equiv_def', Int.ne_zero_coe_mul]
+    grind [Quotient.eq]
 
 end MyRat

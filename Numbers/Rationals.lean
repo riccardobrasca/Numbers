@@ -52,12 +52,14 @@ instance R_equiv : Setoid MyPrerat where
   iseqv := ⟨R_refl, R_symm, R_trans⟩
 
 -- Teach the definition of `≈` to the simplifier
-@[simp, grind =] lemma equiv_def (a : MyInt) (b : {x : MyInt // x ≠ 0}) (c : MyInt) (d : {x : MyInt // x ≠ 0}) :
+@[simp, grind =]
+lemma equiv_def (a : MyInt) (b : {x : MyInt // x ≠ 0}) (c : MyInt) (d : {x : MyInt // x ≠ 0}) :
     (a, b) ≈ (c, d) ↔ a * d = b * c := by
   rfl
 
 -- Teach the definition of `Setoid.r` to the simplifier
-@[simp] lemma equiv_def' (a : MyInt) (b : {x : MyInt // x ≠ 0}) (c : MyInt) (d : {x : MyInt // x ≠ 0}) :
+@[simp, grind =]
+lemma equiv_def' (a : MyInt) (b : {x : MyInt // x ≠ 0}) (c : MyInt) (d : {x : MyInt // x ≠ 0}) :
     Setoid.r (a, b) (c, d) ↔ a * d = b * c := by
   rfl
 
@@ -326,6 +328,7 @@ instance commRing : CommRing MyRat where
   nsmul := nsmulRec
   zsmul := zsmulRec
 
+@[grind =]
 lemma sub_def (a : MyInt) (b : {x : MyInt // x ≠ 0}) (c : MyInt) (d : {x : MyInt // x ≠ 0}) :
     (⟦(a, b)⟧ : MyRat) - ⟦(c, d)⟧ = ⟦(a * d - b * c, b * d)⟧ := by
   rw [sub_eq_add_neg, neg_def, add_def, mul_neg, ← sub_eq_add_neg]

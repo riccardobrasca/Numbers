@@ -40,6 +40,7 @@ theorem add_zero : a + 0 = a := rfl
 
 theorem add_succ : a + succ b = succ (a + b):= rfl
 
+@[grind =]
 theorem succ_eq_add_one : succ a = a + 1 := rfl
 
 @[simp] theorem add_one_ne_zero : a + 1 ≠ 0 := by simp [← succ_eq_add_one]
