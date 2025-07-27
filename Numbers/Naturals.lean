@@ -40,6 +40,7 @@ theorem add_zero : a + 0 = a := rfl
 
 theorem add_succ : a + succ b = succ (a + b):= rfl
 
+@[grind =]
 theorem succ_eq_add_one : succ a = a + 1 := rfl
 
 @[simp] theorem add_one_ne_zero : a + 1 ≠ 0 := by simp [← succ_eq_add_one]
@@ -93,7 +94,7 @@ theorem mul_zero : a * 0 = 0 := by
 
 theorem mul_succ : a * b.succ = a * b + a := rfl
 
-theorem succ_mul : a.succ * b = a * b + b := by
+@[grind =] theorem succ_mul : a.succ * b = a * b + b := by
   induction b with
   | zero =>
       rw [zero_def, mul_zero, mul_zero, zero_add]

@@ -35,6 +35,13 @@ lemma IsCauchy.bounded {x : MyNat → MyRat} (hx : IsCauchy x) : ∃ B, 0 < B �
                         exact ⟨A, by simp, rfl⟩
                       · exact hA _ _ H rfl.le
 
+-- When adding grind attributes to external lemmas, best to use "local".
+-- These are not great `grind` attributes, but we will need better built-in support for inequalities
+-- before you can do without them here.
+attribute [local grind] le_of_max_le_left
+attribute [local grind] le_of_max_le_right
+attribute [local grind] le_trans
+
 abbrev MyPrereal := {x // IsCauchy x}
 
 namespace MyPrereal
@@ -74,10 +81,6 @@ lemma R_symm : ∀ {x y}, R x y → R y x := by
   intro n hn
   rw [abs_sub_comm]
   exact HN n hn
-
-attribute [grind] le_of_max_le_left
-attribute [grind] le_of_max_le_right
-attribute [grind] le_trans
 
 lemma R_trans : ∀ {x y z}, R x y → R y z → R x z := by
   intro x y z hxy hyz ε hε
