@@ -36,7 +36,7 @@ $R$ is a reflexive relation.
 \begin{proof}
     \leanok
     \uses{MyPrerat.R}
-    Exercice.
+    Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -48,7 +48,7 @@ $R$ is a symmetric relation.
 \begin{proof}
     \leanok
     \uses{MyPrerat.R}
-    Exercice.
+    Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -60,7 +60,7 @@ $R$ is a transitive relation.
 \begin{proof}
     \leanok
     \uses{MyPrerat.R}
-    Exercice.
+    Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -98,7 +98,7 @@ If $x \approx x'$, then $-x \approx -x'$.
 \begin{proof}
 \uses{MyPrerat.neg}
 \leanok
-Exercice.
+Exercise.
 \end{proof}
 
 \begin{definition}
@@ -107,7 +107,7 @@ Exercice.
     \leanok
     \uses{MyPrerat.R}
 We define an operation, called \emph{addition} on $\MyPrerat$ as follows: the addition of $x = (a,b)$
-and $y = (b, c)$ is
+and $y = (c, d)$ is
 \[
 x + y = (a,b) + (c,d) = (a * d + b * c, b*d)
 \]
@@ -123,7 +123,7 @@ If $x \approx x'$ and $y \approx y'$, then $x + y \approx x' + y'$.
 \begin{proof}
 \uses{MyPrerat.add}
 \leanok
-Exercice.
+Exercise.
 \end{proof}
 
 \begin{definition}
@@ -146,7 +146,7 @@ If $x \approx x'$ and $y \approx y'$, then $x * y \approx x' * y'$.
 \begin{proof}
 \uses{MyPrerat.mul}
 \leanok
-Exercice.
+Exercise.
 \end{proof}
 
 \begin{definition}
@@ -170,7 +170,7 @@ If $x \approx x'$, then $x^{-1} \approx x'^{-1}$.
 \begin{proof}
 \uses{MyPrerat.inv}
 \leanok
-Exercice.
+Exercise.
 \end{proof}
 
 \section{The rationals}
@@ -449,7 +449,7 @@ j(a+b) = j(a) + j(b)
 \begin{proof}
     \uses{MyRat.add, MyRat.j}
     \leanok
-Exercice.
+Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -464,7 +464,7 @@ j(a*b) = j(a) * j(b)
 \begin{proof}
     \uses{MyRat.mul, MyRat.j}
     \leanok
-Exercice.
+Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -476,7 +476,7 @@ Exercice.
 \begin{proof}
     \uses{MyRat.j}
     \leanok
-Exercice.
+Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -500,7 +500,7 @@ It follows from unravelling all the definitions.
 \begin{proof}
     \uses{MyRat.inv, MyRat.mul, MyRat.j}
     \leanok
-Exercice.
+Exercise.
 \end{proof}
 
 \subsection{Nonegativity}
@@ -562,7 +562,7 @@ Can you see why it corresponds to the ``usual definition'' when we think that $x
 \end{lemma}
 \begin{proof}
     \leanok
-    Annoying but easy, left as an exercice.
+    Annoying but easy, left as an exercise.
 \end{proof}
 
 \begin{lemma}
@@ -574,7 +574,7 @@ Can you see why it corresponds to the ``usual definition'' when we think that $x
 \end{lemma}
 \begin{proof}
     \leanok
-    Exercice.
+    Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -586,7 +586,7 @@ Can you see why it corresponds to the ``usual definition'' when we think that $x
 \end{lemma}
 \begin{proof}
     \leanok
-    Exercice.
+    Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -598,7 +598,7 @@ Can you see why it corresponds to the ``usual definition'' when we think that $x
 \end{lemma}
 \begin{proof}
     \leanok
-    Exercice.
+    Exercise.
 \end{proof}
 
 \subsection{The order}
@@ -713,7 +713,7 @@ We have proved that $\MyRat$ is an ordered ring.
 \begin{proof}
     \uses{MyRat.IsNonneg, MyInt.le}
     \leanok
-    Exercice.
+    Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -763,7 +763,7 @@ This follows by Lemma~\ref{MyRat.nonneg_neg_of_not_nonneg}.
 \begin{proof}
     \leanok
     \uses{MyRat.zero_le_iff_IsNonneg, MyRat.isNonneg_mul_isNonneg}
-Exercice.
+Exercise.
 \end{proof}
 
 We now have that $\MyRat$ is a \emph{strict ordered ring}: a nontrivial ring with a partial order such that addition is strictly monotone and multiplication by a positive number is strictly monotone.
