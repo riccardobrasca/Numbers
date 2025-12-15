@@ -37,7 +37,7 @@ jobs:
         run: ~/.elan/bin/lake build Numbers
 
       - name: Cache API docs
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             .lake/build/doc/Aesop
