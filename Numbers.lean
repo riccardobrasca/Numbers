@@ -1,10 +1,5 @@
-import Numbers.Solutions.integers_no_sorry
-import Numbers.Solutions.rationals_no_sorry
-import Numbers.Solutions.rationals_order_no_sorry
-import Numbers.Solutions.reals_no_sorry
-import Numbers.TypeTheory.Exercises
-import Numbers.TypeTheory.typetheory
 import Numbers.integers
+import Numbers.naturals
 import Numbers.rationals
 import Numbers.rationals_order
-import Numbers.real
+import Numbers.reals
