@@ -1,4 +1,5 @@
 import Mathlib.Tactic
+import Numbers.naturals_instances
 
 /-!
 
@@ -10,8 +11,8 @@ In this file we assume all standard facts about the naturals, and then build
 the integers from scratch.
 
 The strategy is to observe that every integer can be written as `a - b`
-for `a` and `b` naturals, so we define the "pre-integers" to be `ℕ × ℕ`, the pairs
-`(a, b)` of naturals. We define an equivalence relation `≈` on `ℕ × ℕ`, with the
+for `a` and `b` naturals, so we define the "pre-integers" to be `MyNat × MyNat`, the pairs
+`(a, b)` of naturals. We define an equivalence relation `≈` on `MyNat × MyNat`, with the
 idea being that `(a, b) ≈ (c, d)` if and only if `a - b = c - d`. This doesn't
 make sense yet, but the equivalent equation `a + d = b + c` does. We prove
 that this is an equivalence relation, and define the integers to be the quotient.
@@ -38,7 +39,7 @@ plays well with the ring structure.
 -/
 
 -- A term of type `MyPreint` is just a pair of natural numbers.
-abbrev MyPreint := ℕ × ℕ
+abbrev MyPreint := MyNat × MyNat
 
 namespace MyPreint
 
@@ -53,7 +54,8 @@ by to get integers. -/
 def R (x y : MyPreint) : Prop := x.1 + y.2 = x.2 + y.1
 
 /-- Useful lemma that is mathematically trivial. -/
-lemma R_def (a b c d : ℕ) : R (a,b) (c,d) ↔ a + d = b + c := by
+@[simp, grind =]
+lemma R_def (a b c d : MyNat) : R (a,b) (c,d) ↔ a + d = b + c := by
   sorry
 
 lemma R_refl : ∀ x, R x x := by
@@ -72,11 +74,11 @@ instance R_equiv : Setoid MyPreint where
   iseqv := ⟨R_refl, R_symm, R_trans⟩
 
 -- Teach the definition of `≈` to the simplifier, so `simp` becomes more powerful
-@[simp] lemma equiv_def (a b c d : ℕ) : (a, b) ≈ (c, d) ↔ a + d = b + c := by
+@[simp, grind =] lemma equiv_def (a b c d : MyNat) : (a, b) ≈ (c, d) ↔ a + d = b + c := by
   sorry
 
 -- Teach the definition of `Setoid.r` to the simplifier, so `simp` becomes more powerful
-@[simp] lemma equiv_def' (a b c d : ℕ) : Setoid.r (a, b) (c, d) ↔ a + d = b + c := by
+@[simp] lemma equiv_def' (a b c d : MyNat) : Setoid.r (a, b) (c, d) ↔ a + d = b + c := by
   sorry
 
 /-!
@@ -89,7 +91,7 @@ instance R_equiv : Setoid MyPreint where
 def neg (x : MyPreint) : MyPreint := (x.2, x.1)
 
 -- teach it to the simplifier
-@[simp] lemma neg_def (a b : ℕ) : neg (a, b) = (b, a) := by
+@[simp, grind =] lemma neg_def (a b : MyNat) : neg (a, b) = (b, a) := by
   sorry
 
 lemma neg_quotient ⦃x x' : MyPreint⦄ (h : x ≈ x') : neg x ≈ neg x' := by
@@ -99,7 +101,7 @@ lemma neg_quotient ⦃x x' : MyPreint⦄ (h : x ≈ x') : neg x ≈ neg x' := by
 @[simp] def add (x y : MyPreint) : MyPreint := (x.1 + y.1, x.2 + y.2)
 
 -- teach it to the simplifier
-@[simp] lemma add_def (a b c d : ℕ) : add (a, b) (c, d) = (a + c, b + d) := by
+@[simp, grind =] lemma add_def (a b c d : MyNat) : add (a, b) (c, d) = (a + c, b + d) := by
   sorry
 
 lemma add_quotient ⦃x x' : MyPreint⦄ (h : x ≈ x') ⦃y y' : MyPreint⦄ (h' : y ≈ y') :
@@ -111,7 +113,8 @@ lemma add_quotient ⦃x x' : MyPreint⦄ (h : x ≈ x') ⦃y y' : MyPreint⦄ (h
   (x.1 * y.1 + x.2 * y.2, x.1 * y.2 + x.2 * y.1)
 
 -- teach it to the simplifier
-@[simp] lemma mul_def (a b c d : ℕ) : mul (a, b) (c, d) = (a * c + b * d, a * d + b * c) := by
+@[simp, grind =] lemma mul_def (a b c d : MyNat) :
+    mul (a, b) (c, d) = (a * c + b * d, a * d + b * c) := by
   sorry
 
 lemma mul_quotient ⦃x x' : MyPreint⦄ (h : x ≈ x') ⦃y y' : MyPreint⦄ (h' : y ≈ y') :
@@ -133,7 +136,7 @@ abbrev MyInt := Quotient R_equiv
 
 namespace MyInt
 
-@[simp] lemma Quot_eq_Quotient (a b : ℕ) : Quot.mk Setoid.r (a, b) = ⟦(a, b)⟧ := by
+@[simp] lemma Quot_eq_Quotient (a b : MyNat) : Quot.mk Setoid.r (a, b) = ⟦(a, b)⟧ := by
   sorry
 
 -- `0` notation (the equiv class of (0,0))
@@ -168,10 +171,10 @@ def mul : MyInt → MyInt → MyInt  := Quotient.map₂ MyPreint.mul mul_quotien
 -- `*` notation
 instance : Mul MyInt where mul := mul
 
-lemma mul_def (a b c d : ℕ) : (⟦(a, b)⟧ : MyInt) * ⟦(c, d)⟧ = ⟦(a * c + b * d, a * d + b * c)⟧ := by
+lemma mul_def (a b c d : MyNat) : (⟦(a, b)⟧ : MyInt) * ⟦(c, d)⟧ = ⟦(a * c + b * d, a * d + b * c)⟧ := by
   sorry
 
-lemma add_def (a b c d : ℕ) : (⟦(a, b)⟧ : MyInt) + ⟦(c, d)⟧ = ⟦(a + c, b + d)⟧ :=
+lemma add_def (a b c d : MyNat) : (⟦(a, b)⟧ : MyInt) + ⟦(c, d)⟧ = ⟦(a + c, b + d)⟧ :=
   rfl
 
 lemma add_assoc : ∀ (x y z : MyInt), (x + y) + z = x + (y + z) := by
@@ -256,22 +259,6 @@ instance commRing : CommRing MyInt where
 lemma zero_ne_one : (0 : MyInt) ≠ 1 := by
   sorry
 
-lemma aux_mul_lemma (a b c d : ℕ) (h : a * d + b * c = a * c + b * d) : a = b ∨ c = d := by
-  induction a generalizing b with
-  | zero =>
-    simp_all
-    tauto
-  | succ e he =>
-    cases b with
-    | zero =>
-      simp_all
-    | succ f =>
-      specialize he f
-      simp
-      apply he
-      simp [Nat.succ_mul] at h
-      linarith
-
 lemma mul_ne_zero (x y : MyInt) : x ≠ 0 → y ≠ 0 → x * y ≠ 0 := by
   sorry
 
@@ -285,22 +272,26 @@ lemma eq_of_mul_eq_mul_right {x y z : MyInt} (hx : x ≠ 0) (h : y * x = z * x) 
 -/
 
 /-- The natural map from the naturals to the integers. -/
-def i (n : ℕ) : MyInt := ⟦(n, 0)⟧
+def i (n : MyNat) : MyInt := ⟦(n, 0)⟧
 
 -- The natural map preserves 0
+@[simp, grind =]
 lemma i_zero : i 0 = 0 := by
   sorry
 
 -- The natural map preserves 1
+@[simp, grind =]
 lemma i_one : i 1 = 1 := by
   sorry
 
 -- The natural map preserves addition
-lemma i_add (a b : ℕ) : i (a + b) = i a + i b := by
+@[grind =]
+lemma i_add (a b : MyNat) : i (a + b) = i a + i b := by
   sorry
 
 -- The natural map preserves multiplication
-lemma i_mul (a b : ℕ) : i (a * b) = i a * i b := by
+@[grind =]
+lemma i_mul (a b : MyNat) : i (a * b) = i a * i b := by
   sorry
 
 -- The natural map is injective
@@ -314,7 +305,7 @@ lemma i_injective : Function.Injective i := by
 -/
 
 /-- We say `x ≤ y` if there's some natural `a` such that `y = x + a` -/
-def le (x y : MyInt) : Prop := ∃ a : ℕ, y = x + i a
+def le (x y : MyInt) : Prop := ∃ a : MyNat, y = x + i a
 
 -- Notation `≤` for `le`
 instance : LE MyInt where
@@ -344,7 +335,7 @@ lemma zero_le_one : (0 : MyInt) ≤ 1 := by
   sorry
 
 /-- The natural map from the naturals to the integers preserves and reflects `≤`. -/
-lemma i_le_iff (a b : ℕ) : i a ≤ i b ↔ a ≤ b := by
+lemma i_le_iff (a b : MyNat) : i a ≤ i b ↔ a ≤ b := by
   sorry
 
 /-
@@ -369,7 +360,7 @@ instance : IsOrderedAddMonoid MyInt where
 instance : IsStrictOrderedRing MyInt :=
   IsStrictOrderedRing.of_mul_pos mul_pos
 
-lemma archimedean (x : MyInt) : ∃ (n : ℕ), x ≤ i n := by
+lemma archimedean (x : MyInt) : ∃ (n : MyNat), x ≤ i n := by
   sorry
 
 end MyInt
