@@ -353,7 +353,7 @@ lemma i_le_iff (a b : ℕ) : i a ≤ i b ↔ a ≤ b := by
 
 -/
 
-lemma add_le_add_left (x y : MyInt) (h : x ≤ y) (z : MyInt) : z + x ≤ z + y := by
+lemma add_le_add_left (x y : MyInt) (h : x ≤ y) (z : MyInt) : x + z ≤ y + z := by
   sorry
 
 lemma mul_pos (x y : MyInt) (hx : 0 < x) (hy : 0 < y) : 0 < x * y := by

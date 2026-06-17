@@ -60,7 +60,7 @@ lemma R_refl : ∀ x, R x x := by
   rw [add_comm] --We alreado know that addition is commutative on natural numbers!
 
 lemma R_symm : ∀ {x y}, R x y → R y x := by
-  dsimp [Symmetric, R]
+  dsimp [R]
   intro x y hxy
   rw [add_comm y.1, add_comm y.2, hxy]
 
@@ -312,7 +312,7 @@ instance commRing : CommRing MyInt where
   zsmul := zsmulRec --ignore this
 
 lemma zero_ne_one : (0 : MyInt) ≠ 1 := by
-  simp [zero_def, one_def]
+  simp [zero_def, one_def, Quotient.eq]
 
 lemma aux_mul_lemma (a b c d : ℕ) (h : a * d + b * c = a * c + b * d) : a = b ∨ c = d := by
   induction a generalizing b with
@@ -333,7 +333,7 @@ lemma aux_mul_lemma (a b c d : ℕ) (h : a * d + b * c = a * c + b * d) : a = b 
 lemma mul_ne_zero (x y : MyInt) : x ≠ 0 → y ≠ 0 → x * y ≠ 0 := by
   refine Quot.induction_on₂ x y ?_
   rintro ⟨a, b⟩ ⟨c, d⟩ h1 h2
-  simp_all [zero_def, mul_def]
+  simp_all [zero_def, mul_def, Quotient.eq]
   intro h
   cases aux_mul_lemma _ _ _ _ h <;> tauto
 
@@ -376,8 +376,7 @@ lemma i_mul (a b : ℕ) : i (a * b) = i a * i b := by
 -- The natural map is injective
 lemma i_injective : Function.Injective i := by
   intro a b h
-  simp [i] at h
-  assumption
+  simpa [i, Quotient.eq] using h
 
 /-!
 
@@ -463,7 +462,7 @@ lemma i_le_iff (a b : ℕ) : i a ≤ i b ↔ a ≤ b := by
 
 -/
 
-lemma add_le_add_left (x y : MyInt) (h : x ≤ y) (z : MyInt) : z + x ≤ z + y := by
+lemma add_le_add_left (x y : MyInt) (h : x ≤ y) (z : MyInt) : x + z ≤ y + z := by
   rcases h with ⟨n, rfl⟩
   use n
   ring
@@ -492,6 +491,6 @@ lemma archimedean (x : MyInt) : ∃ (n : ℕ), x ≤ i n := by
   refine Quot.induction_on x ?_
   intro ⟨a, b⟩
   refine ⟨a, b, ?_⟩
-  simp [i, add_def]
+  simp [i, add_def, Quotient.eq]
 
 end MyInt

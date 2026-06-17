@@ -146,7 +146,7 @@ instance : PartialOrder MyRat where
 
 instance : ZeroLEOneClass MyRat := ⟨zero_le_one⟩
 
-lemma add_le_add_left (x y : MyRat) (h : x ≤ y) (t : MyRat) : t + x ≤ t + y := by
+lemma add_le_add_left (x y : MyRat) (h : x ≤ y) (t : MyRat) : x + t ≤ y + t := by
   simp_all [le_def]
 
 lemma mul_nonneg (x y : MyRat) (hx : 0 ≤ x) (hy : 0 ≤ y) : 0 ≤ x * y := by
