@@ -164,10 +164,10 @@ lemma j_le_iff (p q : MyInt) : j p ≤ j q ↔ p ≤ q := by
 
 /-- The natural map from the naturals to the rationals preserves
 and reflects `≤`. -/
-lemma i_le_iff (a b : ℕ) : i a ≤ i b ↔ a ≤ b := by
+lemma i_le_iff (a b : MyNat) : i a ≤ i b ↔ a ≤ b := by
   sorry
 
-lemma i_lt_iff (a b : ℕ) : i a < i b ↔ a < b := by
+lemma i_lt_iff (a b : MyNat) : i a < i b ↔ a < b := by
   sorry
 
 /-!
@@ -189,7 +189,7 @@ lemma mul_pos (a b : MyRat) (ha : 0 < a) (hb : 0 < b) : 0 < a * b := by
 noncomputable instance : IsStrictOrderedRing MyRat :=
   IsStrictOrderedRing.of_mul_pos mul_pos
 
-lemma archimedean (x : MyRat) : ∃ (n : ℕ), x ≤ i n := by
+lemma archimedean (x : MyRat) : ∃ (n : MyNat), x ≤ i n := by
   sorry
 
 end MyRat
