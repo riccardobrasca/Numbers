@@ -91,8 +91,32 @@ the raionals are a linear order.
 /-- Our definition of x ≤ y on the rationals. -/
 def le (x y : MyRat) : Prop := IsNonneg (y - x)
 
-instance : LE MyRat where
+lemma le_refl (x : MyRat) : le x x := by
+  sorry
+
+/-!
+
+Next is transitivitiy
+
+-/
+
+lemma le_trans (x y z : MyRat) (h1 : le x y) (h2 : le y z) : le x z := by
+  sorry
+
+/-!
+
+Next is antisymmetry
+
+-/
+
+lemma le_antisymm (x y : MyRat) (hxy : le x y) (hyx : le y x) : x = y := by
+  sorry
+
+instance : PartialOrder MyRat where
   le := le
+  le_refl := le_refl
+  le_trans := le_trans
+  le_antisymm := le_antisymm
 
 lemma le_def (x y : MyRat) : x ≤ y ↔ IsNonneg (y - x) := by
   sorry
@@ -109,40 +133,6 @@ Let's warm up with 0 ≤ 1.
 
 lemma zero_le_one : (0 : MyRat) ≤ 1 := by
   sorry
-
-/-!
-
-There's no point proving 0 ≤ 0 and 1 ≤ 1, we may as well prove reflexivity
-in general.
-
--/
-
-lemma le_refl (x : MyRat) : x ≤ x := by
-  sorry
-
-/-!
-
-Next is transitivitiy
-
--/
-
-lemma le_trans (x y z : MyRat) (h1 : x ≤ y) (h2 : y ≤ z) : x ≤ z := by
-  sorry
-
-/-!
-
-Next is antisymmetry
-
--/
-
-lemma le_antisymm (x y : MyRat) (hxy : x ≤ y) (hyx : y ≤ x) : x = y := by
-  sorry
-
-instance : PartialOrder MyRat where
-  le := (. ≤ .)
-  le_refl := le_refl
-  le_trans := le_trans
-  le_antisymm := le_antisymm
 
 instance : ZeroLEOneClass MyRat := ⟨zero_le_one⟩
 

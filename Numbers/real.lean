@@ -19,7 +19,7 @@ open MyPrereal
 --ignore the following
 instance funLike : FunLike MyPrereal ℕ MyRat where
   coe := Subtype.val
-  coe_injective' _ _ := Subtype.ext
+  coe_injective _ _ := Subtype.ext
 
 lemma prop (x : MyPrereal) : ∀ ε, 0 < ε → ∃ N, ∀ p q, N ≤ p → N ≤ q → |x p - x q| ≤ ε :=
   x.2
@@ -277,10 +277,7 @@ instance field : Field MyReal where
   mul_inv_cancel := mul_inv_cancel
   inv_zero := by
     apply Quot.sound
-    simp only [MyPrereal.inv, Setoid.refl, not_true_eq_false, reduceDIte, equiv_def',
-      MyPrereal.zero_def, sub_self, abs_zero]
-    intro ε hε
-    exact ⟨0, fun _ _ ↦ hε.le⟩
+    simp [MyPrereal.inv]
   qsmul := _
   nnqsmul := _
 
@@ -433,7 +430,7 @@ instance : ZeroLEOneClass MyReal := ⟨zero_le_one⟩
 lemma pos_def {x : MyPrereal} : IsPos x ↔ 0 < (⟦x⟧ : MyReal) := by
   sorry
 
-lemma add_le_add_left (x y : MyReal) (h : x ≤ y) (t : MyReal) : t + x ≤ t + y := by
+lemma add_le_add_left (x y : MyReal) (h : x ≤ y) (t : MyReal) : x + t ≤ y + t := by
   sorry
 
 lemma mul_nonneg (x y : MyReal) (hx : 0 ≤ x) (hy : 0 ≤ y) : 0 ≤ x * y := by

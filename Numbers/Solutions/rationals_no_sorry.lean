@@ -68,7 +68,7 @@ by to get rationals. -/
 def R (x y : MyPrerat) : Prop := x.1 * y.2 = x.2 * y.1
 
 -- Lemma saying what definition of `R` is on ordered pairs
-lemma R_def (a : MyInt) (b : {x : MyInt // x ≠ 0}) (c : MyInt) (d : {x : MyInt // x ≠ 0}) :
+@[grind =] lemma R_def (a : MyInt) (b : {x : MyInt // x ≠ 0}) (c : MyInt) (d : {x : MyInt // x ≠ 0}) :
     R (a,b) (c,d) ↔ a * d = b * c := by
   rfl
 
@@ -95,12 +95,14 @@ instance R_equiv : Setoid MyPrerat where
   iseqv := ⟨R_refl, R_symm, R_trans⟩
 
 -- Teach the definition of `≈` to the simplifier
-@[simp] lemma equiv_def (a : MyInt) (b : {x : MyInt // x ≠ 0}) (c : MyInt) (d : {x : MyInt // x ≠ 0}) :
+@[simp, grind =]
+lemma equiv_def (a : MyInt) (b : {x : MyInt // x ≠ 0}) (c : MyInt) (d : {x : MyInt // x ≠ 0}) :
     (a, b) ≈ (c, d) ↔ a * d = b * c := by
   rfl
 
 -- Teach the definition of `Setoid.r` to the simplifier
-@[simp] lemma equiv_def' (a : MyInt) (b : {x : MyInt // x ≠ 0}) (c : MyInt) (d : {x : MyInt // x ≠ 0}) :
+@[simp, grind =]
+lemma equiv_def' (a : MyInt) (b : {x : MyInt // x ≠ 0}) (c : MyInt) (d : {x : MyInt // x ≠ 0}) :
     Setoid.r (a, b) (c, d) ↔ a * d = b * c := by
   rfl
 
@@ -120,7 +122,7 @@ instance R_equiv : Setoid MyPrerat where
 def neg (ab : MyPrerat) : MyPrerat := (-ab.1, ab.2)
 
 -- teach it to the simplifier
-@[simp] lemma neg_def (a : MyInt) (b : {x : MyInt // x ≠ 0}) : neg (a, b) = (-a, b) := by
+@[simp, grind =] lemma neg_def (a : MyInt) (b : {x : MyInt // x ≠ 0}) : neg (a, b) = (-a, b) := by
   rfl
 
 lemma neg_quotient ⦃x x' : MyPrerat⦄ (h : x ≈ x') : neg x ≈ neg x' := by
@@ -372,6 +374,7 @@ instance commRing : CommRing MyRat where
   nsmul := nsmulRec
   zsmul := zsmulRec
 
+@[grind =]
 lemma sub_def (a : MyInt) (b : {x : MyInt // x ≠ 0}) (c : MyInt) (d : {x : MyInt // x ≠ 0}) :
     (⟦(a, b)⟧ : MyRat) - ⟦(c, d)⟧ = ⟦(a * d - b * c, b * d)⟧ := by
   rw [sub_eq_add_neg, neg_def, add_def, mul_neg, ← sub_eq_add_neg]
