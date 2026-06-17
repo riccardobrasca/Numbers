@@ -58,35 +58,39 @@ lemma nonneg_neg {x : MyRat} (h : IsNonneg x) (h' : IsNonneg (-x)) :
 
 -- this one is also useful
 lemma nonneg_neg_of_not_nonneg {x : MyRat} : ¬ IsNonneg x → IsNonneg (-x) := by
+  -- Work with a concrete representative `a / b` of `x` (the denominator `b` is nonzero).
   refine Quot.induction_on x ?_
-  rintro ⟨a, ⟨b, hb⟩⟩ h
+  rintro ⟨a, b, hb⟩ h
+  -- Unfolding `IsNonneg` everywhere, the hypothesis `h` now says: there is *no* way to
+  -- write `a / b` as `n / d` with numerator `n ≥ 0` and denominator `d > 0`. The goal
+  -- asks us to produce exactly such a representation of `-(a / b)`.
   simp [IsNonneg] at *
-  -- This is as you can imagine a big case bash depending on the signs of a and b.
-  -- The question is to build a nonnegative prerational that maps onto -(a/b)
-  -- given that a/b is not nonnegative. We argue by cases on whether a is nonnegative.
-  by_cases ha : 0 ≤ a
-  -- In  a>=0 then the prerational we're going to use is a/(-b).
-  · use a, ha, -b
-    -- We know x is not nonnegative. So if a>=0 then b had better be <0
-    have foo : 0 < -b := by
-      -- because if b>=0 then x=a/b is a nonnegative prerational, a contradiction.
-      by_contra!
-      exact h a b (lt_of_le_of_ne (neg_nonpos.1 this) hb.symm) ha <| mul_comm _ _
-    clear h -- don't need hypothesis that x is not nonnegative any more.
-    -- A machine can do the rest.
-    use foo
-    apply Quotient.eq.2 -- remaining goal of the form ⟦(p,q)⟧=⟦(r,s)⟧ so turn it into a question
-                        -- about integers being equivalent
-    simp [mul_comm] -- the simplifier reduces this random question to `mul_comm` on `MyInt`
-  · push_neg at ha
-    use -a, (neg_nonneg.2 ha.le)
-    have foo : ¬ 0 < -b := by
-      -- foo true because other wise you can use h to get a contradiction
-      intro hb
-      exact h (-a) (-b) hb (neg_nonneg.2 ha.le) (by grind)
-    use b, (pos_of_neg_neg (lt_of_le_of_ne (by linarith) (by grind)))
-    apply Quotient.eq.2
-    simp [mul_comm]
+  -- Two recurring facts make the rest mechanical:
+  --   * two fractions are equal iff they cross-multiply equally
+  --     (`⟦(p, q)⟧ = ⟦(r, s)⟧ ↔ p * s = q * r`, supplied by `Quotient.eq` + `simp`);
+  --   * `-(a / b) = (-a) / b`.
+  -- The sign of the denominator `b` decides which representative of `-(a / b)` has a
+  -- positive denominator, so we split on it.
+  rcases lt_or_gt_of_ne hb with hb_neg | hb_pos
+  · -- `b < 0`, so `-b > 0` and `-(a / b) = a / (-b)`.
+    -- Claim `0 ≤ a`. If instead `a < 0`, then `-a > 0`, and `a / b = (-a) / (-b)` would
+    -- already be a nonnegative representative of `x` (numerator `-a ≥ 0`, denominator
+    -- `-b > 0`) — contradicting `h`.
+    have ha : 0 ≤ a := by
+      by_contra ha
+      push Not at ha
+      exact h (-a) (by linarith) (-b) (by linarith) (by apply Quotient.eq.2; grind)
+    -- So `a / (-b)` is the required nonnegative representative of `-(a / b)`.
+    exact ⟨a, ha, -b, by linarith, by apply Quotient.eq.2; grind⟩
+  · -- `b > 0`, so `-(a / b) = (-a) / b` already has a positive denominator.
+    -- Claim `0 ≤ -a`. If instead `-a < 0`, i.e. `a > 0`, then `a / b` itself is a
+    -- nonnegative representative of `x` — contradicting `h`.
+    have ha : 0 ≤ -a := by
+      by_contra ha
+      push Not at ha
+      exact h a (by linarith) b hb_pos (by apply Quotient.eq.2; grind)
+    -- So `(-a) / b` is the required nonnegative representative of `-(a / b)`.
+    exact ⟨-a, ha, b, hb_pos, by apply Quotient.eq.2; grind⟩
 /-
 
 ## Relationship with addition
@@ -134,7 +138,7 @@ lemma isNonneg_inv_isNonneg {x : MyRat} (hx : IsNonneg x) :
     simp [MyPrerat.inv]
   · use b, a, by linarith, lt_of_le_of_ne ha ha2.symm
     apply Quotient.eq.2
-    simp [MyPrerat.inv, ha2, mul_comm]
+    simp [MyPrerat.inv, ha2]
 
 /-!
 
@@ -149,8 +153,39 @@ the raionals are a linear order.
 /-- Our definition of x ≤ y on the rationals. -/
 def le (x y : MyRat) : Prop := IsNonneg (y - x)
 
-instance : LE MyRat where
+lemma le_refl (x : MyRat) : le x x := by
+  simp [le]
+
+/-!
+
+Next is transitivitiy
+
+-/
+
+lemma le_trans (x y z : MyRat) (h1 : le x y) (h2 : le y z) : le x z := by
+  simp [le] at *
+  convert isNonneg_add_isNonneg h1 h2 using 1
+  ring
+
+/-!
+
+Next is antisymmetry
+
+-/
+
+lemma le_antisymm (x y : MyRat) (hxy : le x y) (hyx : le y x) : x = y := by
+  simp [le] at *
+  have foo : IsNonneg (-(y - x)) := by
+    convert hyx using 1
+    ring
+  have := nonneg_neg hxy foo
+  linear_combination -(1 * this)
+
+instance : PartialOrder MyRat where
   le := le
+  le_refl := le_refl
+  le_trans := le_trans
+  le_antisymm := le_antisymm
 
 lemma le_def (x y : MyRat) : x ≤ y ↔ IsNonneg (y - x) := by
   rfl
@@ -167,50 +202,9 @@ Let's warm up with 0 ≤ 1.
 lemma zero_le_one : (0 : MyRat) ≤ 1 := by
   simp [le_def]
 
-/-!
-
-There's no point proving 0 ≤ 0 and 1 ≤ 1, we may as well prove reflexivity
-in general.
-
--/
-
-lemma le_refl (x : MyRat) : x ≤ x := by
-  simp [le_def]
-
-/-!
-
-Next is transitivitiy
-
--/
-
-lemma le_trans (x y z : MyRat) (h1 : x ≤ y) (h2 : y ≤ z) : x ≤ z := by
-  simp [le_def] at *
-  convert isNonneg_add_isNonneg h1 h2 using 1
-  ring
-
-/-!
-
-Next is antisymmetry
-
--/
-
-lemma le_antisymm (x y : MyRat) (hxy : x ≤ y) (hyx : y ≤ x) : x = y := by
-  simp [le_def] at *
-  have foo : IsNonneg (-(y - x)) := by
-    convert hyx using 1
-    ring
-  have := nonneg_neg hxy foo
-  linear_combination -(1 * this)
-
-instance : PartialOrder MyRat where
-  le := (. ≤ .)
-  le_refl := le_refl
-  le_trans := le_trans
-  le_antisymm := le_antisymm
-
 instance : ZeroLEOneClass MyRat := ⟨zero_le_one⟩
 
-lemma add_le_add_left (x y : MyRat) (h : x ≤ y) (t : MyRat) : t + x ≤ t + y := by
+lemma add_le_add_left (x y : MyRat) (h : x ≤ y) (t : MyRat) : x + t ≤ y + t := by
   simp_all [le_def]
 
 lemma mul_nonneg (x y : MyRat) (hx : 0 ≤ x) (hy : 0 ≤ y) : 0 ≤ x * y := by

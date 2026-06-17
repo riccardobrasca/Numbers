@@ -27,7 +27,7 @@ lemma IsCauchy.bounded {x : MyNat → MyRat} (hx : IsCauchy x) : ∃ B, 0 < B �
           refine ⟨n, H, rfl⟩
          _ ≤ M + 1 := by linarith
   · calc |x n| = |x A + (x n - x A)| := by ring_nf
-         _ ≤ |x A| + |x n - x A| := abs_add _ _
+         _ ≤ |x A| + |x n - x A| := abs_add_le _ _
          _ ≤ M + 1 := by
                       gcongr
                       · apply le_max'
@@ -38,9 +38,9 @@ lemma IsCauchy.bounded {x : MyNat → MyRat} (hx : IsCauchy x) : ∃ B, 0 < B �
 -- When adding grind attributes to external lemmas, best to use "local".
 -- These are not great `grind` attributes, but we will need better built-in support for inequalities
 -- before you can do without them here.
-attribute [local grind] le_of_max_le_left
-attribute [local grind] le_of_max_le_right
-attribute [local grind] le_trans
+attribute [local grind .] le_of_max_le_left
+attribute [local grind →] le_of_max_le_right
+attribute [local grind <=] le_trans
 
 abbrev MyPrereal := {x // IsCauchy x}
 
@@ -51,7 +51,7 @@ open MyPrereal
 --ignore the following
 instance funLike : FunLike MyPrereal MyNat MyRat where
   coe := Subtype.val
-  coe_injective' _ _ := Subtype.ext
+  coe_injective _ _ := Subtype.ext
 
 lemma prop (x : MyPrereal) : ∀ ε, 0 < ε → ∃ N, ∀ p q, N ≤ p → N ≤ q → |x p - x q| ≤ ε :=
   x.2
@@ -190,7 +190,7 @@ lemma IsCauchy.mul {x y : MyNat → MyRat} (hx : IsCauchy x) (hy : IsCauchy y) :
   intro p q hp hq
   calc |(x * y) p - (x * y) q| = |x p * y p - x q * y q| := by simp
        _ = |x p * (y p - y q) + y q * (x p - x q)| := by ring_nf
-       _ ≤ |x p * (y p - y q)| + |y q * (x p - x q)| := abs_add _ _
+       _ ≤ |x p * (y p - y q)| + |y q * (x p - x q)| := abs_add_le _ _
        _ = |x p| * |(y p - y q)| + |y q| * |(x p - x q)| := by simp only [abs_mul]
        _ ≤ A * (ε/(2*A)) + B * (ε/(2*B)) := by grw [hA, hB, HN p q (by grind) (by grind),
                                               HM p q (by grind) (by grind)]
@@ -213,7 +213,7 @@ lemma mul_quotient ⦃x x' : MyPrereal⦄ (h : x ≈ x') ⦃y y' : MyPrereal⦄ 
   intro n hn
   calc |(x * y) n - (x' * y') n| = |x n * y n - x' n * y' n| := by simp
        _ = |x n * (y n - y' n) + y' n * (x n - x' n)| := by ring_nf
-       _ ≤ |x n| * |(y n - y' n)| + |y' n| * |(x n - x' n)| := by grw [abs_add, abs_mul, abs_mul]
+       _ ≤ |x n| * |(y n - y' n)| + |y' n| * |(x n - x' n)| := by grw [abs_add_le, abs_mul, abs_mul]
        _ ≤ A * (ε/(2*A)) + B * (ε/(2*B)) := by grw [hA, hB, HN' n (by grind), HN n (by grind)]
        _ = ε := by field_simp; ring
 
@@ -244,7 +244,7 @@ lemma IsCauchy.inv {x : MyPrereal} (H : ¬(x ≈ 0)) : IsCauchy (x⁻¹) := by
                                       · exact (HN p (by grind)).le
                                       · exact (HN q (by grind)).le
       _ ≤ (ε*A*A) / (A * A) := by grw [hM q p (by grind) (by grind)]
-      _ = ε := by field_simp; ring
+      _ = ε := by field_simp
 
 open Classical in
 noncomputable def inv (x : MyPrereal) : MyPrereal := if H : ¬(x ≈ 0) then ⟨_, IsCauchy.inv H⟩ else 0
@@ -279,7 +279,7 @@ lemma inv_quotient ⦃x x' : MyPrereal⦄ (h : x ≈ x') : inv x ≈ inv x' := b
                                          · exact (HN' n (by grind)).le
        _ ≤ (ε*A*A') / (A * A') := by gcongr
                                      exact hM n (by grind)
-       _ = ε := by field_simp; ring
+       _ = ε := by field_simp
 
 end MyPrereal
 
@@ -426,7 +426,7 @@ lemma mul_inv_cancel (x : MyReal) (hx : x ≠ 0) : x * x⁻¹ = 1 := by
   refine ⟨N, fun n hn ↦ ?_⟩
   convert hε.le
   simp only [hx, not_false_eq_true, MyPrereal.inv_def, abs_eq_zero]
-  suffices x n ≠ 0 by field_simp
+  suffices x n ≠ 0 by field_simp; simp
   exact abs_ne_zero.1 <| ne_of_gt <| lt_trans hδpos <| HN n hn
 
 noncomputable
@@ -435,10 +435,7 @@ instance field : Field MyReal where
   mul_inv_cancel := mul_inv_cancel
   inv_zero := by
     apply Quot.sound
-    simp only [MyPrereal.inv, Setoid.refl, not_true_eq_false, reduceDIte, equiv_def',
-      MyPrereal.zero_def, sub_self, abs_zero]
-    intro ε hε
-    exact ⟨0, fun _ _ ↦ hε.le⟩
+    simp [MyPrereal.inv, Setoid.refl]
   qsmul := _
   nnqsmul := _
 
@@ -481,6 +478,7 @@ lemma k_inv (x : MyRat) : k x⁻¹ = (k x)⁻¹ := by
   · simp [hx]
   rw [← mul_eq_one_iff_eq_inv₀ (k_injective.ne hx), ← k_mul]
   field_simp
+  simp
 
 @[simp] lemma k_inj {x y : MyRat} : k x = k y ↔ x = y :=
   k_injective.eq_iff
@@ -695,7 +693,7 @@ lemma pos_def {x : MyPrereal} : IsPos x ↔ 0 < (⟦x⟧ : MyReal) := by
   refine ⟨fun h ↦ ⟨by left; assumption, not_equiv_zero_of_isPos' h⟩, fun ⟨h1, h2⟩ ↦ ?_⟩
   simpa [← Quotient.eq_iff_equiv, ← zero_def, h2] using h1
 
-lemma add_le_add_left (x y : MyReal) (h : x ≤ y) (t : MyReal) : t + x ≤ t + y := by
+lemma add_le_add_left (x y : MyReal) (h : x ≤ y) (t : MyReal) : x + t ≤ y + t := by
   simp_all [le_def]
 
 lemma mul_nonneg (x y : MyReal) (hx : 0 ≤ x) (hy : 0 ≤ y) : 0 ≤ x * y := by
@@ -886,7 +884,7 @@ lemma approx_cauchy {f : MyNat → MyReal} (hf : IsCauchy f) : _root_.IsCauchy (
   calc |k (approx f p - approx f q)| = |k (approx f p) - k (approx f q)| := by rw [k_sub]
        _ = |-(f p - k (approx f p)) + (f p - f q) + (f q - k (approx f q))| := by ring_nf
        _ ≤ |f p - k (approx f p)| + |f p - f q| + |f q - k (approx f q)| := by
-        grw [abs_add, abs_add, abs_neg]
+        grw [abs_add_le, abs_add_le, abs_neg]
        _ ≤ |f p - k (approx f p)| + ((k ε)/3) + |f q - k (approx f q)| := by
         grw [HN p q (by grind) (by grind)]
        _ ≤ (k ε)/3 + (k ε)/3 + (k ε)/3 := by
@@ -916,7 +914,7 @@ theorem complete {f : MyNat → MyReal} (hf : IsCauchy f) : IsConvergent f := by
       simp only [add_le_add_iff_right]
       grind
   calc |f n - ⟦x⟧| = |f n - k (x n) + (k (x n) - ⟦x⟧)| := by ring_nf
-       _ ≤ |f n - k (x n)| + |k (x n) - ⟦x⟧| := by grw [abs_add]
+       _ ≤ |f n - k (x n)| + |k (x n) - ⟦x⟧| := by grw [abs_add_le]
        _ ≤ ε/2 + ε/2 := by grw [HN n (by grind),
         _root_.le_trans (_root_.le_trans (hf.approx_spec n).le H) HM]
        _ = ε := by ring

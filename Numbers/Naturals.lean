@@ -227,6 +227,10 @@ theorem le_total : a ≤ b ∨ b ≤ a := by
 theorem le_self_add : a ≤ a + b :=
   ⟨b, rfl⟩
 
+theorem le_add_self : a ≤ b + a := by
+  rw [add_comm]
+  exact le_self_add a b
+
 @[simp] theorem le_succ_iff_eq_succ_or_le : a ≤ b.succ ↔ a = b.succ ∨ a ≤ b := by
   refine ⟨fun ⟨x, hx⟩ ↦ ?_, fun h ↦  ?_⟩
   · cases x with
@@ -269,11 +273,11 @@ theorem lt_iff_ex_ne_zero : a < b ↔ ∃ x ≠ 0, b = a + x := by
 
 variable {a b c}
 
-theorem add_le_add_left (hab : a ≤ b) : c + a ≤ c + b := by
+theorem add_le_add_left (hab : a ≤ b) : a + c ≤ b + c := by
   rcases hab with ⟨x, rfl⟩
-  exact ⟨x, by rw [add_assoc]⟩
+  exact ⟨x, by rw [add_assoc, add_comm x, ← add_assoc]⟩
 
-theorem mul_lt_mul_of_pos_left (hab : a < b) (hc : 0 < c) : c * a < c * b := by
+theorem mul_lt_mul_of_pos_left (hc : 0 < c) (hab : a < b) : c * a < c * b := by
   rw [lt_iff_ex_ne_zero] at *
   rcases hab with ⟨x, hx, rfl⟩
   rcases hc with ⟨y, hy, rfl⟩
@@ -282,9 +286,9 @@ theorem mul_lt_mul_of_pos_left (hab : a < b) (hc : 0 < c) : c * a < c * b := by
   · exact mul_ne_zero hx hy
   · rw [zero_add, left_distrib, mul_comm x]
 
-theorem mul_lt_mul_of_pos_right (hab : a < b) (hc : 0 < c) : a * c < b * c := by
+theorem mul_lt_mul_of_pos_right (hc : 0 < c) (hab : a < b) : a * c < b * c := by
   rw [mul_comm, mul_comm b]
-  exact mul_lt_mul_of_pos_left hab hc
+  exact mul_lt_mul_of_pos_left hc hab
 
 theorem le_of_add_le_add_left (h : a + b ≤ a + c) : b ≤ c := by
   rcases h with ⟨x, hx⟩
@@ -298,13 +302,13 @@ theorem mul_left_cancel_of_ne_zero (ha : a ≠ 0) (h : a * b = a * c) : b = c :=
     · assumption
     exfalso
     rw [ne_zero_iff_pos] at ha
-    exact (lt_iff_le_and_ne.1 (mul_lt_mul_of_pos_left (lt_iff_le_and_ne.mpr ⟨H, hbc⟩) ha)).2 h
+    exact (lt_iff_le_and_ne.1 (mul_lt_mul_of_pos_left ha (lt_iff_le_and_ne.mpr ⟨H, hbc⟩))).2 h
   · by_cases hbc : b = c
     · assumption
     exfalso
     rw [ne_zero_iff_pos] at ha
-    exact (lt_iff_le_and_ne.1 (mul_lt_mul_of_pos_left (lt_iff_le_and_ne.mpr
-        ⟨H, Ne.symm hbc⟩) ha)).2 h.symm
+    exact (lt_iff_le_and_ne.1 (mul_lt_mul_of_pos_left ha (lt_iff_le_and_ne.mpr
+        ⟨H, Ne.symm hbc⟩))).2 h.symm
 
 theorem mul_right_cancel_of_ne_zero (ha : a ≠ 0) (h : b * a = c * a) : b = c := by
   rw [mul_comm, mul_comm c] at h

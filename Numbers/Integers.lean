@@ -150,7 +150,7 @@ instance commRing : CommRing MyInt where
   zsmul := zsmulRec
 
 lemma zero_ne_one : (0 : MyInt) ≠ 1 := by
-  simp [zero_def, one_def]
+  simp [zero_def, one_def, Quotient.eq]
 
 lemma mul_ne_zero : x ≠ 0 → y ≠ 0 → x * y ≠ 0 := by
   refine Quot.induction_on₂ x y ?_
@@ -179,7 +179,7 @@ def i : MyInt := ⟦(a, 0)⟧
 
 lemma i_injective : Function.Injective i := by
   intro a b h
-  simpa [i] using h
+  simpa [Quotient.eq, i] using h
 
 /-- We say `x ≤ y` if there's some natural `a` such that `y = x + a` -/
 def le (x y : MyInt) : Prop := ∃ a : MyNat, y = x + i a
@@ -245,7 +245,7 @@ lemma i_le_iff : i a ≤ i b ↔ a ≤ b := by
     use k
     rw [← i_add, ← hk]
 
-lemma add_le_add_left (h : x ≤ y) (z : MyInt) : z + x ≤ z + y := by
+lemma add_le_add_left (h : x ≤ y) (z : MyInt) : x + z ≤ y + z := by
   rcases h with ⟨n, rfl⟩
   use n
   grind
@@ -272,6 +272,6 @@ lemma archimedean (x : MyInt) : ∃ (n : MyNat), x ≤ i n := by
   refine Quot.induction_on x ?_
   intro ⟨a, b⟩
   refine ⟨a, b, ?_⟩
-  simp [i, add_def]
+  simp [i, add_def, Quotient.eq]
 
 end MyInt

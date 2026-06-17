@@ -336,7 +336,7 @@ lemma sub_def (a : MyInt) (b : {x : MyInt // x ≠ 0}) (c : MyInt) (d : {x : MyI
 -- To make the rationals into a field we need to think a little more.
 
 lemma zero_ne_one : (0 : MyRat) ≠ 1 := by
-  simp [zero_def, one_def]
+  simp [zero_def, one_def, Quotient.eq]
 
 lemma mul_inv_cancel (x : MyRat) (hx : x ≠ 0) : x * x⁻¹ = 1 := by
   rcases x with ⟨a, b, hb⟩
@@ -392,8 +392,7 @@ lemma i_mul (a b : MyNat) : i (a * b) = i a * i b := by
 -- The natural map is injective
 lemma i_injective : Function.Injective i := by
   intro a b h
-  simp [i, MyInt.i] at h
-  assumption
+  simpa [i, MyInt.i, Quotient.eq] using h
 
 /-!
 
@@ -426,8 +425,7 @@ lemma j_mul (a b : MyInt) : j (a * b) = j a * j b := by
 lemma j_injective (a b : MyInt) : j a = j b ↔ a = b := by
   constructor
   · intro h
-    simp [j] at h
-    assumption
+    simpa [j, Quotient.eq] using h
   · rintro rfl
     rfl
 

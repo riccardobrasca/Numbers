@@ -49,11 +49,12 @@ instance : IsStrictOrderedRing MyNat where
   zero_le_one := by simp
   le_of_add_le_add_left _ _ _ := le_of_add_le_add_left
   exists_pair_ne := ⟨0, 1, zero_ne_one⟩
-  mul_lt_mul_of_pos_left _ _ _ := mul_lt_mul_of_pos_left
-  mul_lt_mul_of_pos_right _ _ _ := mul_lt_mul_of_pos_right
+  mul_lt_mul_of_pos_left _ h _ _ H := mul_lt_mul_of_pos_left h H
+  mul_lt_mul_of_pos_right _ h _ _ H := mul_lt_mul_of_pos_right h H
 
 instance : CanonicallyOrderedAdd MyNat where
   exists_add_of_le := id
+  le_add_self := le_add_self
   le_self_add := le_self_add
 
 instance : IsDomain MyNat := inferInstance
