@@ -14,6 +14,7 @@ __pycache__
 *.mtc
 *.mtc0
 build
+lean_decls
 *.bcf
 *.bbl
 *.toc

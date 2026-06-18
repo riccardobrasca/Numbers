@@ -13,7 +13,7 @@ $\MyRat$ will be a quotient of a type called $\MyPrerat$.
     \lean{MyPrerat}
     \leanok
     \uses{MyInt}
-    Let $\MyPrerat$ be $\MyInt \times \MyInt \backslash \{0\}$
+    Let $\MyPrerat$ be $\MyInt \times (\MyInt \backslash \{0\})$
 \end{definition}
 
 \begin{definition}
@@ -107,7 +107,7 @@ Exercice.
     \leanok
     \uses{MyPrerat.R}
 We define an operation, called \emph{addition} on $\MyPrerat$ as follows: the addition of $x = (a,b)$
-and $y = (b, c)$ is
+and $y = (c, d)$ is
 \[
 x + y = (a,b) + (c,d) = (a * d + b * c, b*d)
 \]
@@ -131,7 +131,7 @@ Exercice.
     \lean{MyPrerat.mul}
     \leanok
     \uses{MyPrerat.R}
-We define an operation, called \emph{multiplication} on $\MyPrerat$ as follows: the multiplication of $x = (a,b)$ and $y = (b, c)$ is
+We define an operation, called \emph{multiplication} on $\MyPrerat$ as follows: the multiplication of $x = (a,b)$ and $y = (c, d)$ is
 \[
 x * y = (a,b) * (c,d) = (a*c, b*d)
 \]
@@ -154,9 +154,9 @@ Exercice.
     \lean{MyPrerat.inv}
     \leanok
     \uses{MyPrerat.R}
-We define an operation, called \emph{negation} on $\MyPrerat$ as follows: the inverse of $x = (a,b)$ is:
+We define an operation, called \emph{inversion} on $\MyPrerat$ as follows: the inverse of $x = (a,b)$ is:
 \[
-\mbox{if} b \neq 0 \mbox{ then } x^{-1} = (b, a), \mbox{ otherwise } x^{-1} = (0, 1)
+\mbox{if } a \neq 0 \mbox{ then } x^{-1} = (b, a), \mbox{ otherwise } x^{-1} = (0, 1)
 \]
 Note that $x^{-1}$ is \emph{always} defined!
 \end{definition}
@@ -212,7 +212,7 @@ We define the one of $\MyRat$, denoted $1$ as the class of $(1,1)$ (note that $1
     \lean{MyRat.neg}
     \uses{MyPrerat.R_equiv, MyPrerat.neg_quotient}
     \leanok
-We define the negation of $x = ⟦ (a, b) ⟧$ in $\MyInt$ as
+We define the negation of $x = ⟦ (a, b) ⟧$ in $\MyRat$ as
 \[
 -x = ⟦ -(a, b) ⟧
 \]
@@ -224,7 +224,7 @@ Thanks to Lemma~\ref{MyPrerat.neg_quotient} this is well defined.
     \lean{MyRat.add}
     \uses{MyPrerat.R_equiv, MyPrerat.add_quotient}
     \leanok
-We define the addition of $x = ⟦ (a, b) ⟧$ and $y = ⟦ (c, d) ⟧$ in $\MyInt$ as
+We define the addition of $x = ⟦ (a, b) ⟧$ and $y = ⟦ (c, d) ⟧$ in $\MyRat$ as
 \[
 x + y = ⟦ (a,b)+(c,d) ⟧
 \]
@@ -236,7 +236,7 @@ Thanks to Lemma~\ref{MyPrerat.add_quotient} this is well defined.
     \lean{MyRat.mul}
     \uses{MyPrerat.R_equiv, MyPrerat.mul_quotient}
     \leanok
-We define the multiplication of $x = ⟦ (a, b) ⟧$ and $y = ⟦ (c, d) ⟧$ in $\MyInt$ as
+We define the multiplication of $x = ⟦ (a, b) ⟧$ and $y = ⟦ (c, d) ⟧$ in $\MyRat$ as
 \[
 x * y = ⟦ (a, b)*(c,d) ⟧
 \]
@@ -248,7 +248,7 @@ Thanks to Lemma~\ref{MyPrerat.mul_quotient} this is well defined.
     \lean{MyRat.inv}
     \uses{MyPrerat.R_equiv, MyPrerat.inv_quotient}
     \leanok
-We define the negation of $x = ⟦ (a, b) ⟧$ in $\MyInt$ as
+We define the inverse of $x = ⟦ (a, b) ⟧$ in $\MyRat$ as
 \[
 x^{-1} = ⟦ (a, b)^{-1} ⟧
 \]
@@ -370,7 +370,7 @@ i(a+b) = i(a) + i(b)
 \[
 ⟦ (\MyInt.i (a), 1) + (\MyInt.i (b), 1) ⟧ = ⟦ (\MyInt.i (a), 1) ⟧ + ⟦ (\MyInt.i (b), 1) ⟧
 \]
-that is obvious from the definition ().
+that is obvious from the definition.
 \end{proof}
 
 \begin{lemma}
@@ -456,7 +456,7 @@ Exercice.
     \label{MyRat.j_mul}
     \lean{MyRat.j_mul}
     \leanok
-For all $a$ and $b$ in $\N$ we have that
+For all $a$ and $b$ in $\MyInt$ we have that
 \[
 j(a*b) = j(a) * j(b)
 \]
@@ -483,7 +483,7 @@ Exercice.
     \label{MyRat.j_comp_eq_i}
     \lean{MyRat.j_comp_eq_i}
     \leanok
-    Let $n$ be a natural number. Then $\MyRat.j (\MyInt.i (n)) = MyRat.i (n)$.
+    Let $n$ be a natural number. Then $\MyRat.j (\MyInt.i (n)) = \MyRat.i (n)$.
 \end{lemma}
 \begin{proof}
     \uses{MyRat.i, MyRat.j}
@@ -680,7 +680,7 @@ It follows that $\leq$ is an order relation.
     \label{MyRat.add_le_add_left}
     \lean{MyRat.add_le_add_left}
     \leanok
-    Let $x$, $y$ and $z$ in $\MyRat$ be such that $x \leq y$. Then $z + x ≤ z + y$.
+    Let $x$, $y$ and $z$ in $\MyRat$ be such that $x \leq y$. Then $x + z \leq y + z$.
 \end{lemma}
 \begin{proof}
     \uses{MyRat.le, MyRat.add}
@@ -718,7 +718,7 @@ We have proved that $\MyRat$ is an ordered ring.
 
 \begin{lemma}
     \label{MyRat.i_le_iff}
-    \lean{MyInt.i_le_iff}
+    \lean{MyRat.i_le_iff}
     \leanok
     Let $x$ and $y$ in $\N$. We have that $i(x) \leq i(y)$ if and only if $x \leq y$.
 \end{lemma}

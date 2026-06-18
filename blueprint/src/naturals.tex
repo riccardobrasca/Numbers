@@ -1,0 +1,298 @@
+\chapter{The natural numbers}
+
+Everything starts with the natural numbers. Since \texttt{lean} already has a type called $\N$, we
+define our own copy, called $\MyNat$, from scratch. To make sure we do not secretly use results that
+are already in mathlib, the file defining $\MyNat$ does not import anything. From now on we will also
+write $\N$ for $\MyNat$.
+
+\section{Definition}
+
+\begin{definition}
+    \label{MyNat}
+    \lean{MyNat}
+    \leanok
+    We define $\MyNat$ as the inductive type with two constructors:
+    \begin{itemize}
+        \item a term $0$ (called \texttt{zero});
+        \item for every $n \in \MyNat$, a term $\mathrm{succ}(n)$ (the \emph{successor} of $n$).
+    \end{itemize}
+    In other words, every natural number is obtained from $0$ by applying the successor function a
+    finite number of times. We write $1$ for $\mathrm{succ}(0)$.
+\end{definition}
+
+\begin{definition}
+    \label{MyNat.add}
+    \lean{MyNat.add}
+    \uses{MyNat}
+    \leanok
+    We define \emph{addition} on $\MyNat$ by recursion on the second argument:
+    \[
+    a + 0 = a, \qquad a + \mathrm{succ}(b) = \mathrm{succ}(a + b).
+    \]
+\end{definition}
+
+\begin{definition}
+    \label{MyNat.mul}
+    \lean{MyNat.mul}
+    \uses{MyNat.add}
+    \leanok
+    We define \emph{multiplication} on $\MyNat$ by recursion on the second argument:
+    \[
+    a * 0 = 0, \qquad a * \mathrm{succ}(b) = a * b + a.
+    \]
+\end{definition}
+
+\section{Commutative semiring structure}
+
+All the lemmas of this section are proved by induction, using the recursive definitions of addition
+and multiplication. Note that $a + 0 = a$ and $a * 0 = 0$ hold \emph{by definition}, while the
+symmetric statements $0 + a = a$ and $0 * a = 0$ need a proof.
+
+\begin{lemma}
+    \label{MyNat.zero_add}
+    \lean{MyNat.zero_add}
+    \leanok
+    For all $a$ in $\MyNat$ we have $0 + a = a$.
+\end{lemma}
+\begin{proof}
+    \uses{MyNat.add}
+    \leanok
+    By induction on $a$.
+\end{proof}
+
+\begin{lemma}
+    \label{MyNat.add_assoc}
+    \lean{MyNat.add_assoc}
+    \leanok
+    Addition on $\MyNat$ is associative.
+\end{lemma}
+\begin{proof}
+    \uses{MyNat.add}
+    \leanok
+    By induction on the last variable.
+\end{proof}
+
+\begin{lemma}
+    \label{MyNat.add_comm}
+    \lean{MyNat.add_comm}
+    \leanok
+    Addition on $\MyNat$ is commutative.
+\end{lemma}
+\begin{proof}
+    \uses{MyNat.add, MyNat.zero_add}
+    \leanok
+    By induction.
+\end{proof}
+
+\begin{lemma}
+    \label{MyNat.left_distrib}
+    \lean{MyNat.left_distrib}
+    \leanok
+    For all $a$, $b$ and $c$ in $\MyNat$ we have $a * (b + c) = a * b + a * c$.
+\end{lemma}
+\begin{proof}
+    \uses{MyNat.add, MyNat.mul, MyNat.add_assoc, MyNat.add_comm}
+    \leanok
+    By induction on $c$.
+\end{proof}
+
+\begin{lemma}
+    \label{MyNat.right_distrib}
+    \lean{MyNat.right_distrib}
+    \leanok
+    For all $a$, $b$ and $c$ in $\MyNat$ we have $(a + b) * c = a * c + b * c$.
+\end{lemma}
+\begin{proof}
+    \uses{MyNat.add, MyNat.mul, MyNat.add_assoc, MyNat.add_comm}
+    \leanok
+    By induction on $c$.
+\end{proof}
+
+\begin{lemma}
+    \label{MyNat.mul_assoc}
+    \lean{MyNat.mul_assoc}
+    \leanok
+    Multiplication on $\MyNat$ is associative.
+\end{lemma}
+\begin{proof}
+    \uses{MyNat.mul, MyNat.left_distrib}
+    \leanok
+    By induction, using left distributivity.
+\end{proof}
+
+\begin{lemma}
+    \label{MyNat.mul_comm}
+    \lean{MyNat.mul_comm}
+    \leanok
+    Multiplication on $\MyNat$ is commutative.
+\end{lemma}
+\begin{proof}
+    \uses{MyNat.mul}
+    \leanok
+    By induction.
+\end{proof}
+
+\begin{lemma}
+    \label{MyNat.one_mul}
+    \lean{MyNat.one_mul}
+    \leanok
+    For all $a$ in $\MyNat$ we have $1 * a = a$.
+\end{lemma}
+\begin{proof}
+    \uses{MyNat.mul}
+    \leanok
+    By induction, recalling that $1 = \mathrm{succ}(0)$.
+\end{proof}
+
+\begin{proposition}
+    \label{MyNat.instCommSemiring}
+    \lean{MyNat.instCommSemiring}
+    \leanok
+    $\MyNat$ with addition and multiplication is a commutative semiring.
+\end{proposition}
+\begin{proof}
+    \uses{MyNat.add, MyNat.mul, MyNat.zero_add, MyNat.add_assoc, MyNat.add_comm,
+    MyNat.left_distrib, MyNat.right_distrib, MyNat.mul_assoc, MyNat.mul_comm, MyNat.one_mul}
+    \leanok
+    We collect all the lemmas above: addition is associative and commutative with neutral element
+    $0$, multiplication is associative and commutative with neutral element $1$, multiplication
+    distributes over addition and $0$ is absorbing for multiplication.
+\end{proof}
+
+\begin{lemma}
+    \label{MyNat.zero_ne_one}
+    \lean{MyNat.zero_ne_one}
+    \leanok
+    In $\MyNat$ we have $0 \neq 1$.
+\end{lemma}
+\begin{proof}
+    \uses{MyNat}
+    \leanok
+    The constructors $\mathrm{zero}$ and $\mathrm{succ}$ are distinct, and $1 = \mathrm{succ}(0)$.
+\end{proof}
+
+\begin{lemma}
+    \label{MyNat.mul_ne_zero}
+    \lean{MyNat.mul_ne_zero}
+    \leanok
+    Let $a$ and $b$ in $\MyNat$ be such that $a \neq 0$ and $b \neq 0$. Then $a * b \neq 0$.
+\end{lemma}
+\begin{proof}
+    \uses{MyNat.mul}
+    \leanok
+    If $a \neq 0$ and $b \neq 0$ we can write $a = \mathrm{succ}(a')$ and $b = \mathrm{succ}(b')$, and
+    then $a * b = \mathrm{succ}(a' * b' + a' + b')$ is a successor, hence nonzero.
+\end{proof}
+
+\section{The order}
+
+\begin{definition}
+    \label{MyNat.le}
+    \lean{MyNat.le}
+    \uses{MyNat.add}
+    \leanok
+    Let $a$ and $b$ in $\MyNat$. We write $a \leq b$ if there exists a natural number $x$ such that
+    \[
+    b = a + x.
+    \]
+\end{definition}
+
+\begin{lemma}
+    \label{MyNat.le_refl}
+    \lean{MyNat.le_refl}
+    \leanok
+    The relation $\leq$ on $\MyNat$ is reflexive.
+\end{lemma}
+\begin{proof}
+    \uses{MyNat.le}
+    \leanok
+    We can take $x = 0$.
+\end{proof}
+
+\begin{lemma}
+    \label{MyNat.le_trans}
+    \lean{MyNat.le_trans}
+    \leanok
+    The relation $\leq$ on $\MyNat$ is transitive.
+\end{lemma}
+\begin{proof}
+    \uses{MyNat.le, MyNat.add_assoc}
+    \leanok
+    If $b = a + x$ and $c = b + y$ then $c = a + (x + y)$.
+\end{proof}
+
+\begin{lemma}
+    \label{MyNat.le_antisymm}
+    \lean{MyNat.le_antisymm}
+    \leanok
+    The relation $\leq$ on $\MyNat$ is antisymmetric.
+\end{lemma}
+\begin{proof}
+    \uses{MyNat.le}
+    \leanok
+    If $b = a + x$ and $a = b + y$ then $a = a + (x + y)$, so $x + y = 0$ and hence $x = y = 0$,
+    giving $a = b$.
+\end{proof}
+
+\begin{lemma}
+    \label{MyNat.le_total}
+    \lean{MyNat.le_total}
+    \leanok
+    The order $\leq$ on $\MyNat$ is total.
+\end{lemma}
+\begin{proof}
+    \uses{MyNat.le}
+    \leanok
+    By induction one shows that for all $a$ and $b$ either $a \leq b$ or $b \leq a$.
+\end{proof}
+
+\begin{lemma}
+    \label{MyNat.linearOrder}
+    \lean{MyNat.linearOrder}
+    \leanok
+    We have that $\MyNat$ with $\leq$ is a \emph{linear order}.
+\end{lemma}
+\begin{proof}
+    \uses{MyNat.le_refl, MyNat.le_trans, MyNat.le_antisymm, MyNat.le_total}
+    \leanok
+    Clear from the lemmas above.
+\end{proof}
+
+\section{Interaction between the order and the algebraic structure}
+
+\begin{lemma}
+    \label{MyNat.add_le_add_left}
+    \lean{MyNat.add_le_add_left}
+    \leanok
+    Let $a$, $b$ and $c$ in $\MyNat$ be such that $a \leq b$. Then $a + c \leq b + c$.
+\end{lemma}
+\begin{proof}
+    \uses{MyNat.le, MyNat.add}
+    \leanok
+    Let $x$ be such that $b = a + x$. The same $x$ shows that $a + c \leq b + c$.
+\end{proof}
+
+\begin{lemma}
+    \label{MyNat.mul_lt_mul_of_pos_left}
+    \lean{MyNat.mul_lt_mul_of_pos_left}
+    \leanok
+    Let $a$, $b$ and $c$ in $\MyNat$ be such that $0 < c$ and $a < b$. Then $c * a < c * b$.
+\end{lemma}
+\begin{proof}
+    \uses{MyNat.le, MyNat.mul, MyNat.left_distrib, MyNat.mul_ne_zero}
+    \leanok
+    Write $b = a + x$ with $x \neq 0$. Then $c * b = c * a + c * x$ with $c * x \neq 0$, so
+    $c * a < c * b$.
+\end{proof}
+
+\begin{lemma}
+    \label{MyNat.mul_lt_mul_of_pos_right}
+    \lean{MyNat.mul_lt_mul_of_pos_right}
+    \leanok
+    Let $a$, $b$ and $c$ in $\MyNat$ be such that $0 < c$ and $a < b$. Then $a * c < b * c$.
+\end{lemma}
+\begin{proof}
+    \uses{MyNat.mul_lt_mul_of_pos_left, MyNat.mul_comm}
+    \leanok
+    Identical to the previous lemma using commutativity of multiplication.
+\end{proof}
