@@ -3,7 +3,7 @@ import Mathlib.Algebra.Order.Ring.Defs
 import Mathlib.Algebra.Ring.GrindInstances
 import Mathlib.Algebra.Ring.Regular
 import Mathlib.Order.Interval.Finset.Defs
-import Numbers.Solutions.naturals_no_sorry
+import Numbers.naturals
 
 /-!
 
