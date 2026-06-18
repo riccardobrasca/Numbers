@@ -1,0 +1,1163 @@
+\chapter{The reals}
+
+We finally construct the real numbers starting from our rationals $\MyRat$. As usual \texttt{lean}
+already has a type called $\R$, so we define a new type called $\MyReal$ that will be another
+definition of the real numbers.
+
+The idea is the classical one: a real number is a Cauchy sequence of rationals, where two Cauchy
+sequences are identified when their difference tends to $0$. We will write the absolute value $|x|$
+of an element $x$ of $\MyRat$, which \texttt{lean} already knows about: since $\MyRat$ is ordered,
+$|x|$ is defined as $\max(x, -x)$.
+
+\section{Cauchy sequences}
+
+A sequence of rationals is just a function $x \colon \MyNat \to \MyRat$, and we write $x_n$ for its
+value at $n$.
+
+\begin{definition}
+    \label{IsCauchy}
+    \lean{IsCauchy}
+    \leanok
+    \uses{MyRat}
+A sequence $x \colon \MyNat \to \MyRat$ is a \emph{Cauchy sequence} if
+\[
+\forall \varepsilon > 0, \ \exists N, \ \forall p, q \geq N, \ |x_p - x_q| \leq \varepsilon.
+\]
+\end{definition}
+
+\begin{lemma}
+    \label{IsCauchy.bounded}
+    \lean{IsCauchy.bounded}
+    \leanok
+    \uses{IsCauchy}
+    Every Cauchy sequence $x$ is bounded: there exists $B > 0$ such that $|x_n| \leq B$ for all $n$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Apply the definition with $\varepsilon = 1$ to get an $N$, and take $B$ to be the maximum of
+    $1 + |x_N|$ and the finitely many values $|x_0|, \dots, |x_{N-1}|$.
+\end{proof}
+
+$\MyReal$ will be a quotient of a type called $\MyPrereal$.
+
+\begin{definition}
+    \label{MyPrereal}
+    \lean{MyPrereal}
+    \leanok
+    \uses{IsCauchy}
+Let $\MyPrereal$ be the type of Cauchy sequences, that is the subtype of $x \colon \MyNat \to \MyRat$
+such that $x$ is a Cauchy sequence.
+\end{definition}
+
+\begin{definition}
+    \label{MyPrereal.R}
+    \lean{MyPrereal.R}
+    \leanok
+    \uses{MyPrereal}
+We define a relation $R$ on $\MyPrereal$ as follows: $x$ and $y$ are related if and only if
+\[
+\forall \varepsilon > 0, \ \exists N, \ \forall n \geq N, \ |x_n - y_n| \leq \varepsilon,
+\]
+in other words if their difference tends to $0$.
+\end{definition}
+
+\begin{lemma}
+$R$ is a reflexive relation.
+    \label{MyPrereal.R_refl}
+    \lean{MyPrereal.R_refl}
+    \leanok
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{MyPrereal.R}
+    Exercice.
+\end{proof}
+
+\begin{lemma}
+$R$ is a symmetric relation.
+    \label{MyPrereal.R_symm}
+    \lean{MyPrereal.R_symm}
+    \leanok
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{MyPrereal.R}
+    Exercice.
+\end{proof}
+
+\begin{lemma}
+$R$ is a transitive relation.
+    \label{MyPrereal.R_trans}
+    \lean{MyPrereal.R_trans}
+    \leanok
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{MyPrereal.R}
+    Exercice, using the triangle inequality and splitting $\varepsilon$ into $\varepsilon/2 +
+    \varepsilon/2$.
+\end{proof}
+
+\begin{lemma}
+    \label{MyPrereal.R_equiv}
+    \lean{MyPrereal.R_equiv}
+    \leanok
+We have that $R$ is an equivalence relation. From now on, we will write $x \approx y$ for $x R y$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{MyPrereal.R_refl, MyPrereal.R_symm, MyPrereal.R_trans}
+Clear from Lemma~\ref{MyPrereal.R_refl}, Lemma~\ref{MyPrereal.R_symm} and
+Lemma~\ref{MyPrereal.R_trans}.
+\end{proof}
+
+\begin{lemma}
+    \label{MyPrereal.IsCauchy.const}
+    \lean{MyPrereal.IsCauchy.const}
+    \leanok
+    \uses{IsCauchy}
+For any rational $x$, the constant sequence $n \mapsto x$ is a Cauchy sequence.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Obvious, since $|x - x| = 0 \leq \varepsilon$.
+\end{proof}
+
+We now endow $\MyPrereal$ with the algebraic operations, all defined termwise.
+
+\begin{definition}
+    \label{MyPrereal.zero}
+    \lean{MyPrereal.zero}
+    \leanok
+    \uses{MyPrereal.IsCauchy.const}
+We define the zero of $\MyPrereal$ as the constant sequence $0$.
+\end{definition}
+
+\begin{definition}
+    \label{MyPrereal.one}
+    \lean{MyPrereal.one}
+    \leanok
+    \uses{MyPrereal.IsCauchy.const}
+We define the one of $\MyPrereal$ as the constant sequence $1$.
+\end{definition}
+
+\begin{lemma}
+    \label{MyPrereal.IsCauchy.neg}
+    \lean{MyPrereal.IsCauchy.neg}
+    \leanok
+    \uses{IsCauchy}
+If $x$ is a Cauchy sequence, then $-x$ (the termwise negation) is a Cauchy sequence. In particular
+negation is well defined on $\MyPrereal$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Exercice.
+\end{proof}
+
+\begin{lemma}
+    \label{MyPrereal.neg_quotient}
+    \lean{MyPrereal.neg_quotient}
+    \leanok
+    \uses{MyPrereal.IsCauchy.neg}
+If $x \approx x'$, then $-x \approx -x'$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Exercice.
+\end{proof}
+
+\begin{lemma}
+    \label{MyPrereal.IsCauchy.add}
+    \lean{MyPrereal.IsCauchy.add}
+    \leanok
+    \uses{IsCauchy}
+If $x$ and $y$ are Cauchy sequences, then $x + y$ (the termwise sum) is a Cauchy sequence. In
+particular addition is well defined on $\MyPrereal$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Exercice, splitting $\varepsilon$ into $\varepsilon/2 + \varepsilon/2$.
+\end{proof}
+
+\begin{lemma}
+    \label{MyPrereal.add_quotient}
+    \lean{MyPrereal.add_quotient}
+    \leanok
+    \uses{MyPrereal.IsCauchy.add}
+If $x \approx x'$ and $y \approx y'$, then $x + y \approx x' + y'$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Exercice.
+\end{proof}
+
+\begin{lemma}
+    \label{MyPrereal.IsCauchy.mul}
+    \lean{MyPrereal.IsCauchy.mul}
+    \leanok
+    \uses{IsCauchy, IsCauchy.bounded}
+If $x$ and $y$ are Cauchy sequences, then $x * y$ (the termwise product) is a Cauchy sequence. In
+particular multiplication is well defined on $\MyPrereal$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Write $x_p y_p - x_q y_q = x_p(y_p - y_q) + (x_p - x_q)y_q$ and use that Cauchy sequences are
+    bounded (Lemma~\ref{IsCauchy.bounded}).
+\end{proof}
+
+\begin{lemma}
+    \label{MyPrereal.mul_quotient}
+    \lean{MyPrereal.mul_quotient}
+    \leanok
+    \uses{MyPrereal.IsCauchy.mul}
+If $x \approx x'$ and $y \approx y'$, then $x * y \approx x' * y'$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Exercice, again using boundedness.
+\end{proof}
+
+Inversion is more delicate: to invert a Cauchy sequence we first need to know that, if it does not
+tend to $0$, then it is eventually bounded away from $0$.
+
+\begin{lemma}
+    \label{MyPrereal.pos_of_not_equiv_zero}
+    \lean{MyPrereal.pos_of_not_equiv_zero}
+    \leanok
+    \uses{MyPrereal.zero, MyPrereal.R}
+Let $x$ be in $\MyPrereal$ with $x \not\approx 0$. Then there exist $\delta > 0$ and $N$ such that
+$\delta < |x_n|$ for all $n \geq N$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Since $x \not\approx 0$ there is some $\varepsilon > 0$ for which the defining condition fails;
+    combine this with the Cauchy property to make $|x_n|$ eventually larger than $\delta =
+    \varepsilon/2$.
+\end{proof}
+
+\begin{lemma}
+    \label{MyPrereal.IsCauchy.inv}
+    \lean{MyPrereal.IsCauchy.inv}
+    \leanok
+    \uses{MyPrereal.pos_of_not_equiv_zero}
+Let $x$ be in $\MyPrereal$ with $x \not\approx 0$. Then the termwise inverse $x^{-1}$ is a Cauchy
+sequence.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{IsCauchy}
+    Using Lemma~\ref{MyPrereal.pos_of_not_equiv_zero} the terms are eventually bounded away from $0$,
+    and then $|x_p^{-1} - x_q^{-1}| = |x_p - x_q| / |x_p x_q|$ is controlled.
+\end{proof}
+
+\begin{definition}
+    \label{MyPrereal.inv}
+    \lean{MyPrereal.inv}
+    \leanok
+    \uses{MyPrereal.IsCauchy.inv, MyPrereal.zero}
+We define the inverse of $x$ in $\MyPrereal$ as the termwise inverse $x^{-1}$ if $x \not\approx 0$,
+and as $0$ otherwise. Note that it is \emph{always} defined.
+\end{definition}
+
+\begin{lemma}
+    \label{MyPrereal.inv_quotient}
+    \lean{MyPrereal.inv_quotient}
+    \leanok
+    \uses{MyPrereal.inv}
+If $x \approx x'$, then $x^{-1} \approx x'^{-1}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Exercice.
+\end{proof}
+
+\section{The reals}
+
+\subsection{Definitions}
+
+\begin{definition}
+    \label{MyReal}
+    \lean{MyReal}
+    \leanok
+    \uses{MyPrereal.R_equiv}
+    We define our reals $\MyReal$ as
+\[
+\MyReal = \MyPrereal \, / \approx
+\]
+We will write $⟦ x ⟧$ for the class of the Cauchy sequence $x$.
+\end{definition}
+
+\begin{definition}
+    \label{MyReal.zero}
+    \lean{MyReal.zero}
+    \leanok
+    \uses{MyReal, MyPrereal.zero}
+We define the zero of $\MyReal$, denoted $0$, as the class of the zero of $\MyPrereal$.
+\end{definition}
+
+\begin{definition}
+    \label{MyReal.one}
+    \lean{MyReal.one}
+    \leanok
+    \uses{MyReal, MyPrereal.one}
+We define the one of $\MyReal$, denoted $1$, as the class of the one of $\MyPrereal$.
+\end{definition}
+
+\subsection{Field structure}
+
+\begin{definition}
+    \label{MyReal.neg}
+    \lean{MyReal.neg}
+    \leanok
+    \uses{MyReal, MyPrereal.neg_quotient}
+We define the negation of $⟦ x ⟧$ in $\MyReal$ as $⟦ -x ⟧$. Thanks to
+Lemma~\ref{MyPrereal.neg_quotient} this is well defined.
+\end{definition}
+
+\begin{definition}
+    \label{MyReal.add}
+    \lean{MyReal.add}
+    \leanok
+    \uses{MyReal, MyPrereal.add_quotient}
+We define the addition of $⟦ x ⟧$ and $⟦ y ⟧$ in $\MyReal$ as $⟦ x + y ⟧$. Thanks to
+Lemma~\ref{MyPrereal.add_quotient} this is well defined.
+\end{definition}
+
+\begin{definition}
+    \label{MyReal.mul}
+    \lean{MyReal.mul}
+    \leanok
+    \uses{MyReal, MyPrereal.mul_quotient}
+We define the multiplication of $⟦ x ⟧$ and $⟦ y ⟧$ in $\MyReal$ as $⟦ x * y ⟧$. Thanks to
+Lemma~\ref{MyPrereal.mul_quotient} this is well defined.
+\end{definition}
+
+\begin{definition}
+    \label{MyReal.inv}
+    \lean{MyReal.inv}
+    \leanok
+    \uses{MyReal, MyPrereal.inv_quotient}
+We define the inverse of $⟦ x ⟧$ in $\MyReal$ as $⟦ x^{-1} ⟧$. Thanks to
+Lemma~\ref{MyPrereal.inv_quotient} this is well defined.
+\end{definition}
+
+\begin{proposition}
+    \label{MyReal.commRing}
+    \lean{MyReal.commRing}
+    \leanok
+    $\MyReal$ with addition and multiplication is a commutative ring.
+\end{proposition}
+\begin{proof}
+    \uses{MyReal.add, MyReal.mul, MyReal.zero, MyReal.one, MyReal.neg}
+    \leanok
+    All the ring axioms are checked by reducing to representatives and using that the operations are
+    termwise, so everything follows from the corresponding properties in $\MyRat$.
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.zero_ne_one}
+    \lean{MyReal.zero_ne_one}
+    \leanok
+In $\MyReal$ we have $0 \neq 1$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{MyReal.zero, MyReal.one}
+    If $0 = 1$ then the constant sequences $0$ and $1$ would be related, which is false since
+    $|0 - 1| = 1$ does not become small.
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.mul_inv_cancel}
+    \lean{MyReal.mul_inv_cancel}
+    \leanok
+Let $x \neq 0$ be in $\MyReal$. Then $x * x^{-1} = 1$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{MyReal.inv, MyReal.mul, MyPrereal.pos_of_not_equiv_zero}
+    Let $x = ⟦ a ⟧$ with $a \not\approx 0$. By Lemma~\ref{MyPrereal.pos_of_not_equiv_zero} the terms
+    $a_n$ are eventually nonzero, so $a_n a_n^{-1} = 1$ eventually, and hence $a * a^{-1} \approx 1$.
+\end{proof}
+
+\begin{proposition}
+    \label{MyReal.field}
+    \lean{MyReal.field}
+    \leanok
+    $\MyReal$ with addition and multiplication is a field.
+\end{proposition}
+\begin{proof}
+    \uses{MyReal.commRing, MyReal.mul_inv_cancel, MyReal.zero_ne_one}
+    \leanok
+    Clear because of Lemma~\ref{MyReal.zero_ne_one} and Lemma~\ref{MyReal.mul_inv_cancel}.
+\end{proof}
+
+\subsection{\texorpdfstring{The inclusion $k \colon \MyRat \to \MyReal$}{The inclusion}}
+
+\begin{definition}
+    \label{MyReal.k}
+    \lean{MyReal.k}
+    \leanok
+    \uses{MyReal, MyPrereal.IsCauchy.const}
+    We define a map
+\begin{gather*}
+    k \colon \MyRat \to \MyReal \\
+    x \mapsto ⟦ (n \mapsto x) ⟧
+\end{gather*}
+sending a rational to the class of the corresponding constant sequence.
+\end{definition}
+
+\begin{lemma}
+    \label{MyReal.k_zero}
+    \lean{MyReal.k_zero}
+    \leanok
+We have that $k(0) = 0$.
+\end{lemma}
+\begin{proof}
+    \uses{MyReal.k, MyReal.zero}
+    \leanok
+Clear from the definition.
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.k_one}
+    \lean{MyReal.k_one}
+    \leanok
+We have that $k(1) = 1$.
+\end{lemma}
+\begin{proof}
+    \uses{MyReal.k, MyReal.one}
+    \leanok
+Clear from the definition.
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.k_neg}
+    \lean{MyReal.k_neg}
+    \leanok
+For all $x$ in $\MyRat$ we have that $k(-x) = -k(x)$.
+\end{lemma}
+\begin{proof}
+    \uses{MyReal.k, MyReal.neg}
+    \leanok
+Clear from the definition.
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.k_add}
+    \lean{MyReal.k_add}
+    \leanok
+For all $x$ and $y$ in $\MyRat$ we have that $k(x + y) = k(x) + k(y)$.
+\end{lemma}
+\begin{proof}
+    \uses{MyReal.k, MyReal.add}
+    \leanok
+Clear from the definition.
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.k_sub}
+    \lean{MyReal.k_sub}
+    \leanok
+For all $x$ and $y$ in $\MyRat$ we have that $k(x - y) = k(x) - k(y)$.
+\end{lemma}
+\begin{proof}
+    \uses{MyReal.k, MyReal.k_add, MyReal.k_neg}
+    \leanok
+Clear from the definition.
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.k_mul}
+    \lean{MyReal.k_mul}
+    \leanok
+For all $x$ and $y$ in $\MyRat$ we have that $k(x * y) = k(x) * k(y)$.
+\end{lemma}
+\begin{proof}
+    \uses{MyReal.k, MyReal.mul}
+    \leanok
+Clear from the definition.
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.k_inv}
+    \lean{MyReal.k_inv}
+    \leanok
+For all $x$ in $\MyRat$ we have that $k(x^{-1}) = k(x)^{-1}$.
+\end{lemma}
+\begin{proof}
+    \uses{MyReal.k, MyReal.inv}
+    \leanok
+Exercice.
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.k_injective}
+    \lean{MyReal.k_injective}
+    \leanok
+    We have that $k$ is injective.
+\end{lemma}
+\begin{proof}
+    \uses{MyReal.k}
+    \leanok
+    If $k(x) = k(y)$ then the constant sequences $x$ and $y$ are related, so $|x - y|$ is arbitrarily
+    small and hence $x = y$.
+\end{proof}
+
+\section{Positivity}
+
+To define the order on $\MyReal$ we follow the same strategy as for $\MyRat$: we first introduce a
+notion of positivity and nonnegativity at the level of $\MyPrereal$.
+
+\subsection{Positive prereals}
+
+\begin{definition}
+    \label{MyPrereal.IsPos}
+    \lean{MyPrereal.IsPos}
+    \leanok
+    \uses{MyPrereal}
+Given $x$ in $\MyPrereal$, we say that $x$ is \emph{positive} if there exist $\delta > 0$ and $N$
+such that $\delta \leq x_n$ for all $n \geq N$, in other words if $x$ is eventually bounded below by
+a positive rational.
+\end{definition}
+
+\begin{lemma}
+    \label{MyPrereal.pos_of_isPos}
+    \lean{MyPrereal.pos_of_isPos}
+    \leanok
+    \uses{MyPrereal.IsPos}
+    If $x$ is positive, then there exists $N$ such that $0 < x_n$ for all $n \geq N$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Immediate from the definition.
+\end{proof}
+
+\begin{lemma}
+    \label{MyPrereal.one_pos}
+    \lean{MyPrereal.one_pos}
+    \leanok
+    \uses{MyPrereal.IsPos, MyPrereal.one}
+    The one of $\MyPrereal$ is positive.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Take $\delta = 1$.
+\end{proof}
+
+\begin{lemma}
+    \label{MyPrereal.not_isPos_zero}
+    \lean{MyPrereal.not_isPos_zero}
+    \leanok
+    \uses{MyPrereal.IsPos, MyPrereal.zero}
+    If $x \approx 0$, then $x$ is not positive.
+\end{lemma}
+\begin{proof}
+    \leanok
+    If $x$ were positive its terms would eventually be at least $\delta > 0$, contradicting $x
+    \approx 0$.
+\end{proof}
+
+\begin{lemma}
+    \label{MyPrereal.not_equiv_zero_of_isPos}
+    \lean{MyPrereal.not_equiv_zero_of_isPos}
+    \leanok
+    \uses{MyPrereal.not_isPos_zero}
+    If $x$ is positive, then $x \not\approx 0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Contrapositive of Lemma~\ref{MyPrereal.not_isPos_zero}.
+\end{proof}
+
+\begin{lemma}
+    \label{MyPrereal.isPos_quotient}
+    \lean{MyPrereal.isPos_quotient}
+    \leanok
+    \uses{MyPrereal.IsPos}
+    If $x \approx x'$ and $x$ is positive, then $x'$ is positive.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Exercice.
+\end{proof}
+
+\begin{lemma}
+    \label{MyPrereal.IsPos.add}
+    \lean{MyPrereal.IsPos.add}
+    \leanok
+    \uses{MyPrereal.IsPos}
+    Let $x$ and $y$ in $\MyPrereal$ both positive. Then $x + y$ is positive.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Exercice.
+\end{proof}
+
+\begin{lemma}
+    \label{MyPrereal.IsPos.mul}
+    \lean{MyPrereal.IsPos.mul}
+    \leanok
+    \uses{MyPrereal.IsPos}
+    Let $x$ and $y$ in $\MyPrereal$ both positive. Then $x * y$ is positive.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Exercice.
+\end{proof}
+
+\subsection{Nonnegative prereals}
+
+\begin{definition}
+    \label{MyPrereal.IsNonneg}
+    \lean{MyPrereal.IsNonneg}
+    \leanok
+    \uses{MyPrereal.IsPos, MyPrereal.zero}
+Given $x$ in $\MyPrereal$, we say that $x$ is \emph{nonnegative} if either $x$ is positive or $x
+\approx 0$.
+\end{definition}
+
+\begin{lemma}
+    \label{MyPrereal.IsNonneg_of_equiv_zero}
+    \lean{MyPrereal.IsNonneg_of_equiv_zero}
+    \leanok
+    \uses{MyPrereal.IsNonneg}
+    If $x \approx 0$, then $x$ is nonnegative.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Clear from the definition.
+\end{proof}
+
+\begin{lemma}
+    \label{MyPrereal.IsNonneg_of_nonneg}
+    \lean{MyPrereal.IsNonneg_of_nonneg}
+    \leanok
+    \uses{MyPrereal.IsNonneg}
+    If there exists $N$ such that $0 \leq x_n$ for all $n \geq N$, then $x$ is nonnegative.
+\end{lemma}
+\begin{proof}
+    \leanok
+    If $x \not\approx 0$ then, by an argument similar to
+    Lemma~\ref{MyPrereal.pos_of_not_equiv_zero}, $x$ is eventually bounded below by a positive
+    rational, hence positive.
+\end{proof}
+
+\begin{lemma}
+    \label{MyPrereal.zero_nonneg}
+    \lean{MyPrereal.zero_nonneg}
+    \leanok
+    \uses{MyPrereal.IsNonneg, MyPrereal.zero}
+    The zero of $\MyPrereal$ is nonnegative.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Clear, since $0 \approx 0$.
+\end{proof}
+
+\begin{lemma}
+    \label{MyPrereal.one_nonneg}
+    \lean{MyPrereal.one_nonneg}
+    \leanok
+    \uses{MyPrereal.IsNonneg, MyPrereal.one_pos}
+    The one of $\MyPrereal$ is nonnegative.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Clear because of Lemma~\ref{MyPrereal.one_pos}.
+\end{proof}
+
+\begin{lemma}
+    \label{MyPrereal.isNonneg_quotient}
+    \lean{MyPrereal.isNonneg_quotient}
+    \leanok
+    \uses{MyPrereal.IsNonneg, MyPrereal.isPos_quotient}
+    If $x \approx x'$ and $x$ is nonnegative, then $x'$ is nonnegative.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Follows from Lemma~\ref{MyPrereal.isPos_quotient}.
+\end{proof}
+
+\begin{lemma}
+    \label{MyPrereal.eq_zero_of_isNonneg_of_isNonneg_neg}
+    \lean{MyPrereal.eq_zero_of_isNonneg_of_isNonneg_neg}
+    \leanok
+    \uses{MyPrereal.IsNonneg}
+    Let $x$ be in $\MyPrereal$ such that both $x$ and $-x$ are nonnegative. Then $x \approx 0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{MyPrereal.not_isPos_zero}
+    If $x \not\approx 0$ then $x$ is positive, and then $-x$ cannot be nonnegative by
+    Lemma~\ref{MyPrereal.not_isPos_zero}.
+\end{proof}
+
+\begin{lemma}
+    \label{MyPrereal.isNonneg_neg_of_not_isNonneg}
+    \lean{MyPrereal.isNonneg_neg_of_not_isNonneg}
+    \leanok
+    \uses{MyPrereal.IsNonneg}
+    Let $x$ be in $\MyPrereal$ such that $x$ is not nonnegative. Then $-x$ is nonnegative.
+\end{lemma}
+\begin{proof}
+    \leanok
+    If $x$ is not nonnegative then it is in particular not eventually nonnegative, so $-x$ is
+    eventually bounded below by a positive rational.
+\end{proof}
+
+\subsection{Nonnegative reals}
+
+The notion of nonnegativity descends to $\MyReal$.
+
+\begin{definition}
+    \label{MyReal.IsNonneg}
+    \lean{MyReal.IsNonneg}
+    \leanok
+    \uses{MyPrereal.IsNonneg, MyPrereal.isNonneg_quotient}
+We say that $⟦ x ⟧$ in $\MyReal$ is \emph{nonnegative} if $x$ is nonnegative. Thanks to
+Lemma~\ref{MyPrereal.isNonneg_quotient} this does not depend on the representative.
+\end{definition}
+
+\begin{lemma}
+    \label{MyReal.zero_nonneg}
+    \lean{MyReal.zero_nonneg}
+    \leanok
+    \uses{MyReal.IsNonneg, MyReal.zero, MyPrereal.zero_nonneg}
+    The zero of $\MyReal$ is nonnegative.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Clear because of Lemma~\ref{MyPrereal.zero_nonneg}.
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.eq_zero_of_isNonneg_of_isNonneg_neg}
+    \lean{MyReal.eq_zero_of_isNonneg_of_isNonneg_neg}
+    \leanok
+    \uses{MyReal.IsNonneg, MyPrereal.eq_zero_of_isNonneg_of_isNonneg_neg}
+    Let $x$ be in $\MyReal$ such that both $x$ and $-x$ are nonnegative. Then $x = 0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Follows from Lemma~\ref{MyPrereal.eq_zero_of_isNonneg_of_isNonneg_neg}.
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.IsNonneg.add}
+    \lean{MyReal.IsNonneg.add}
+    \leanok
+    \uses{MyReal.IsNonneg, MyPrereal.IsPos.add}
+    Let $x$ and $y$ in $\MyReal$ both nonnegative. Then $x + y$ is nonnegative.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Reduce to representatives and use Lemma~\ref{MyPrereal.IsPos.add} (treating the cases where one
+    of them is $\approx 0$ separately).
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.IsNonneg.mul}
+    \lean{MyReal.IsNonneg.mul}
+    \leanok
+    \uses{MyReal.IsNonneg, MyPrereal.IsPos.mul}
+    Let $x$ and $y$ in $\MyReal$ both nonnegative. Then $x * y$ is nonnegative.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Reduce to representatives and use Lemma~\ref{MyPrereal.IsPos.mul}.
+\end{proof}
+
+\section{The order}
+
+\begin{definition}
+    \label{MyReal.le}
+    \lean{MyReal.le}
+    \leanok
+    \uses{MyReal.IsNonneg, MyReal.field}
+Let $x$ and $y$ in $\MyReal$. We write $x \leq y$ if $y - x$ is nonnegative.
+\end{definition}
+
+\begin{lemma}
+    \label{MyReal.zero_le_iff_isNonneg}
+    \lean{MyReal.zero_le_iff_isNonneg}
+    \leanok
+    \uses{MyReal.zero, MyReal.le}
+    We have that $0 \leq x$ if and only if $x$ is nonnegative.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Clear.
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.zero_le_one}
+    \lean{MyReal.zero_le_one}
+    \leanok
+    In $\MyReal$ we have that $0 \leq 1$.
+\end{lemma}
+\begin{proof}
+    \uses{MyReal.zero, MyReal.one, MyPrereal.one_nonneg}
+    \leanok
+    Clear because of Lemma~\ref{MyPrereal.one_nonneg}.
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.le_refl}
+    \lean{MyReal.le_refl}
+    \leanok
+    The relation $\leq$ on $\MyReal$ is reflexive.
+\end{lemma}
+\begin{proof}
+    \uses{MyReal.le, MyReal.zero_nonneg}
+    \leanok
+    Clear because of Lemma~\ref{MyReal.zero_nonneg}.
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.le_trans}
+    \lean{MyReal.le_trans}
+    \leanok
+    The relation $\leq$ on $\MyReal$ is transitive.
+\end{lemma}
+\begin{proof}
+    \uses{MyReal.le, MyReal.IsNonneg.add}
+    \leanok
+    It follows from Lemma~\ref{MyReal.IsNonneg.add}, since $(z - y) + (y - x) = z - x$.
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.le_antisymm}
+    \lean{MyReal.le_antisymm}
+    \leanok
+    The relation $\leq$ on $\MyReal$ is antisymmetric.
+\end{lemma}
+\begin{proof}
+    \uses{MyReal.le, MyReal.eq_zero_of_isNonneg_of_isNonneg_neg}
+    \leanok
+    It follows from Lemma~\ref{MyReal.eq_zero_of_isNonneg_of_isNonneg_neg}.
+\end{proof}
+
+It follows that $\leq$ is an order relation.
+
+\subsection{Interaction between the order and the ring structure}
+
+\begin{lemma}
+    \label{MyReal.add_le_add_left}
+    \lean{MyReal.add_le_add_left}
+    \leanok
+    Let $x$, $y$ and $t$ in $\MyReal$ be such that $x \leq y$. Then $x + t \leq y + t$.
+\end{lemma}
+\begin{proof}
+    \uses{MyReal.le, MyReal.add}
+    \leanok
+    Clear from the definitions, since $(y + t) - (x + t) = y - x$.
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.mul_nonneg}
+    \lean{MyReal.mul_nonneg}
+    \leanok
+    Let $x$ and $y$ in $\MyReal$ be such that $0 \leq x$ and $0 \leq y$. Then $0 \leq x * y$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{MyReal.zero_le_iff_isNonneg, MyReal.IsNonneg.mul}
+    It follows from Lemma~\ref{MyReal.IsNonneg.mul}.
+\end{proof}
+
+We have proved that $\MyReal$ is an ordered ring.
+
+\subsection{Interaction between the order and the inclusion}
+
+\begin{lemma}
+    \label{MyReal.k_le_iff}
+    \lean{MyReal.k_le_iff}
+    \leanok
+    Let $x$ and $y$ in $\MyRat$. We have that $k(x) \leq k(y)$ if and only if $x \leq y$.
+\end{lemma}
+\begin{proof}
+    \uses{MyReal.k, MyReal.le}
+    \leanok
+    Exercice.
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.k_lt_iff}
+    \lean{MyReal.k_lt_iff}
+    \leanok
+    Let $x$ and $y$ in $\MyRat$. We have that $k(x) < k(y)$ if and only if $x < y$.
+\end{lemma}
+\begin{proof}
+    \uses{MyReal.k_le_iff, MyReal.k_injective}
+    \leanok
+    Immediate from Lemma~\ref{MyReal.k_le_iff} and Lemma~\ref{MyReal.k_injective}.
+\end{proof}
+
+\subsection{The linear order structure}
+
+\begin{lemma}
+    \label{MyReal.le_total}
+    \lean{MyReal.le_total}
+    \leanok
+    The order $\leq$ on $\MyReal$ is a total order.
+\end{lemma}
+\begin{proof}
+    \uses{MyReal.le, MyPrereal.isNonneg_neg_of_not_isNonneg}
+    \leanok
+This follows by Lemma~\ref{MyPrereal.isNonneg_neg_of_not_isNonneg}.
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.linearOrder}
+    \lean{MyReal.linearOrder}
+    \leanok
+    We have that $\MyReal$ with $\leq$ is a \emph{linear order}.
+\end{lemma}
+\begin{proof}
+    \uses{MyReal.le_refl, MyReal.le_antisymm, MyReal.le_trans, MyReal.le_total}
+    \leanok
+    Clear from the lemmas above.
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.mul_pos}
+    \lean{MyReal.mul_pos}
+    \leanok
+    Let $a$ and $b$ in $\MyReal$ be such that $0 < a$ and $0 < b$. Then $0 < a * b$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{MyReal.zero_le_iff_isNonneg, MyPrereal.IsPos.mul}
+Exercice, using that a positive real is the class of a positive prereal and
+Lemma~\ref{MyPrereal.IsPos.mul}.
+\end{proof}
+
+We now have that $\MyReal$ is a \emph{strict ordered ring}.
+
+\section{Density and completeness}
+
+The whole point of this construction is that $\MyReal$ is complete: every Cauchy sequence of reals
+converges. We first record that $\MyRat$ is dense in $\MyReal$ (through $k$).
+
+\subsection{Density}
+
+\begin{lemma}
+    \label{MyReal.myRat_dense_rat'}
+    \lean{MyReal.myRat_dense_rat'}
+    \leanok
+    \uses{MyReal.k}
+    Let $x$ in $\MyReal$ and let $\varepsilon$ in $\MyRat$ with $0 < \varepsilon$. Then there exists
+    $r$ in $\MyRat$ with $|x - k(r)| < k(\varepsilon)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Pick a representative $a$ of $x$; by the Cauchy property the rational $r = a_N$ for $N$ large
+    enough works.
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.myRat_dense_of_pos}
+    \lean{MyReal.myRat_dense_of_pos}
+    \leanok
+    \uses{MyReal.k, MyReal.k_lt_iff}
+    Let $x$ in $\MyReal$ with $0 < x$. Then there exists $r$ in $\MyRat$ with $0 < r$ and $k(r) < x$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    A positive real is the class of a positive prereal, which is eventually bounded below by a
+    positive rational $r$.
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.myRat_dense_rat}
+    \lean{MyReal.myRat_dense_rat}
+    \leanok
+    \uses{MyReal.myRat_dense_rat', MyReal.myRat_dense_of_pos}
+    Let $x$ in $\MyReal$ and let $\varepsilon$ in $\MyReal$ with $0 < \varepsilon$. Then there exists
+    $r$ in $\MyRat$ with $|x - k(r)| < \varepsilon$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Combine Lemma~\ref{MyReal.myRat_dense_of_pos} (to find a rational below $\varepsilon$) with
+    Lemma~\ref{MyReal.myRat_dense_rat'}.
+\end{proof}
+
+\subsection{Limits and Cauchy sequences in \texorpdfstring{$\MyReal$}{the reals}}
+
+\begin{definition}
+    \label{MyReal.TendsTo}
+    \lean{MyReal.TendsTo}
+    \leanok
+    \uses{MyReal.le}
+A sequence $f \colon \MyNat \to \MyReal$ \emph{tends to} $x$ in $\MyReal$ if
+\[
+\forall \varepsilon > 0, \ \exists N, \ \forall n \geq N, \ |f_n - x| \leq \varepsilon.
+\]
+\end{definition}
+
+\begin{definition}
+    \label{MyReal.IsConvergent}
+    \lean{MyReal.IsConvergent}
+    \leanok
+    \uses{MyReal.TendsTo}
+A sequence $f \colon \MyNat \to \MyReal$ is \emph{convergent} if it tends to some $x$ in $\MyReal$.
+\end{definition}
+
+\begin{definition}
+    \label{MyReal.IsCauchy}
+    \lean{MyReal.IsCauchy}
+    \leanok
+    \uses{MyReal.le}
+A sequence $f \colon \MyNat \to \MyReal$ is a \emph{Cauchy sequence} if
+\[
+\forall \varepsilon > 0, \ \exists N, \ \forall p, q \geq N, \ |f_p - f_q| \leq \varepsilon.
+\]
+\end{definition}
+
+\begin{lemma}
+    \label{MyReal.tendsTo_of_myRat_tendsTo}
+    \lean{MyReal.tendsTo_of_myRat_tendsTo}
+    \leanok
+    \uses{MyReal.TendsTo, MyReal.k}
+    Let $f \colon \MyNat \to \MyReal$ and $x$ in $\MyReal$. If for every rational $\varepsilon > 0$
+    there exists $N$ such that $|f_n - x| \leq k(\varepsilon)$ for all $n \geq N$, then $f$ tends to
+    $x$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{MyReal.myRat_dense_of_pos}
+    It is enough to check the condition for $\varepsilon$ of the form $k(\delta)$, which is possible
+    by density (Lemma~\ref{MyReal.myRat_dense_of_pos}).
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.tendsTo_myRat}
+    \lean{MyReal.tendsTo_myRat}
+    \leanok
+    \uses{MyReal.TendsTo, MyReal.k}
+    Let $x$ in $\MyPrereal$. Then the sequence $n \mapsto k(x_n)$ tends to $⟦ x ⟧$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{MyReal.tendsTo_of_myRat_tendsTo}
+    Immediate from the definition of $\approx$ and Lemma~\ref{MyReal.tendsTo_of_myRat_tendsTo}: the
+    Cauchy property of $x$ is exactly what is needed.
+\end{proof}
+
+\subsection{Completeness}
+
+\begin{lemma}
+    \label{MyReal.archimedean}
+    \lean{MyReal.archimedean}
+    \leanok
+    \uses{MyReal.k, MyRat.i}
+    Let $x$ in $\MyReal$. Then there exists a natural number $n$ such that $x \leq k(i(n+1))$, where
+    $i \colon \N \to \MyRat$ is the inclusion.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Pick a rational $r$ with $x < k(r)$ by density, and use that $\N$ is archimedean in $\MyRat$.
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.archimedean0}
+    \lean{MyReal.archimedean0}
+    \leanok
+    \uses{MyReal.archimedean}
+    Let $x$ in $\MyReal$ with $0 < x$. Then there exists a natural number $n$ such that
+    $k(i(n+1)^{-1}) \leq x$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Apply Lemma~\ref{MyReal.archimedean} to $x^{-1}$ and take inverses.
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.ex_approx_punctual}
+    \lean{MyReal.ex_approx_punctual}
+    \leanok
+    \uses{MyReal.k, MyRat.i}
+    Let $x$ in $\MyReal$ and $n$ a natural number. Then there exists a rational $r$ such that
+    $|x - k(r)| < k(i(n+1)^{-1})$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{MyReal.myRat_dense_rat'}
+    Apply density (Lemma~\ref{MyReal.myRat_dense_rat'}) with $\varepsilon = i(n+1)^{-1}$.
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.ex_approx}
+    \lean{MyReal.ex_approx}
+    \leanok
+    \uses{MyReal.ex_approx_punctual}
+    Let $f \colon \MyNat \to \MyReal$. Then there exists $g \colon \MyNat \to \MyRat$ such that
+    $|f_n - k(g_n)| < k(i(n+1)^{-1})$ for all $n$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Apply Lemma~\ref{MyReal.ex_approx_punctual} for each $n$ and collect the choices.
+\end{proof}
+
+\begin{definition}
+    \label{MyReal.approx}
+    \lean{MyReal.approx}
+    \leanok
+    \uses{MyReal.ex_approx}
+    Given $f \colon \MyNat \to \MyReal$, we define $\mathrm{approx}(f) \colon \MyNat \to \MyRat$ to
+    be a choice of rational approximating sequence as in Lemma~\ref{MyReal.ex_approx}.
+\end{definition}
+
+\begin{lemma}
+    \label{MyReal.approx_spec}
+    \lean{MyReal.approx_spec}
+    \leanok
+    \uses{MyReal.approx}
+    For all $n$ we have $|f_n - k(\mathrm{approx}(f)_n)| < k(i(n+1)^{-1})$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    This is the defining property of $\mathrm{approx}(f)$.
+\end{proof}
+
+\begin{lemma}
+    \label{MyReal.approx_cauchy}
+    \lean{MyReal.approx_cauchy}
+    \leanok
+    \uses{MyReal.approx_spec, IsCauchy, MyReal.IsCauchy}
+    If $f \colon \MyNat \to \MyReal$ is a Cauchy sequence, then $\mathrm{approx}(f)$ is a Cauchy
+    sequence of rationals.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{MyReal.archimedean0}
+    Estimate $|\mathrm{approx}(f)_p - \mathrm{approx}(f)_q|$ by inserting $f_p$ and $f_q$ and using
+    Lemma~\ref{MyReal.approx_spec}, together with the archimedean property
+    (Lemma~\ref{MyReal.archimedean0}) to make the error terms small.
+\end{proof}
+
+\begin{definition}
+    \label{MyReal.IsCauchy.approx}
+    \lean{MyReal.IsCauchy.approx}
+    \leanok
+    \uses{MyReal.approx_cauchy, MyPrereal}
+    If $f \colon \MyNat \to \MyReal$ is a Cauchy sequence, then $\mathrm{approx}(f)$, being a Cauchy
+    sequence of rationals, defines an element of $\MyPrereal$.
+\end{definition}
+
+\begin{theorem}
+    \label{MyReal.complete}
+    \lean{MyReal.complete}
+    \leanok
+    $\MyReal$ is complete: every Cauchy sequence $f \colon \MyNat \to \MyReal$ is convergent.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{MyReal.IsCauchy.approx, MyReal.tendsTo_myRat, MyReal.approx_spec, MyReal.IsConvergent}
+    Let $a = \mathrm{approx}(f)$, seen as an element of $\MyPrereal$
+    (Definition~\ref{MyReal.IsCauchy.approx}), and let $x = ⟦ a ⟧$. By
+    Lemma~\ref{MyReal.tendsTo_myRat} the sequence $n \mapsto k(a_n)$ tends to $x$, and by
+    Lemma~\ref{MyReal.approx_spec} the sequence $f$ stays close to $n \mapsto k(a_n)$, so $f$ tends
+    to $x$. Hence $f$ is convergent.
+\end{proof}
