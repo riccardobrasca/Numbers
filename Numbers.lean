@@ -3,3 +3,4 @@ import Numbers.naturals
 import Numbers.rationals
 import Numbers.rationals_order
 import Numbers.reals
+import Numbers.Solutions.adics_no_sorry
