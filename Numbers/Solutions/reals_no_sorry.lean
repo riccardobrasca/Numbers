@@ -1,8 +1,8 @@
 import Numbers.Solutions.rationals_order_no_sorry
 
--- Lean already knows the absolute value (since there is an order on `MyRat`: `|x|` is defined as
--- `max (x, -x)`.
---See the files `Mathlib.Algebra.Order.*.Abs` for various properties
+-- Lean already knows the absolute value (since there is an order on `MyRat`): `|x|` is defined
+-- as `max x (-x)`.
+-- See the files `Mathlib.Algebra.Order.*.Abs` for various properties.
 abbrev IsCauchy (x : MyNat → MyRat) : Prop :=
   ∀ ε, 0 < ε → ∃ N, ∀ p q, N ≤ p → N ≤ q → |x p - x q| ≤ ε
 

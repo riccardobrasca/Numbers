@@ -1,6 +1,6 @@
 /-!
 
-In this file we define our copy `MyNat` of the natural numbers. To check that we dont cheat
+In this file we define our copy `MyNat` of the natural numbers. To check that we don't cheat
 using results already proved in mathlib we don't import anything. (Note that even if `MyNat` is
 defined here, the simple fact of, say, providing the `Semiring` instance allows to use a lot of
 results in mathlib.)

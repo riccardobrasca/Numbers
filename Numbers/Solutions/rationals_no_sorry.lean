@@ -10,13 +10,13 @@ All the original work is by Kevin Buzzard.
 In this file we assume all standard facts about the integers, and then build
 the rationals from scratch.
 
-The strategy is to observe that every rationals can be written as `a / b`
-for `a` and `b` integers witb `b ≠ 0`, so we define the "pre-rationals" to
+The strategy is to observe that every rational can be written as `a / b`
+for `a` and `b` integers with `b ≠ 0`, so we define the "pre-rationals" to
 be `MyInt × (MyInt - {0})`, the pairs `(a, b)` of integers. We define an equivalence
 relation `≈` on `MyInt × (MyInt - {0})`, with the idea being that `(a, b) ≈ (c, d)`
 if and only if `a / b = c / d`. This doesn't make sense yet, but the equivalent
 equation `a * d = b * c` does. We prove that this is an equivalence relation,
-and define the integers to be the quotient.
+and define the rationals to be the quotient.
 
 ## The field structure on the rationals
 
@@ -25,9 +25,9 @@ define division. We then prove that the rationals are a field. The proofs are al
 the form "reduce to a question about integers, and then solve it using tactics
 which prove theorems about integers".
 
-## The ordering on the integers
+## The ordering on the rationals
 
-In the file `RationalGameOrder.lean` we define an ordering on the rationals,
+In the file `rationals_order.lean` we define an ordering on the rationals,
 prove that it is total, and that it plays well with the ring structure
 defined in this file.
 -/
@@ -42,7 +42,7 @@ defined in this file.
 instance : Mul {x : MyInt // x ≠ 0} where
   mul a b := ⟨a.1 * b.1, mul_ne_zero a.2 b.2⟩
 
-@[simp, norm_cast] lemma Int.ne_zero_coe_mul (a b : {x : MyInt // x ≠ 0}) :
+@[simp, norm_cast] lemma MyInt.ne_zero_coe_mul (a b : {x : MyInt // x ≠ 0}) :
     ((a * b : {x : MyInt // x ≠ 0}) : MyInt) = a * b := by
   rfl
 
@@ -509,7 +509,7 @@ end MyRat
 /-!
 
 Want more of this nonsense? See how the concept of order is developed
-on the rational numbers in `RationalGameOrder.lean`. It's more
+on the rational numbers in `rationals_order.lean`. It's more
 subtle than what we had to do here, which was only equational reasoning.
 
 -/
