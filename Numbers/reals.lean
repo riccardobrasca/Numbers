@@ -1,8 +1,8 @@
 import Numbers.rationals_order
 
--- Lean already knows the absolute value (since there is an order on `MyRat`: `|x|` is defined as
--- `max (x, -x)`.
---See the files `Mathlib.Algebra.Order.*.Abs` for various properties
+-- Lean already knows the absolute value (since there is an order on `MyRat`): `|x|` is defined
+-- as `max x (-x)`.
+-- See the files `Mathlib.Algebra.Order.*.Abs` for various properties.
 abbrev IsCauchy (x : MyNat → MyRat) : Prop :=
   ∀ ε, 0 < ε → ∃ N, ∀ p q, N ≤ p → N ≤ q → |x p - x q| ≤ ε
 
@@ -420,7 +420,7 @@ lemma le_antisymm (x y : MyReal) (hxy : x ≤ y) (hyx : y ≤ x) : x = y := by
   sorry
 
 instance : PartialOrder MyReal where
-  le := (. ≤ .)
+  le := (· ≤ ·)
   le_refl := le_refl
   le_trans := le_trans
   le_antisymm := le_antisymm
