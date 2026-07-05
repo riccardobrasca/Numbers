@@ -117,7 +117,7 @@ We need to show $b+a'=b'+a$, which follows immediately from $a + b' = b + a'$.
     \leanok
     \uses{MyPreint.R}
 We define an operation, called \emph{addition} on $\MyPreint$ as follows: the addition of $x = (a,b)$
-and $y = (b, c)$ is
+and $y = (c, d)$ is
 \[
 x + y = (a,b) + (c,d) = (a+c, b + d)
 \]
@@ -152,7 +152,7 @@ that is $x + y = (a+c,b+d) \approx (a'+c',b'+d') = x'+y'$.
     \lean{MyPreint.mul}
     \leanok
     \uses{MyPreint.R}
-We define an operation, called \emph{multiplication} on $\MyPreint$ as follows: the multiplication of $x = (a,b)$ and $y = (b, c)$ is
+We define an operation, called \emph{multiplication} on $\MyPreint$ as follows: the multiplication of $x = (a,b)$ and $y = (c, d)$ is
 \[
 x * y = (a,b) * (c,d) = (a*c+b*d, a*d+b*c)
 \]
@@ -427,7 +427,7 @@ i(a*b) = i(a) * i(b)
 \]
 By definition of multiplication we have
 \[
-⟦ (a, 0) ⟧ * ⟦ (b, 0) ⟧ = ⟦ (a*c+0*0, a*0+0*b) ⟧
+⟦ (a, 0) ⟧ * ⟦ (b, 0) ⟧ = ⟦ (a*b+0*0, a*0+0*b) ⟧
 \]
 and the lemma follows.
 \end{proof}
@@ -559,7 +559,7 @@ It follows that $\leq$ is an order relation.
     \label{MyInt.i_le_iff}
     \lean{MyInt.i_le_iff}
     \leanok
-    Given two natural numbers $a$ and $b$, we have $i(a) \leq b$ if and only if $a \leq b$.
+    Given two natural numbers $a$ and $b$, we have $i(a) \leq i(b)$ if and only if $a \leq b$.
 \end{lemma}
 \begin{proof}
     \uses{MyInt.i, MyInt.i_add, MyInt.i_injective}
@@ -576,12 +576,12 @@ It follows that $\leq$ is an order relation.
     \label{MyInt.add_le_add_left}
     \lean{MyInt.add_le_add_left}
     \leanok
-    Let $x$, $y$ and $z$ in $\MyInt$ be such that $x \leq y$. Then $z + x ≤ z + y$.
+    Let $x$, $y$ and $z$ in $\MyInt$ be such that $x \leq y$. Then $x + z \leq y + z$.
 \end{lemma}
 \begin{proof}
     \uses{MyInt.le, MyInt.add}
     \leanok
-    Let $n$ be such that $y = x + i(n)$. It's immediate that $n$ also work to show that $z + x ≤ z + y$.
+    Let $n$ be such that $y = x + i(n)$. It's immediate that $n$ also work to show that $x + z \leq y + z$.
 \end{proof}
 
 \begin{lemma}

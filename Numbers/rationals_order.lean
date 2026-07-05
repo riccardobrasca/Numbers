@@ -13,7 +13,7 @@ namespace MyRat
 
 /-
 
-## Nonnegativitiy on the rationals
+## Nonnegativity on the rationals
 
 -/
 -- this definition is somehow bad as it asks for proofs of b≠0 and b>0
@@ -84,7 +84,7 @@ lemma isNonneg_inv_isNonneg {x : MyRat} (hx : IsNonneg x) :
 
 I think that's it for non-negativity on the rationals. Let's see
 if we can use those theorems about nonnegativity to prove that
-the raionals are a linear order.
+the rationals are a linear order.
 
 -/
 
@@ -96,7 +96,7 @@ lemma le_refl (x : MyRat) : le x x := by
 
 /-!
 
-Next is transitivitiy
+Next is transitivity
 
 -/
 
@@ -176,7 +176,7 @@ lemma i_lt_iff (a b : MyNat) : i a < i b ↔ a < b := by
 
 -/
 
-def le_total (a b : MyRat) : a ≤ b ∨ b ≤ a := by
+lemma le_total (a b : MyRat) : a ≤ b ∨ b ≤ a := by
   sorry
 
 noncomputable instance linearOrder : LinearOrder MyRat where
