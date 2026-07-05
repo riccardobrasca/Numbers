@@ -70,7 +70,7 @@ $R$ is a reflexive relation.
 \begin{proof}
     \leanok
     \uses{MyPrereal.R}
-    Exercice.
+    Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -82,7 +82,7 @@ $R$ is a symmetric relation.
 \begin{proof}
     \leanok
     \uses{MyPrereal.R}
-    Exercice.
+    Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -94,7 +94,7 @@ $R$ is a transitive relation.
 \begin{proof}
     \leanok
     \uses{MyPrereal.R}
-    Exercice, using the triangle inequality and splitting $\varepsilon$ into $\varepsilon/2 +
+    Exercise, using the triangle inequality and splitting $\varepsilon$ into $\varepsilon/2 +
     \varepsilon/2$.
 \end{proof}
 
@@ -151,7 +151,7 @@ negation is well defined on $\MyPrereal$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Exercice.
+    Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -163,7 +163,7 @@ If $x \approx x'$, then $-x \approx -x'$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Exercice.
+    Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -176,7 +176,7 @@ particular addition is well defined on $\MyPrereal$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Exercice, splitting $\varepsilon$ into $\varepsilon/2 + \varepsilon/2$.
+    Exercise, splitting $\varepsilon$ into $\varepsilon/2 + \varepsilon/2$.
 \end{proof}
 
 \begin{lemma}
@@ -188,7 +188,7 @@ If $x \approx x'$ and $y \approx y'$, then $x + y \approx x' + y'$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Exercice.
+    Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -214,7 +214,7 @@ If $x \approx x'$ and $y \approx y'$, then $x * y \approx x' * y'$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Exercice, again using boundedness.
+    Exercise, again using boundedness.
 \end{proof}
 
 Inversion is more delicate: to invert a Cauchy sequence we first need to know that, if it does not
@@ -268,7 +268,7 @@ If $x \approx x'$, then $x^{-1} \approx x'^{-1}$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Exercice.
+    Exercise.
 \end{proof}
 
 \section{The reals}
@@ -488,7 +488,7 @@ For all $x$ in $\MyRat$ we have that $k(x^{-1}) = k(x)^{-1}$.
 \begin{proof}
     \uses{MyReal.k, MyReal.inv}
     \leanok
-Exercice.
+Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -579,7 +579,7 @@ a positive rational.
 \end{lemma}
 \begin{proof}
     \leanok
-    Exercice.
+    Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -591,7 +591,7 @@ a positive rational.
 \end{lemma}
 \begin{proof}
     \leanok
-    Exercice.
+    Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -603,7 +603,7 @@ a positive rational.
 \end{lemma}
 \begin{proof}
     \leanok
-    Exercice.
+    Exercise.
 \end{proof}
 
 \subsection{Nonnegative prereals}
@@ -688,9 +688,11 @@ Given $x$ in $\MyPrereal$, we say that $x$ is \emph{nonnegative} if either $x$ i
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{MyPrereal.not_isPos_zero}
-    If $x \not\approx 0$ then $x$ is positive, and then $-x$ cannot be nonnegative by
-    Lemma~\ref{MyPrereal.not_isPos_zero}.
+    \uses{MyPrereal.IsNonneg, MyPrereal.IsPos}
+    Suppose $x \not\approx 0$. Since $x$ is nonnegative, $x$ is positive. Since $-x$ is
+    nonnegative, either $-x \approx 0$ or $-x$ is positive. The first case implies
+    $x \approx 0$, a contradiction. In the second case, $x_n$ and $-x_n$ are both eventually bounded
+    below by positive rationals, which is impossible on a common tail. Hence $x \approx 0$.
 \end{proof}
 
 \begin{lemma}
@@ -879,7 +881,7 @@ We have proved that $\MyReal$ is an ordered ring.
 \begin{proof}
     \uses{MyReal.k, MyReal.le}
     \leanok
-    Exercice.
+    Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -929,7 +931,7 @@ This follows by Lemma~\ref{MyPrereal.isNonneg_neg_of_not_isNonneg}.
 \begin{proof}
     \leanok
     \uses{MyReal.zero_le_iff_isNonneg, MyPrereal.IsPos.mul}
-Exercice, using that a positive real is the class of a positive prereal and
+Exercise, using that a positive real is the class of a positive prereal and
 Lemma~\ref{MyPrereal.IsPos.mul}.
 \end{proof}
 
@@ -1051,13 +1053,15 @@ A sequence $f \colon \MyNat \to \MyReal$ is a \emph{Cauchy sequence} if
     \label{MyReal.archimedean}
     \lean{MyReal.archimedean}
     \leanok
-    \uses{MyReal.k, MyRat.i}
+    \uses{MyReal.k, MyRat.i, MyReal.myRat_dense_rat, MyRat.archimedean, MyReal.k_le_iff}
     Let $x$ in $\MyReal$. Then there exists a natural number $n$ such that $x \leq k(i(n+1))$, where
     $i \colon \N \to \MyRat$ is the inclusion.
 \end{lemma}
 \begin{proof}
     \leanok
-    Pick a rational $r$ with $x < k(r)$ by density, and use that $\N$ is archimedean in $\MyRat$.
+    Apply density with $\varepsilon = 1$ to find $r$ with $|x-k(r)|<1$, so $x<k(r+1)$.
+    Then use Lemma~\ref{MyRat.archimedean} to bound $r+1$ by some $i(m)$, enlarge this to a bound
+    of the form $i(n+1)$, and transfer the inequality through $k$.
 \end{proof}
 
 \begin{lemma}

@@ -511,7 +511,7 @@ It follows that $\leq$ is an order relation.
 \begin{proof}
     \uses{MyInt.le, MyInt.i_zero, MyInt.i_injective}
     \leanok
-    Let $x$ and $y$ by in $\MyInt$. We can write $x = ⟦ (a,b) ⟧$ and
+    Let $x$ and $y$ be in $\MyInt$. We can write $x = ⟦ (a,b) ⟧$ and
     $y = ⟦ (c,d) ⟧$ and we need to prove that
     $⟦ (a,b) ⟧ \leq ⟦ (c,d) ⟧$ or $⟦ (c,d) ⟧ \leq ⟦ (a,b) ⟧$. Let's consider two cases (we use that the order on $\N$ is total):
     \begin{itemize}
@@ -523,7 +523,7 @@ It follows that $\leq$ is an order relation.
         \]
         We have that $⟦ (a+e,b) ⟧ = ⟦ (c,d) ⟧$ since
         \[
-        a+e+d=b+d
+        a+e+d=b+c
         \]
         by our assumption on $e$ and so $⟦ (a,b) ⟧ \leq ⟦ (c,d) ⟧$.
         \item the case $b + c \leq a + d$ is completely analogous.
@@ -581,7 +581,7 @@ It follows that $\leq$ is an order relation.
 \begin{proof}
     \uses{MyInt.le, MyInt.add}
     \leanok
-    Let $n$ be such that $y = x + i(n)$. It's immediate that $n$ also work to show that $x + z \leq y + z$.
+    Let $n$ be such that $y = x + i(n)$. It's immediate that $n$ also works to show that $x + z \leq y + z$.
 \end{proof}
 
 \begin{lemma}
@@ -599,4 +599,16 @@ It follows that $\leq$ is an order relation.
     0+i(n*m)=i(n*m)=i(n)*i(m)
     \]
     as required.
+\end{proof}
+
+\begin{lemma}
+    \label{MyInt.archimedean}
+    \lean{MyInt.archimedean}
+    \leanok
+    \uses{MyInt.le, MyInt.i}
+    For every $x$ in $\MyInt$ there exists $n$ in $\N$ such that $x \leq i(n)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Write $x = ⟦(a,b)⟧$. Then $i(a) = x + i(b)$ in $\MyInt$, so $x \leq i(a)$.
 \end{proof}

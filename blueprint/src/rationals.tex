@@ -36,7 +36,7 @@ $R$ is a reflexive relation.
 \begin{proof}
     \leanok
     \uses{MyPrerat.R}
-    Exercice.
+    Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -48,7 +48,7 @@ $R$ is a symmetric relation.
 \begin{proof}
     \leanok
     \uses{MyPrerat.R}
-    Exercice.
+    Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -60,7 +60,7 @@ $R$ is a transitive relation.
 \begin{proof}
     \leanok
     \uses{MyPrerat.R}
-    Exercice.
+    Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -98,7 +98,7 @@ If $x \approx x'$, then $-x \approx -x'$.
 \begin{proof}
 \uses{MyPrerat.neg}
 \leanok
-Exercice.
+Exercise.
 \end{proof}
 
 \begin{definition}
@@ -123,7 +123,7 @@ If $x \approx x'$ and $y \approx y'$, then $x + y \approx x' + y'$.
 \begin{proof}
 \uses{MyPrerat.add}
 \leanok
-Exercice.
+Exercise.
 \end{proof}
 
 \begin{definition}
@@ -146,7 +146,7 @@ If $x \approx x'$ and $y \approx y'$, then $x * y \approx x' * y'$.
 \begin{proof}
 \uses{MyPrerat.mul}
 \leanok
-Exercice.
+Exercise.
 \end{proof}
 
 \begin{definition}
@@ -170,7 +170,7 @@ If $x \approx x'$, then $x^{-1} \approx x'^{-1}$.
 \begin{proof}
 \uses{MyPrerat.inv}
 \leanok
-Exercice.
+Exercise.
 \end{proof}
 
 \section{The rationals}
@@ -397,7 +397,10 @@ Similar to the proof of Lemma~\ref{MyRat.i_add}.
 \begin{proof}
     \uses{MyRat.i}
     \leanok
-    Let $a$ be such that $i(a)=0$. This means $⟦ (\MyInt.i a,1) ⟧ = ⟦ (0,1) ⟧$ so $(\MyInt.i a) * 1 = 1 * 0$ and hence $\MyInt.i a = 0$ so $a = 0$.
+    Let $a$ and $b$ be such that $i(a)=i(b)$. This means
+    $⟦ (\MyInt.i a,1) ⟧ = ⟦ (\MyInt.i b,1) ⟧$, so
+    $(\MyInt.i a) * 1 = 1 * (\MyInt.i b)$. Hence $\MyInt.i a = \MyInt.i b$, and injectivity
+    of $\MyInt.i$ gives $a = b$.
 \end{proof}
 
 \subsection{\texorpdfstring{The inclusion $j \colon \MyInt \to \MyRat$}{The inclusion}}
@@ -449,7 +452,7 @@ j(a+b) = j(a) + j(b)
 \begin{proof}
     \uses{MyRat.add, MyRat.j}
     \leanok
-Exercice.
+Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -464,7 +467,7 @@ j(a*b) = j(a) * j(b)
 \begin{proof}
     \uses{MyRat.mul, MyRat.j}
     \leanok
-Exercice.
+Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -476,7 +479,7 @@ Exercice.
 \begin{proof}
     \uses{MyRat.j}
     \leanok
-Exercice.
+Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -500,10 +503,10 @@ It follows from unravelling all the definitions.
 \begin{proof}
     \uses{MyRat.inv, MyRat.mul, MyRat.j}
     \leanok
-Exercice.
+Exercise.
 \end{proof}
 
-\subsection{Nonegativity}
+\subsection{Nonnegativity}
 
 Before defining the order on $\MyRat$, let's define the notion of nonnegativity.
 
@@ -512,9 +515,13 @@ Before defining the order on $\MyRat$, let's define the notion of nonnegativity.
     \lean{MyRat.IsNonneg}
     \uses{MyRat, MyRat.zero}
     \leanok
-Given $x = (a,b)$ in $\MyRat$, we say that $x$ is \emph{nonnegative} if $0 \leq a$ and $0 < b$.
-
-Can you see why it corresponds to the ``usual definition'' when we think that $x = a/b$?
+Given $x$ in $\MyRat$, we say that $x$ is \emph{nonnegative} if it has a representative with
+nonnegative numerator and positive denominator: there exist $a$ and $b$ in $\MyInt$ with
+$0 \leq a$ and $0 < b$ such that
+\[
+x = ⟦(a,b)⟧.
+\]
+This is the usual condition $0 \leq a/b$ after choosing a positive denominator.
 \end{definition}
 
 \begin{lemma}
@@ -562,7 +569,7 @@ Can you see why it corresponds to the ``usual definition'' when we think that $x
 \end{lemma}
 \begin{proof}
     \leanok
-    Annoying but easy, left as an exercice.
+    Annoying but easy, left as an exercise.
 \end{proof}
 
 \begin{lemma}
@@ -574,7 +581,7 @@ Can you see why it corresponds to the ``usual definition'' when we think that $x
 \end{lemma}
 \begin{proof}
     \leanok
-    Exercice.
+    Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -586,7 +593,7 @@ Can you see why it corresponds to the ``usual definition'' when we think that $x
 \end{lemma}
 \begin{proof}
     \leanok
-    Exercice.
+    Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -598,7 +605,7 @@ Can you see why it corresponds to the ``usual definition'' when we think that $x
 \end{lemma}
 \begin{proof}
     \leanok
-    Exercice.
+    Exercise.
 \end{proof}
 
 \subsection{The order}
@@ -713,7 +720,7 @@ We have proved that $\MyRat$ is an ordered ring.
 \begin{proof}
     \uses{MyRat.IsNonneg, MyInt.le}
     \leanok
-    Exercice.
+    Exercise.
 \end{proof}
 
 \begin{lemma}
@@ -763,7 +770,22 @@ This follows by Lemma~\ref{MyRat.nonneg_neg_of_not_nonneg}.
 \begin{proof}
     \leanok
     \uses{MyRat.zero_le_iff_IsNonneg, MyRat.isNonneg_mul_isNonneg}
-Exercice.
+Exercise.
 \end{proof}
 
 We now have that $\MyRat$ is a \emph{strict ordered ring}: a nontrivial ring with a partial order such that addition is strictly monotone and multiplication by a positive number is strictly monotone.
+
+\begin{lemma}
+    \label{MyRat.archimedean}
+    \lean{MyRat.archimedean}
+    \leanok
+    \uses{MyRat.i, MyRat.j_le_iff, MyInt.archimedean}
+    For every $x$ in $\MyRat$ there exists $n$ in $\N$ such that $x \leq i(n)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Choose a representative $x = a/b$ with $0 < b$. By Lemma~\ref{MyInt.archimedean}, choose a
+    natural number $n$ such that $a \leq \MyInt.i(n)$. Since $b$ is positive and $\MyInt.i(n)$ is
+    nonnegative, we have $\MyInt.i(n) \leq b \cdot \MyInt.i(n)$. Thus
+    $a \leq b \cdot \MyInt.i(n)$, which is exactly $a/b \leq n$, hence $x \leq i(n)$.
+\end{proof}
