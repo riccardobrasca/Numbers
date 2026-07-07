@@ -36,6 +36,8 @@ theorem one_ne_zero : (1 : MyNat) ≠ 0 := by
   rw [one_eq_succ_zero]
   exact succ_ne_zero _
 
+theorem zero_ne_one : (0 : MyNat) ≠ 1 := one_ne_zero.symm
+
 /-- Addition on `MyNat`. -/
 def add : MyNat → MyNat → MyNat
 | a, 0 => a
