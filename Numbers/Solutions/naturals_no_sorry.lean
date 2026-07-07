@@ -253,7 +253,8 @@ theorem le_add_self : a ≤ b + a := by
   rw [add_comm]
   exact le_self_add a b
 
-@[simp] theorem le_succ_iff_eq_succ_or_le : a ≤ b.succ ↔ a = b.succ ∨ a ≤ b := by
+@[simp]
+theorem le_succ_iff_eq_succ_or_le : a ≤ b.succ ↔ a = b.succ ∨ a ≤ b := by
   refine ⟨fun ⟨x, hx⟩ ↦ ?_, fun h ↦  ?_⟩
   · cases x with
     | zero =>
