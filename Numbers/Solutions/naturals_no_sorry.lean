@@ -32,7 +32,9 @@ theorem one_eq_succ_zero : 1 = succ 0 := rfl
 
 theorem succ_ne_zero : succ a ≠ 0 := by simp
 
-theorem zero_ne_one : (0 : MyNat) ≠ 1 := by simp
+theorem zero_ne_one : (1 : MyNat) ≠ 0 := by
+  rw [one_eq_succ_zero]
+  exact succ_ne_zero _
 
 /-- Addition on `MyNat`. -/
 def add : MyNat → MyNat → MyNat
