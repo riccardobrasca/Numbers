@@ -73,11 +73,12 @@ theorem add_zero : a + 0 = a := by
 theorem add_succ : a + succ b = succ (a + b):= by
   sorry
 
-@[grind =]
+@[grind =] --Ignore all tags like this one, same for `@[simp]`
 theorem succ_eq_add_one : succ a = a + 1 := by
   sorry
 
-@[simp] theorem add_one_ne_zero : a + 1 ≠ 0 := by
+@[simp]
+theorem add_one_ne_zero : a + 1 ≠ 0 := by
   sorry
 
 theorem zero_add : 0 + a = a := by
@@ -110,7 +111,8 @@ theorem mul_zero : a * 0 = 0 := by
 theorem mul_succ : a * b.succ = a * b + a := by
   sorry
 
-@[grind =] theorem succ_mul : a.succ * b = a * b + b := by
+@[grind =]
+theorem succ_mul : a.succ * b = a * b + b := by
   sorry
 
 theorem zero_mul : 0 * a = 0 := by
