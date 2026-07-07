@@ -151,6 +151,7 @@ theorem mul_assoc : a * b * c = a * (b * c) := by
       rw [mul_succ, hn, mul_succ, left_distrib]
 
 variable {a b c} in
+/-- In this one you may find useful to use `succ.inj`, the `succ` function is injective. -/
 theorem add_left_cancel (h : a + b = a + c) : b = c := by
   induction a with
   | zero =>
