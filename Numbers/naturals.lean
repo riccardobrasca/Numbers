@@ -43,6 +43,9 @@ theorem succ_ne_zero : succ a ≠ 0 := by
 theorem one_ne_zero : (1 : MyNat) ≠ 0 := by
   sorry
 
+theorem zero_ne_one : (0 : MyNat) ≠ 1 := by
+  sorry
+
 /-- Addition on `MyNat`. -/
 def add : MyNat → MyNat → MyNat
 | a, 0 => a
