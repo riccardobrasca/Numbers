@@ -65,7 +65,6 @@ theorem succ_eq_add_one : succ a = a + 1 := by
   sorry
 
 theorem zero_add : 0 + a = a := by
-  induction a
   sorry
 
 theorem succ_add : (succ a) + b = succ (a + b) := by
