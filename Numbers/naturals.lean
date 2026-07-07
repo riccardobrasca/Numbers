@@ -165,7 +165,8 @@ theorem succ_pred (ha : a ≠ 0) : succ (pred a) = a := by
   sorry
 
 variable {a} in
-@[simp] theorem pred_add_one (ha : a ≠ 0) : (pred a) + 1 = a := by
+@[simp]
+theorem pred_add_one (ha : a ≠ 0) : (pred a) + 1 = a := by
   sorry
 
 /-- The order relation on `MyNat`. -/

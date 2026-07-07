@@ -192,7 +192,9 @@ match a with
 | succ _ => pred_succ _
 
 variable {a} in
-@[simp] theorem pred_add_one (ha : a ≠ 0) : (pred a) + 1 = a := succ_pred ha
+@[simp]
+theorem pred_add_one (ha : a ≠ 0) : (pred a) + 1 = a := by
+  exact succ_pred ha
 
 /-- The order relation on `MyNat`. -/
 def le : Prop := ∃ x, b = a + x
