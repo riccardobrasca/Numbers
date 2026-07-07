@@ -33,6 +33,7 @@ theorem one_def : one = 1 := by
 theorem one_eq_succ_zero : 1 = succ 0 := by
   sorry
 
+/-- This is basically an axiom added by Lean when defining natural numbers (feel free to ask more details if you want!) -/
 theorem succ_ne_zero : succ a ≠ 0 := by
   sorry
 
