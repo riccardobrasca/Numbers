@@ -16,12 +16,19 @@ namespace MyNat
 
 variable (a b c : MyNat)
 
+/-- The following is to activate the notation `(0 : MyNat)`.
+Beware: if you just write `0`, sometimes Lean thinks you mean the "usual" natural number `0`. -/
 instance : Zero MyNat := ⟨zero⟩
 
 theorem zero_def : zero = 0 := by
-  sorry
+  rfl
 
-instance : One MyNat := ⟨succ 0⟩
+def one : MyNat := succ 0
+
+instance : One MyNat := ⟨one⟩
+
+theorem one_def : one = 1 := by
+  rfl
 
 theorem one_eq_succ_zero : 1 = succ 0 := by
   sorry
