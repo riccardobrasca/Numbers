@@ -36,7 +36,7 @@ theorem one_eq_succ_zero : 1 = succ 0 := by
 theorem succ_ne_zero : succ a ≠ 0 := by
   sorry
 
-theorem zero_ne_one : (0 : MyNat) ≠ 1 := by
+theorem one_ne_zero : (1 : MyNat) ≠ 0 := by
   sorry
 
 /-- Addition on `MyNat`. -/
