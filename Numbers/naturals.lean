@@ -164,7 +164,8 @@ theorem succ_pred (ha : a ≠ 0) : succ (pred a) = a := by
   sorry
 
 variable {a} in
-@[simp] theorem pred_add_one (ha : a ≠ 0) : (pred a) + 1 = a := by
+@[simp]
+theorem pred_add_one (ha : a ≠ 0) : (pred a) + 1 = a := by
   sorry
 
 /-- The order relation on `MyNat`. -/
@@ -173,7 +174,8 @@ def le : Prop := ∃ x, b = a + x
 instance : LE MyNat where
   le := le
 
-@[simp] theorem zero_le : 0 ≤ a := by
+@[simp]
+theorem zero_le : 0 ≤ a := by
   sorry
 
 theorem le_succ : a ≤ a.succ := by
