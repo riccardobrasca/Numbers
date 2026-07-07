@@ -173,7 +173,8 @@ def le : Prop := ∃ x, b = a + x
 instance : LE MyNat where
   le := le
 
-@[simp] theorem zero_le : 0 ≤ a := by
+@[simp]
+theorem zero_le : 0 ≤ a := by
   sorry
 
 theorem le_succ : a ≤ a.succ := by

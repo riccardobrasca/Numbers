@@ -36,7 +36,8 @@ theorem one_ne_zero : (1 : MyNat) ≠ 0 := by
   rw [one_eq_succ_zero]
   exact succ_ne_zero _
 
-theorem zero_ne_one : (0 : MyNat) ≠ 1 := one_ne_zero.symm
+theorem zero_ne_one : (0 : MyNat) ≠ 1 := by
+  exact one_ne_zero.symm
 
 /-- Addition on `MyNat`. -/
 def add : MyNat → MyNat → MyNat
@@ -53,7 +54,8 @@ theorem add_succ : a + succ b = succ (a + b):= rfl
 @[grind =]
 theorem succ_eq_add_one : succ a = a + 1 := rfl
 
-@[simp] theorem add_one_ne_zero : a + 1 ≠ 0 := by simp [← succ_eq_add_one]
+@[simp]
+theorem add_one_ne_zero : a + 1 ≠ 0 := by simp [← succ_eq_add_one]
 
 theorem zero_add : 0 + a = a := by
   induction a with
@@ -104,7 +106,8 @@ theorem mul_zero : a * 0 = 0 := by
 
 theorem mul_succ : a * b.succ = a * b + a := rfl
 
-@[grind =] theorem succ_mul : a.succ * b = a * b + b := by
+@[grind =]
+theorem succ_mul : a.succ * b = a * b + b := by
   induction b with
   | zero =>
       rw [zero_def, mul_zero, mul_zero, zero_add]
@@ -171,11 +174,16 @@ def pred : MyNat → MyNat
 | zero => 0
 | succ a => a
 
-@[simp] theorem pred_zero : pred 0 = 0 := rfl
+@[simp]
+theorem pred_zero : pred 0 = 0 := by
+  rfl
 
-theorem pred_succ : pred (succ a) = a := rfl
+theorem pred_succ : pred (succ a) = a := by
+  rfl
 
-@[simp] theorem add_one_pred : pred (a + 1) = a := rfl
+@[simp]
+theorem add_one_pred : pred (a + 1) = a := by
+  rfl
 
 variable {a} in
 theorem succ_pred (ha : a ≠ 0) : succ (pred a) = a :=
@@ -191,7 +199,8 @@ def le : Prop := ∃ x, b = a + x
 instance : LE MyNat where
   le := le
 
-@[simp] theorem zero_le : 0 ≤ a := by
+@[simp]
+theorem zero_le : 0 ≤ a := by
   exact ⟨a, by rw [zero_add]⟩
 
 theorem le_succ : a ≤ a.succ := by
