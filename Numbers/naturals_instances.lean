@@ -48,7 +48,7 @@ instance : IsStrictOrderedRing MyNat where
   add_le_add_left _ _ h _ := add_le_add_left h
   zero_le_one := by simp
   le_of_add_le_add_left _ _ _ := le_of_add_le_add_left
-  exists_pair_ne := ⟨0, 1, zero_ne_one⟩
+  exists_pair_ne := ⟨0, 1, one_ne_zero.symm⟩
   mul_lt_mul_of_pos_left _ h _ _ H := mul_lt_mul_of_pos_left h H
   mul_lt_mul_of_pos_right _ h _ _ H := mul_lt_mul_of_pos_right h H
 
