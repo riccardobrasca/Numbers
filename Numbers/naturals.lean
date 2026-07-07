@@ -14,13 +14,26 @@ inductive MyNat where
 | zero : MyNat
 | succ : MyNat → MyNat
 
+#check MyNat.zero
 namespace MyNat
+
+#check zero
+
+#check succ
+
+#check succ zero
+
+#check succ (succ zero)
 
 variable (a b c : MyNat)
 
 /-- The following is to activate the notation `(0 : MyNat)`.
 Beware: if you just write `0`, sometimes Lean thinks you mean the "usual" natural number `0`. -/
 instance : Zero MyNat := ⟨zero⟩
+
+#check 0
+
+#check (0 : MyNat)
 
 theorem zero_def : zero = 0 := by
   rfl
