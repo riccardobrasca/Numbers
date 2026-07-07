@@ -1,3 +1,5 @@
+import Batteries.CodeAction
+
 /-!
 
 In this file we define our copy `MyNat` of the natural numbers. To check that we don't cheat
@@ -33,7 +35,8 @@ theorem one_def : one = 1 := by
 theorem one_eq_succ_zero : 1 = succ 0 := by
   sorry
 
-/-- This is basically an axiom added by Lean when defining natural numbers (feel free to ask more details if you want!) -/
+/-- This is basically an axiom added by Lean when defining natural numbers (feel free to ask more
+details if you want!) -/
 theorem succ_ne_zero : succ a ≠ 0 := by
   sorry
 
@@ -62,6 +65,7 @@ theorem succ_eq_add_one : succ a = a + 1 := by
   sorry
 
 theorem zero_add : 0 + a = a := by
+  induction a
   sorry
 
 theorem succ_add : (succ a) + b = succ (a + b) := by
