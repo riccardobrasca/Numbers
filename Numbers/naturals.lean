@@ -43,6 +43,9 @@ theorem succ_ne_zero : succ a ≠ 0 := by
 theorem one_ne_zero : (1 : MyNat) ≠ 0 := by
   sorry
 
+theorem zero_ne_one : (0 : MyNat) ≠ 1 := by
+  sorry
+
 /-- Addition on `MyNat`. -/
 def add : MyNat → MyNat → MyNat
 | a, 0 => a
@@ -130,13 +133,15 @@ def pred : MyNat → MyNat
 | zero => 0
 | succ a => a
 
-@[simp] theorem pred_zero : pred 0 = 0 := by
+@[simp]
+theorem pred_zero : pred 0 = 0 := by
   sorry
 
 theorem pred_succ : pred (succ a) = a := by
   sorry
 
-@[simp] theorem add_one_pred : pred (a + 1) = a := by
+@[simp]
+theorem add_one_pred : pred (a + 1) = a := by
   sorry
 
 variable {a} in
@@ -179,7 +184,8 @@ theorem le_self_add : a ≤ a + b := by
 theorem le_add_self : a ≤ b + a := by
   sorry
 
-@[simp] theorem le_succ_iff_eq_succ_or_le : a ≤ b.succ ↔ a = b.succ ∨ a ≤ b := by
+@[simp]
+theorem le_succ_iff_eq_succ_or_le : a ≤ b.succ ↔ a = b.succ ∨ a ≤ b := by
   sorry
 
 /-- The obvious `<` relation. -/
