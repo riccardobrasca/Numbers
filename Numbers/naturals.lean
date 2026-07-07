@@ -36,14 +36,14 @@ instance : Zero MyNat := ⟨zero⟩
 #check (0 : MyNat)
 
 theorem zero_def : zero = 0 := by
-  rfl
+  sorry
 
 def one : MyNat := succ 0
 
 instance : One MyNat := ⟨one⟩
 
 theorem one_def : one = 1 := by
-  rfl
+  sorry
 
 theorem one_eq_succ_zero : 1 = succ 0 := by
   sorry
