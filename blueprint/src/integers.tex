@@ -1,6 +1,6 @@
 \chapter{The integers}
 
-We construct the integers starting from the natural numbers $\N$. Since \texttt{lean} already has a
+We construct the integers starting from the natural numbers $\MyNat$. Since \texttt{lean} already has a
 type called $\Z$, we define a new type called $\MyInt$ that will be another definition of the integers.
 
 \section{The \emph{preintegers}}
@@ -11,7 +11,7 @@ $\MyInt$ will be a quotient of a type called $\MyPreint$.
     \label{MyPreint}
     \lean{MyPreint}
     \leanok
-    Let $\MyPreint$ be $\N \times \N$.
+    Let $\MyPreint$ be $\MyNat \times \MyNat$.
 \end{definition}
 
 \begin{definition}
@@ -34,7 +34,7 @@ $R$ is a reflexive relation.
 \begin{proof}
     \leanok
     \uses{MyPreint.R}
-    This follows by commutativity of addition in $\N$.
+    This follows by commutativity of addition in $\MyNat$.
 \end{proof}
 
 \begin{lemma}
@@ -46,7 +46,7 @@ $R$ is a symmetric relation.
 \begin{proof}
     \leanok
     \uses{MyPreint.R}
-    This follows by commutativity of addition in $\N$.
+    This follows by commutativity of addition in $\MyNat$.
 \end{proof}
 
 \begin{lemma}
@@ -63,7 +63,7 @@ $R$ is a transitive relation.
     \[
     a+d+c+f=b+c+d+e
     \]
-    Since addition on $\N$ is cancellative we get
+    Since addition on $\MyNat$ is cancellative we get
     \[
     a+f = b + e
     \]
@@ -281,7 +281,7 @@ Thanks to Lemma~\ref{MyPreint.mul_quotient} this is well defined.
 \begin{proof}
     \uses{MyInt.add}
     \leanok
-To prove the lemma it is enough to prove that, for all $a$, $b$, $c$, $d$, $e$ and $f$ in $\N$, we have
+To prove the lemma it is enough to prove that, for all $a$, $b$, $c$, $d$, $e$ and $f$ in $\MyNat$, we have
 \[
 (⟦ (a, b) ⟧+ ⟦ (c, d) ⟧) + ⟦ (e, f) ⟧ = ⟦ (a, b) ⟧ + (⟦ (c, d) ⟧ + ⟦ (e, f) ⟧)
 \]
@@ -289,7 +289,7 @@ Unravelling the definitions this is
 \[
 a + c + e + (b + (d + f)) = b + d + f + (a + (c + e))
 \]
-that is true by associativity and commutativity in $\N$.
+that is true by associativity and commutativity in $\MyNat$.
 \end{proof}
 
 \begin{proposition}
@@ -324,7 +324,7 @@ In $\MyInt$ we have $0 \neq 1$.
     \leanok
     \uses{MyInt.zero, MyInt.one}
     If $0 = 1$ by definition we would have $⟦ (0,0) ⟧ = ⟦ (1,0) ⟧$
-    so $0+1=0+0$ in $\N$, that is absurd.
+    so $0+1=0+0$ in $\MyNat$, that is absurd.
 \end{proof}
 
 \begin{lemma}
@@ -336,7 +336,7 @@ Let $x$ and $y$ in $\MyInt$ such that $x \neq 0$ and $y \neq 0$. Then $x*y \neq 
 \begin{proof}
     \leanok
     \uses{MyInt.zero, MyInt.mul}
-    It is enough to prove that, for all $a$, $b$, $c$ and $d$ in $\N$ such that $a \neq b$ and $c \neq d$ we have $a*c+b*d\neq a*d+b*c$. If this is not the case we must have $a = b$ or $c = d$. (Can you see how to prove this in $\N$? You cannot use subtraction!) and we are done.
+    It is enough to prove that, for all $a$, $b$, $c$ and $d$ in $\MyNat$ such that $a \neq b$ and $c \neq d$ we have $a*c+b*d\neq a*d+b*c$. If this is not the case we must have $a = b$ or $c = d$. (Can you see how to prove this in $\MyNat$? You cannot use subtraction!) and we are done.
 \end{proof}
 
 \begin{lemma}
@@ -351,7 +351,7 @@ Let $x$, $y$ and $z$ in $\MyInt$ such that $x \neq 0$ and $y * x = z * x$. Then 
 We have $0 = y*x-z*x=(y-z)*x$. Since $x \neq 0$ we have by Lemma~\ref{MyInt.mul_ne_zero} that $y-z=0$ and hence $y=z$.
 \end{proof}
 
-\subsection{\texorpdfstring{The inclusion $i \colon \N \to \MyInt$}{The inclusion}}
+\subsection{\texorpdfstring{The inclusion $i \colon \MyNat \to \MyInt$}{The inclusion}}
 \begin{definition}
     \label{MyInt.i}
     \lean{MyInt.i}
@@ -359,7 +359,7 @@ We have $0 = y*x-z*x=(y-z)*x$. Since $x \neq 0$ we have by Lemma~\ref{MyInt.mul_
     \leanok
     We define a map
 \begin{gather*}
-    i \colon \N \to \MyInt \\
+    i \colon \MyNat \to \MyInt \\
     n \mapsto ⟦ (n,0) ⟧
 \end{gather*}
 \end{definition}
@@ -392,7 +392,7 @@ Clear from the definition.
     \label{MyInt.i_add}
     \lean{MyInt.i_add}
     \leanok
-For all $a$ and $b$ in $\N$ we have that
+For all $a$ and $b$ in $\MyNat$ we have that
 \[
 i(a+b) = i(a) + i(b)
 \]
@@ -412,7 +412,7 @@ that is obvious from the definition.
     \label{MyInt.i_mul}
     \lean{MyInt.i_mul}
     \leanok
-For all $a$ and $b$ in $\N$ we have that
+For all $a$ and $b$ in $\MyNat$ we have that
 \[
 i(a*b) = i(a) * i(b)
 \]
@@ -513,7 +513,7 @@ It follows that $\leq$ is an order relation.
     \leanok
     Let $x$ and $y$ be in $\MyInt$. We can write $x = ⟦ (a,b) ⟧$ and
     $y = ⟦ (c,d) ⟧$ and we need to prove that
-    $⟦ (a,b) ⟧ \leq ⟦ (c,d) ⟧$ or $⟦ (c,d) ⟧ \leq ⟦ (a,b) ⟧$. Let's consider two cases (we use that the order on $\N$ is total):
+    $⟦ (a,b) ⟧ \leq ⟦ (c,d) ⟧$ or $⟦ (c,d) ⟧ \leq ⟦ (a,b) ⟧$. Let's consider two cases (we use that the order on $\MyNat$ is total):
     \begin{itemize}
         \item if $a + d \leq b + c$ let $e$ be such that $b + c = a + d + e$. We prove that
         $⟦ (a,b) ⟧ \leq ⟦ (c,d) ⟧$ using $e$. We have
@@ -606,7 +606,7 @@ It follows that $\leq$ is an order relation.
     \lean{MyInt.archimedean}
     \leanok
     \uses{MyInt.le, MyInt.i}
-    For every $x$ in $\MyInt$ there exists $n$ in $\N$ such that $x \leq i(n)$.
+    For every $x$ in $\MyInt$ there exists $n$ in $\MyNat$ such that $x \leq i(n)$.
 \end{lemma}
 \begin{proof}
     \leanok
