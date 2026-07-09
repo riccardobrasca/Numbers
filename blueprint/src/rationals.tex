@@ -316,7 +316,7 @@ Let $x \neq 0$ be in $\MyRat$. Then $x * x^{-1} = 1$.
     Clear because of Lemma~\ref{MyRat.mul_inv_cancel}.
 \end{proof}
 
-\subsection{\texorpdfstring{The inclusion $i \colon \N \to \MyRat$}{The inclusion}}
+\subsection{\texorpdfstring{The inclusion $i \colon \MyNat \to \MyRat$}{The inclusion}}
 \begin{definition}
     \label{MyRat.i}
     \lean{MyRat.i}
@@ -324,7 +324,7 @@ Let $x \neq 0$ be in $\MyRat$. Then $x * x^{-1} = 1$.
     \leanok
     We define a map
 \begin{gather*}
-    i \colon \N \to \MyRat \\
+    i \colon \MyNat \to \MyRat \\
     n \mapsto ⟦ (\MyInt.i n,1) ⟧
 \end{gather*}
 \end{definition}
@@ -357,7 +357,7 @@ Clear from the definition.
     \label{MyRat.i_add}
     \lean{MyRat.i_add}
     \leanok
-For all $a$ and $b$ in $\N$ we have that
+For all $a$ and $b$ in $\MyNat$ we have that
 \[
 i(a+b) = i(a) + i(b)
 \]
@@ -377,7 +377,7 @@ that is obvious from the definition.
     \label{MyRat.i_mul}
     \lean{MyRat.i_mul}
     \leanok
-For all $a$ and $b$ in $\N$ we have that
+For all $a$ and $b$ in $\MyNat$ we have that
 \[
 i(a*b) = i(a) * i(b)
 \]
@@ -727,7 +727,7 @@ We have proved that $\MyRat$ is an ordered ring.
     \label{MyRat.i_le_iff}
     \lean{MyRat.i_le_iff}
     \leanok
-    Let $x$ and $y$ in $\N$. We have that $i(x) \leq i(y)$ if and only if $x \leq y$.
+    Let $x$ and $y$ in $\MyNat$. We have that $i(x) \leq i(y)$ if and only if $x \leq y$.
 \end{lemma}
 \begin{proof}
     \uses{MyRat.IsNonneg, MyInt.i_le_iff, MyRat.j_le_iff, MyRat.j_comp_eq_i}
@@ -780,7 +780,7 @@ We now have that $\MyRat$ is a \emph{strict ordered ring}: a nontrivial ring wit
     \lean{MyRat.archimedean}
     \leanok
     \uses{MyRat.i, MyRat.j_le_iff, MyInt.archimedean}
-    For every $x$ in $\MyRat$ there exists $n$ in $\N$ such that $x \leq i(n)$.
+    For every $x$ in $\MyRat$ there exists $n$ in $\MyNat$ such that $x \leq i(n)$.
 \end{lemma}
 \begin{proof}
     \leanok
