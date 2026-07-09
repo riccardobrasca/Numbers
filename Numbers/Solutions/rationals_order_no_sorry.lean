@@ -11,16 +11,18 @@ plays well with the ring structure.
 
 namespace MyRat
 
-/-
+/-!
 
 ## Nonnegativity on the rationals
 
 -/
--- this definition is somehow bad as it asks for proofs of b≠0 and b>0
+
+-- Note: forming the prerational requires `b ≠ 0`, which we get from the
+-- assumption `0 < b` as `hb.ne'`.
 def IsNonneg (x : MyRat) : Prop :=
   ∃ (a b : MyInt) (_ : 0 ≤ a) (hb : 0 < b), x = ⟦(a, ⟨b, hb.ne'⟩)⟧
 
-/-
+/-!
 
 ### Relationship with 0 and 1
 
@@ -36,7 +38,7 @@ lemma one_nonneg : IsNonneg 1 := by
   use 1, 1
   simp [one_def]
 
-/-
+/-!
 
 ## Relationship with neg
 
@@ -90,7 +92,7 @@ lemma nonneg_neg_of_not_nonneg {x : MyRat} : ¬ IsNonneg x → IsNonneg (-x) := 
     -- So `(-a) / b` is the required nonnegative representative of `-(a / b)`.
     exact ⟨-a, ha, b, hb_pos, by apply Quotient.eq.2; grind⟩
 
-/-
+/-!
 
 ## Relationship with addition
 
@@ -105,7 +107,7 @@ lemma isNonneg_add_isNonneg {x y : MyRat} (hx : IsNonneg x) (hy : IsNonneg y) :
   simp
   ring
 
-/-
+/-!
 
 ## Relationship with multiplication
 
@@ -121,7 +123,7 @@ lemma isNonneg_mul_isNonneg {x y : MyRat} (hx : IsNonneg x) (hy : IsNonneg y) :
   simp
   ring
 
-/-
+/-!
 
 ## Relationship with inverse
 
@@ -149,7 +151,7 @@ the rationals are a linear order.
 
 -/
 
-/-- Our definition of x ≤ y on the rationals. -/
+/-- Our definition of `x ≤ y` on the rationals. -/
 def le (x y : MyRat) : Prop := IsNonneg (y - x)
 
 lemma le_refl (x : MyRat) : le x x := by
@@ -191,6 +193,7 @@ lemma le_def (x y : MyRat) : x ≤ y ↔ IsNonneg (y - x) := by
 
 lemma zero_le_iff_IsNonneg (x : MyRat) : 0 ≤ x ↔ IsNonneg x := by
   simp [le_def]
+
 /-!
 
 We now develop some basic theory of `≤` on the rationals.
@@ -279,7 +282,7 @@ lemma mul_pos (a b : MyRat) (ha : 0 < a) (hb : 0 < b) : 0 < a * b := by
   rcases ha with ⟨ha, ha'⟩
   rcases hb with ⟨hb, hb'⟩
   refine ⟨?_, by aesop⟩
-  rw [zero_le_iff_IsNonneg] at  ha hb ⊢
+  rw [zero_le_iff_IsNonneg] at ha hb ⊢
   apply isNonneg_mul_isNonneg ha hb
 
 noncomputable instance : IsStrictOrderedRing MyRat :=

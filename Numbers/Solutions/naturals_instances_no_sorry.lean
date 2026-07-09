@@ -7,14 +7,14 @@ import Numbers.Solutions.naturals_no_sorry
 
 /-!
 
-In this file we provide various instances about `MyNat` that depend on mathlib
+In this file we provide various instances about `MyNat` that depend on mathlib.
 
 -/
 
 namespace MyNat
 
 instance : CommSemiring MyNat where
-  add := (· + · )
+  add := (· + ·)
   add_assoc := add_assoc
   zero := zero
   zero_add := zero_add

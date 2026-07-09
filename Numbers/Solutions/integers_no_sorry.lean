@@ -55,9 +55,9 @@ lemma R_def (a b c d : MyNat) : R (a,b) (c,d) ↔ a + d = b + c := by
   rfl
 
 lemma R_refl : ∀ x, R x x := by
-  dsimp [R] --Let's unfold the definitions
+  dsimp [R] -- Let's unfold the definitions
   intro x
-  rw [add_comm] --We alreado know that addition is commutative on natural numbers!
+  rw [add_comm] -- We already know that addition is commutative on natural numbers!
 
 lemma R_symm : ∀ {x y}, R x y → R y x := by
   dsimp [R]
@@ -70,7 +70,7 @@ lemma R_trans : ∀ {x y z}, R x y → R y z → R x z := by
   -- the line above introduces natural numbers `a` and `b` such that `x` is the equivalence class
   -- of the pair `(a,b)`: they exist by definition
   rcases y with ⟨c, d⟩
-  rcases z with ⟨e, f⟩ --one can do directly `intro ⟨a, b⟩ ⟨c, d⟩ ⟨e, f⟩`
+  rcases z with ⟨e, f⟩ -- one can do directly `intro ⟨a, b⟩ ⟨c, d⟩ ⟨e, f⟩`
   dsimp [R] at *
   grind -- `linarith` can do easy computation automatically, see also `ring`
 
@@ -204,7 +204,7 @@ lemma add_assoc : ∀ (x y z : MyInt), (x + y) + z = x + (y + z) := by
   intro x y z
   refine Quot.induction_on₃ x y z ?_
   rintro ⟨a, b⟩ ⟨c, d⟩ ⟨e, f⟩
-  apply Quot.sound --this just goes from "equal in the quotient" to "in relation"
+  apply Quot.sound -- this just goes from "equal in the quotient" to "in relation"
   simp [Setoid.r, R]
   ring
 
@@ -281,8 +281,8 @@ instance commRing : CommRing MyInt where
   neg := (- ·)
   mul_comm := by quot_proof
   neg_add_cancel := by quot_proof
-  nsmul := nsmulRec --ignore this
-  zsmul := zsmulRec --ignore this
+  nsmul := nsmulRec -- ignore this
+  zsmul := zsmulRec -- ignore this
 
 lemma zero_ne_one : (0 : MyInt) ≠ 1 := by
   simp [zero_def, one_def, Quotient.eq]

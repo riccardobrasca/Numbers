@@ -7,7 +7,7 @@ results in mathlib.)
 
 -/
 
-/-- Our copy of the natural numbers.-/
+/-- Our copy of the natural numbers. -/
 inductive MyNat where
 | zero : MyNat
 | succ : MyNat → MyNat
@@ -49,7 +49,7 @@ instance : Add MyNat where
 
 theorem add_zero : a + 0 = a := rfl
 
-theorem add_succ : a + succ b = succ (a + b):= rfl
+theorem add_succ : a + succ b = succ (a + b) := rfl
 
 @[grind =]
 theorem succ_eq_add_one : succ a = a + 1 := rfl
@@ -255,7 +255,7 @@ theorem le_add_self : a ≤ b + a := by
 
 @[simp]
 theorem le_succ_iff_eq_succ_or_le : a ≤ b.succ ↔ a = b.succ ∨ a ≤ b := by
-  refine ⟨fun ⟨x, hx⟩ ↦ ?_, fun h ↦  ?_⟩
+  refine ⟨fun ⟨x, hx⟩ ↦ ?_, fun h ↦ ?_⟩
   · cases x with
     | zero =>
         rw [zero_def, add_zero] at hx
@@ -283,11 +283,13 @@ theorem lt_iff_le_and_ne : a < b ↔ a ≤ b ∧ a ≠ b :=
     fun ⟨h1, h2⟩ ↦ ⟨h1, fun hab ↦ h2 <| le_antisymm h1 hab⟩⟩
 
 theorem ne_zero_iff_pos : a ≠ 0 ↔ 0 < a :=
-  ⟨fun h ↦ lt_iff_le_and_ne.mpr ⟨zero_le _, h.symm⟩, fun h ↦ Ne.symm (lt_iff_le_and_ne.1 h).2⟩
+  ⟨fun h ↦ lt_iff_le_and_ne.mpr ⟨zero_le _, h.symm⟩,
+    fun h ↦ Ne.symm (lt_iff_le_and_ne.1 h).2⟩
 
 theorem lt_iff_ex_ne_zero : a < b ↔ ∃ x ≠ 0, b = a + x := by
   rw [lt_iff_le_and_ne]
-  refine ⟨fun ⟨⟨x, hx⟩, h⟩ ↦ ⟨x, fun h0 ↦ h ?_, hx⟩, fun ⟨x, hx, h⟩ ↦ ⟨⟨x, h⟩, fun h0 ↦ hx ?_⟩⟩
+  refine ⟨fun ⟨⟨x, hx⟩, h⟩ ↦ ⟨x, fun h0 ↦ h ?_, hx⟩,
+    fun ⟨x, hx, h⟩ ↦ ⟨⟨x, h⟩, fun h0 ↦ hx ?_⟩⟩
   · rw [h0, add_zero] at hx
     exact hx.symm
   · replace h : a + 0 = a + x := by

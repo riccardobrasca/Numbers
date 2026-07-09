@@ -1,5 +1,20 @@
 import Numbers.Solutions.rationals_order_no_sorry
 
+/-!
+
+# The reals
+
+We construct the real numbers as the quotient of the type of Cauchy sequences of rationals
+by the equivalence relation identifying two sequences whose difference tends to `0`.
+
+-/
+
+/-!
+
+## Cauchy sequences
+
+-/
+
 -- Lean already knows the absolute value (since there is an order on `MyRat`): `|x|` is defined
 -- as `max x (-x)`.
 -- See the files `Mathlib.Algebra.Order.*.Abs` for various properties.
@@ -7,7 +22,8 @@ abbrev IsCauchy (x : MyNat → MyRat) : Prop :=
   ∀ ε, 0 < ε → ∃ N, ∀ p q, N ≤ p → N ≤ q → |x p - x q| ≤ ε
 
 open Finset in
-lemma IsCauchy.bounded {x : MyNat → MyRat} (hx : IsCauchy x) : ∃ B, 0 < B ∧ ∀ n, |x n| ≤ B := by
+lemma IsCauchy.bounded {x : MyNat → MyRat} (hx : IsCauchy x) :
+    ∃ B, 0 < B ∧ ∀ n, |x n| ≤ B := by
   rcases hx 1 (by simp) with ⟨A, hA⟩
   let S' := (Finset.Icc 0 A).image (fun n ↦ |x n|)
   have hEmpty' : S'.Nonempty := image_nonempty.2 (by simp)
@@ -41,12 +57,13 @@ namespace MyPrereal
 
 open MyPrereal
 
---ignore the following
+-- Ignore the following
 instance funLike : FunLike MyPrereal MyNat MyRat where
   coe := Subtype.val
   coe_injective _ _ := Subtype.ext
 
-lemma prop (x : MyPrereal) : ∀ ε, 0 < ε → ∃ N, ∀ p q, N ≤ p → N ≤ q → |x p - x q| ≤ ε :=
+lemma prop (x : MyPrereal) :
+    ∀ ε, 0 < ε → ∃ N, ∀ p q, N ≤ p → N ≤ q → |x p - x q| ≤ ε :=
   x.2
 
 @[simp] lemma coe_apply {x : MyNat → MyRat} (hx : IsCauchy x) (n : MyNat) :
@@ -56,9 +73,16 @@ lemma prop (x : MyPrereal) : ∀ ε, 0 < ε → ∃ N, ∀ p q, N ≤ p → N �
 lemma bounded (x : MyPrereal) : ∃ B, 0 < B ∧ ∀ n, |x n| ≤ B :=
   x.2.bounded
 
+/-!
+
+## The equivalence relation on the pre-reals
+
+-/
+
 def R (x y : MyPrereal) : Prop := ∀ ε, 0 < ε → ∃ N, ∀ n, N ≤ n → |x n - y n| ≤ ε
 
-lemma R_def (x y : MyPrereal) : R x y ↔ ∀ ε, 0 < ε → ∃ N, ∀ n, N ≤ n → |x n - y n| ≤ ε := by
+lemma R_def (x y : MyPrereal) :
+    R x y ↔ ∀ ε, 0 < ε → ∃ N, ∀ n, N ≤ n → |x n - y n| ≤ ε := by
   rfl
 
 lemma R_refl : ∀ x, R x x := by
@@ -97,6 +121,12 @@ instance R_equiv : Setoid MyPrereal where
 @[simp] lemma equiv_def' (x y : MyPrereal) : Setoid.r x y ↔
     ∀ ε, 0 < ε → ∃ N, ∀ n, N ≤ n → |x n - y n| ≤ ε := by
   rfl
+
+/-!
+
+## The algebraic structure on the pre-reals
+
+-/
 
 lemma IsCauchy.const (x : MyRat) : IsCauchy (fun _ ↦ x) := by
   intro ε hε
@@ -138,7 +168,8 @@ lemma neg_quotient ⦃x x' : MyPrereal⦄ (h : x ≈ x') : -x ≈ -x' := by
   intro n hn
   simpa [← sub_eq_neg_add, abs_sub_comm] using HN n hn
 
-lemma IsCauchy.add {x y : MyNat → MyRat} (hx : IsCauchy x) (hy : IsCauchy y) : IsCauchy (x + y) := by
+lemma IsCauchy.add {x y : MyNat → MyRat} (hx : IsCauchy x) (hy : IsCauchy y) :
+    IsCauchy (x + y) := by
   intro ε hε
   rcases hx (ε/2) (by linarith) with ⟨N, HN⟩
   rcases hy (ε/2) (by linarith) with ⟨M, HM⟩
@@ -173,7 +204,8 @@ lemma add_quotient ⦃x x' : MyPrereal⦄ (h : x ≈ x') ⦃y y' : MyPrereal⦄ 
        _ ≤ ε/2 + ε/2 := by grw [HN n (by grind), HN' n (by grind)]
        _ = ε := by simp
 
-lemma IsCauchy.mul {x y : MyNat → MyRat} (hx : IsCauchy x) (hy : IsCauchy y) : IsCauchy (x * y) := by
+lemma IsCauchy.mul {x y : MyNat → MyRat} (hx : IsCauchy x) (hy : IsCauchy y) :
+    IsCauchy (x * y) := by
   rcases hx.bounded with ⟨A, hApos, hA⟩
   rcases hy.bounded with ⟨B, hBpos, hB⟩
   intro ε hε
@@ -206,7 +238,8 @@ lemma mul_quotient ⦃x x' : MyPrereal⦄ (h : x ≈ x') ⦃y y' : MyPrereal⦄ 
   intro n hn
   calc |(x * y) n - (x' * y') n| = |x n * y n - x' n * y' n| := by simp
        _ = |x n * (y n - y' n) + y' n * (x n - x' n)| := by ring_nf
-       _ ≤ |x n| * |(y n - y' n)| + |y' n| * |(x n - x' n)| := by grw [abs_add_le, abs_mul, abs_mul]
+       _ ≤ |x n| * |(y n - y' n)| + |y' n| * |(x n - x' n)| := by
+        grw [abs_add_le, abs_mul, abs_mul]
        _ ≤ A * (ε/(2*A)) + B * (ε/(2*B)) := by grw [hA, hB, HN' n (by grind), HN n (by grind)]
        _ = ε := by field_simp; ring
 
@@ -240,7 +273,8 @@ lemma IsCauchy.inv {x : MyPrereal} (H : ¬(x ≈ 0)) : IsCauchy (x⁻¹) := by
       _ = ε := by field_simp
 
 open Classical in
-noncomputable def inv (x : MyPrereal) : MyPrereal := if H : ¬(x ≈ 0) then ⟨_, IsCauchy.inv H⟩ else 0
+noncomputable def inv (x : MyPrereal) : MyPrereal :=
+  if H : ¬(x ≈ 0) then ⟨_, IsCauchy.inv H⟩ else 0
 
 @[simp] lemma inv_def {x : MyPrereal} (H : ¬(x ≈ 0)) (n : MyNat) :
     inv x n = (x n)⁻¹ := by
@@ -278,6 +312,12 @@ end MyPrereal
 
 open MyPrereal
 
+/-!
+
+## The reals: definition and algebraic structure
+
+-/
+
 abbrev MyReal := Quotient R_equiv
 
 namespace MyReal
@@ -305,15 +345,15 @@ instance : Neg MyReal where
 lemma neg_def (x : MyPrereal) : -(⟦x⟧ : MyReal) = ⟦-x⟧ := by
   rfl
 
-def add : MyReal → MyReal → MyReal  := Quotient.map₂ _ add_quotient
+def add : MyReal → MyReal → MyReal := Quotient.map₂ _ add_quotient
 
-instance : Add MyReal
-  where add := add
+instance : Add MyReal where
+  add := add
 
 lemma add_def (x y : MyPrereal) : (⟦x⟧ : MyReal) + (⟦y⟧ : MyReal) = ⟦x + y⟧ := by
   rfl
 
-def mul : MyReal → MyReal → MyReal  := Quotient.map₂ _ mul_quotient
+def mul : MyReal → MyReal → MyReal := Quotient.map₂ _ mul_quotient
 
 instance : Mul MyReal where
   mul := mul
@@ -432,6 +472,13 @@ instance field : Field MyReal where
   qsmul := _
   nnqsmul := _
 
+/-!
+
+## The map from the rationals to the reals
+
+-/
+
+/-- The natural map from the rationals to the reals. -/
 def k (x : MyRat) : MyReal := ⟦⟨_, IsCauchy.const x⟩⟧
 
 @[simp] lemma k_zero : k 0 = 0 := by
@@ -477,6 +524,12 @@ lemma k_inv (x : MyRat) : k x⁻¹ = (k x)⁻¹ := by
   k_injective.eq_iff
 
 end MyReal
+
+/-!
+
+## Positivity and order
+
+-/
 
 namespace MyPrereal
 
@@ -536,7 +589,8 @@ def IsNonneg (x : MyPrereal) : Prop :=
 lemma IsNonneg_of_equiv_zero {x : MyPrereal} (hx : x ≈ 0) : IsNonneg x := by
   simp [IsNonneg, hx]
 
-lemma IsNonneg_of_nonneg {x : MyPrereal} (N : MyNat) (hx : ∀ n, N ≤ n → 0 ≤ x n) : IsNonneg x := by
+lemma IsNonneg_of_nonneg {x : MyPrereal} (N : MyNat) (hx : ∀ n, N ≤ n → 0 ≤ x n) :
+    IsNonneg x := by
   by_cases h : x ≈ 0
   · exact IsNonneg_of_equiv_zero h
   rcases pos_of_not_equiv_zero h with ⟨δ, hδpos, M, HM⟩
@@ -595,7 +649,7 @@ end MyPrereal
 
 namespace MyReal
 
-def IsNonneg : MyReal →  Prop := Quotient.lift (MyPrereal.IsNonneg) <| fun _ _ h ↦
+def IsNonneg : MyReal → Prop := Quotient.lift (MyPrereal.IsNonneg) <| fun _ _ h ↦
   propext ⟨fun hx ↦ isNonneg_quotient h hx, fun hy ↦ isNonneg_quotient (symm h) hy⟩
 
 lemma isNonneg_def {x : MyPrereal} : IsNonneg ⟦x⟧ ↔ x.IsNonneg := by
@@ -683,7 +737,8 @@ instance : ZeroLEOneClass MyReal := ⟨zero_le_one⟩
 
 lemma pos_def {x : MyPrereal} : IsPos x ↔ 0 < (⟦x⟧ : MyReal) := by
   rw [lt_iff_le_and_ne, zero_le_iff_isNonneg, isNonneg_def, MyPrereal.IsNonneg, ne_comm]
-  refine ⟨fun h ↦ ⟨by left; assumption, not_equiv_zero_of_isPos' h⟩, fun ⟨h1, h2⟩ ↦ ?_⟩
+  refine ⟨fun h ↦ ⟨by left; assumption, not_equiv_zero_of_isPos' h⟩,
+    fun ⟨h1, h2⟩ ↦ ?_⟩
   simpa [← Quotient.eq_iff_equiv, ← zero_def, h2] using h1
 
 lemma add_le_add_left (x y : MyReal) (h : x ≤ y) (t : MyReal) : x + t ≤ y + t := by
@@ -702,11 +757,12 @@ instance : IsOrderedRing MyReal :=
 lemma k_le_iff (x y : MyRat) : k x ≤ k y ↔ x ≤ y := by
   by_cases H : x = y
   · simp [H]
-  refine ⟨fun h ↦ ?_, fun h ↦  ?_⟩
+  refine ⟨fun h ↦ ?_, fun h ↦ ?_⟩
   · simp only [k, le_def, sub_def, isNonneg_def] at h
-    have : ¬((⟨_, IsCauchy.const y⟩ : MyPrereal) - ⟨_, IsCauchy.const x⟩ ≈ 0) := fun h0 ↦ by
-      apply (k_injective.ne H).symm
-      rwa [← Quotient.eq_iff_equiv, ← sub_def, ← zero_def, sub_eq_zero] at h0
+    have : ¬((⟨_, IsCauchy.const y⟩ : MyPrereal) - ⟨_, IsCauchy.const x⟩ ≈ 0) :=
+      fun h0 ↦ by
+        apply (k_injective.ne H).symm
+        rwa [← Quotient.eq_iff_equiv, ← sub_def, ← zero_def, sub_eq_zero] at h0
     simp only [MyPrereal.IsNonneg, this, or_false] at h
     rcases pos_of_isPos h with ⟨N, HN⟩
     refine le_of_lt (by simpa using HN N le_rfl)
@@ -731,7 +787,8 @@ lemma le_total (x y : MyReal) : x ≤ y ∨ y ≤ x := by
       simp only [Quot_eq_Quotient,sub_def, isNonneg_def] at ha
       simp only [Quot_eq_Quotient] at hb
       apply hb
-      rw [(show (⟦a⟧ : MyReal) - ⟦b⟧ = -(⟦b⟧ - ⟦a⟧) by ring), sub_def, neg_def, isNonneg_def]
+      rw [(show (⟦a⟧ : MyReal) - ⟦b⟧ = -(⟦b⟧ - ⟦a⟧) by ring), sub_def, neg_def,
+        isNonneg_def]
       exact isNonneg_neg_of_not_isNonneg ha
 
 noncomputable instance linearOrder : LinearOrder MyReal where
@@ -786,7 +843,8 @@ abbrev TendsTo (f : MyNat → MyReal) (x : MyReal) : Prop :=
   ∀ ε, 0 < ε → ∃ N, ∀ n, N ≤ n → |f n - x| ≤ ε
 
 lemma tendsTo_of_myRat_tendsTo {f : MyNat → MyReal} {x : MyReal}
-    (h : ∀ (ε : MyRat), 0 < ε → ∃ N, ∀ n, N ≤ n → |f n - x| ≤ k ε) : TendsTo f x := by
+    (h : ∀ (ε : MyRat), 0 < ε → ∃ N, ∀ n, N ≤ n → |f n - x| ≤ k ε) :
+    TendsTo f x := by
   intro ε hε
   rcases myRat_dense_of_pos hε with ⟨δ, hδpos, hδ⟩
   rcases h δ hδpos with ⟨N, HN⟩
@@ -815,6 +873,12 @@ lemma tendsTo_myRat (x : MyPrereal) : TendsTo (fun n ↦ k (x n)) ⟦x⟧ := by
     simp only [MyPrereal.sub_def, coe_apply]
     linarith [abs_le.1 (HN n m hn hm)]
 
+/-!
+
+## Completeness
+
+-/
+
 section completeness
 
 lemma ex_approx_punctual (x : MyReal) (n : MyNat) :
@@ -830,7 +894,8 @@ lemma ex_approx (f : MyNat → MyReal) :
 
 noncomputable def approx (f : MyNat → MyReal) : MyNat → MyRat := (ex_approx f).choose
 
-lemma approx_spec (f : MyNat → MyReal) : ∀ n, |f n - k ((approx f) n)| < k ((MyRat.i (n+1))⁻¹) :=
+lemma approx_spec (f : MyNat → MyReal) :
+    ∀ n, |f n - k ((approx f) n)| < k ((MyRat.i (n+1))⁻¹) :=
   (ex_approx f).choose_spec
 
 lemma archimedean (x : MyReal) : ∃ (n : MyNat), x ≤ k (MyRat.i (n + 1)) := by
@@ -884,7 +949,8 @@ lemma approx_cauchy {f : MyNat → MyReal} (hf : IsCauchy f) : _root_.IsCauchy (
        _ = k ε := by ring
 
 noncomputable
-def IsCauchy.approx {f : MyNat → MyReal} (hf : IsCauchy f) : MyPrereal := ⟨_, approx_cauchy hf⟩
+def IsCauchy.approx {f : MyNat → MyReal} (hf : IsCauchy f) : MyPrereal :=
+  ⟨_, approx_cauchy hf⟩
 
 nonrec lemma IsCauchy.approx_spec {f : MyNat → MyReal} (hf : IsCauchy f) :
     ∀ n, |f n - k (hf.approx n)| < k ((MyRat.i (n+1))⁻¹) :=
