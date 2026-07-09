@@ -7,9 +7,6 @@ All the original work is by Kevin Buzzard.
 
 # The integers
 
-In this file we assume all standard facts about the naturals, and then build
-the integers from scratch.
-
 The strategy is to observe that every integer can be written as `a - b`
 for `a` and `b` naturals, so we define the "pre-integers" to be `MyNat × MyNat`, the pairs
 `(a, b)` of naturals. We define an equivalence relation `≈` on `MyNat × MyNat`, with the
