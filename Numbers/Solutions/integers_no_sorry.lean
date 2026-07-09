@@ -15,7 +15,8 @@ that this is an equivalence relation, and define the integers to be the quotient
 ## The ring structure on the integers
 
 We extend addition and multiplication from the naturals to the integers,
-and also define negation `-x` and subtraction `x - y`.
+and also define negation `-x` (subtraction `x - y` then comes for free
+from the ring structure).
 We then prove that the integers are a commutative ring. The proofs are all of
 the form "reduce to a question about naturals, and then solve it using tactics
 which prove theorems about naturals".
@@ -96,7 +97,7 @@ instance R_equiv : Setoid MyPreint where
 /-- Negation on pre-integers. -/
 def neg (x : MyPreint) : MyPreint := (x.2, x.1)
 
--- teach it to the simplifier
+-- Teach it to the simplifier
 @[simp, grind =] lemma neg_def (a b : MyNat) : neg (a, b) = (b, a) := by
   rfl
 
@@ -109,7 +110,7 @@ lemma neg_quotient ⦃x x' : MyPreint⦄ (h : x ≈ x') : neg x ≈ neg x' := by
 /-- Addition on pre-integers. -/
 @[simp] def add (x y : MyPreint) : MyPreint := (x.1 + y.1, x.2 + y.2)
 
--- teach it to the simplifier
+-- Teach it to the simplifier
 @[simp, grind =] lemma add_def (a b c d : MyNat) : add (a, b) (c, d) = (a + c, b + d) := by
   rfl
 
@@ -126,7 +127,7 @@ lemma add_quotient ⦃x x' : MyPreint⦄ (h : x ≈ x') ⦃y y' : MyPreint⦄ (h
 @[simp] def mul (x y : MyPreint) : MyPreint :=
   (x.1 * y.1 + x.2 * y.2, x.1 * y.2 + x.2 * y.1)
 
--- teach it to the simplifier
+-- Teach it to the simplifier
 @[simp, grind =] lemma mul_def (a b c d : MyNat) :
     mul (a, b) (c, d) = (a * c + b * d, a * d + b * c) := by
   rfl
@@ -146,7 +147,9 @@ open MyPreint
 
 /-!
 
-## The integers: definition and algebraic structure -/
+## The integers: definition and algebraic structure
+
+-/
 
 /-- Make the integers as a quotient of preintegers. -/
 abbrev MyInt := Quotient R_equiv
@@ -179,19 +182,19 @@ def neg : MyInt → MyInt := Quotient.map MyPreint.neg neg_quotient
 instance : Neg MyInt where neg := neg
 
 /-- Addition on integers. -/
-def add : MyInt → MyInt → MyInt  := Quotient.map₂ MyPreint.add add_quotient
+def add : MyInt → MyInt → MyInt := Quotient.map₂ MyPreint.add add_quotient
 
 -- `+` notation
 instance : Add MyInt where add := add
 
 /-- Multiplication on integers. -/
-def mul : MyInt → MyInt → MyInt  := Quotient.map₂ MyPreint.mul mul_quotient
+def mul : MyInt → MyInt → MyInt := Quotient.map₂ MyPreint.mul mul_quotient
 
 -- `*` notation
 instance : Mul MyInt where mul := mul
 
 lemma mul_def (a b c d : MyNat) :
-  (⟦(a, b)⟧ : MyInt) * ⟦(c, d)⟧ = ⟦(a * c + b * d, a * d + b * c)⟧ :=
+    (⟦(a, b)⟧ : MyInt) * ⟦(c, d)⟧ = ⟦(a * c + b * d, a * d + b * c)⟧ :=
   rfl
 
 lemma add_def (a b c d : MyNat) : (⟦(a, b)⟧ : MyInt) + ⟦(c, d)⟧ = ⟦(a + c, b + d)⟧ :=
@@ -205,7 +208,7 @@ lemma add_assoc : ∀ (x y z : MyInt), (x + y) + z = x + (y + z) := by
   simp [Setoid.r, R]
   ring
 
---The same will happen for almost everything else we want to prove!
+-- The same will happen for almost everything else we want to prove!
 
 /-!
 
@@ -297,7 +300,6 @@ lemma eq_of_mul_eq_mul_right {x y z : MyInt} (hx : x ≠ 0) (h : y * x = z * x) 
   apply mul_ne_zero _ _ h hx
   assumption
 
-
 /-!
 
 ## The map from the naturals to the integers
@@ -341,7 +343,7 @@ lemma i_injective : Function.Injective i := by
 
 -/
 
-/-- We say `x ≤ y` if there's some natural `a` such that `y = x + a` -/
+/-- We say `x ≤ y` if there's some natural `a` such that `y = x + i a` -/
 def le (x y : MyInt) : Prop := ∃ a : MyNat, y = x + i a
 
 -- Notation `≤` for `le`
@@ -410,7 +412,7 @@ lemma i_le_iff (a b : MyNat) : i a ≤ i b ↔ a ≤ b := by
     use k
     rw [← i_add, ← hk]
 
-/-
+/-!
 
 ## Interaction between ordering and algebraic structure
 
@@ -422,7 +424,7 @@ lemma add_le_add_left (x y : MyInt) (h : x ≤ y) (z : MyInt) : x + z ≤ y + z 
   ring
 
 lemma mul_pos (x y : MyInt) (hx : 0 < x) (hy : 0 < y) : 0 < x * y := by
-  refine Ne.lt_of_le  ?_ ?_
+  refine Ne.lt_of_le ?_ ?_
   · exact (mul_ne_zero _ _ hx.ne.symm hy.ne.symm).symm
   · rcases hx.le with ⟨n, rfl⟩
     rcases hy.le with ⟨m, rfl⟩
