@@ -19,8 +19,9 @@ and define the rationals to be the quotient.
 
 ## The field structure on the rationals
 
-We extend addition, subtraction and multiplication to the rationals, and also
-define division. We then prove that the rationals are a field. The proofs are all of
+We extend addition and multiplication to the rationals, and also define negation
+and the reciprocal (subtraction and division then come for free from the field
+structure). We then prove that the rationals are a field. The proofs are all of
 the form "reduce to a question about integers, and then solve it using tactics
 which prove theorems about integers".
 
@@ -66,8 +67,9 @@ namespace MyPrerat
 by to get rationals. -/
 def R (x y : MyPrerat) : Prop := x.1 * y.2 = x.2 * y.1
 
--- Lemma saying what definition of `R` is on ordered pairs
-@[grind =] lemma R_def (a : MyInt) (b : {x : MyInt // x ≠ 0}) (c : MyInt) (d : {x : MyInt // x ≠ 0}) :
+-- Lemma saying what the definition of `R` is on ordered pairs
+@[grind =]
+lemma R_def (a : MyInt) (b : {x : MyInt // x ≠ 0}) (c : MyInt) (d : {x : MyInt // x ≠ 0}) :
     R (a,b) (c,d) ↔ a * d = b * c := by
   sorry
 
@@ -105,21 +107,21 @@ lemma equiv_def' (a : MyInt) (b : {x : MyInt // x ≠ 0}) (c : MyInt) (d : {x : 
 
 /-!
 
-# Negation
+## Negation
 
 -/
 
 /-- Negation on pre-rationals. -/
 def neg (x : MyPrerat) : MyPrerat := (-x.1, x.2)
 
--- teach it to the simplifier
+-- Teach it to the simplifier
 @[simp, grind =] lemma neg_def (a : MyInt) (b : {x : MyInt // x ≠ 0}) : neg (a, b) = (-a, b) := by
   sorry
 
 lemma neg_quotient ⦃x x' : MyPrerat⦄ (h : x ≈ x') : neg x ≈ neg x' := by
   sorry
 
-/-
+/-!
 
 ## Addition
 
@@ -128,8 +130,9 @@ lemma neg_quotient ⦃x x' : MyPrerat⦄ (h : x ≈ x') : neg x ≈ neg x' := by
 /-- Addition on pre-rationals. -/
 def add (ab cd : MyPrerat) : MyPrerat := (ab.1 * cd.2 + ab.2 * cd.1, ab.2 * cd.2)
 
--- teach it to the simplifier
-@[simp] lemma add_def (a : MyInt) (b : {x : MyInt // x ≠ 0}) (c : MyInt) (d : {x : MyInt // x ≠ 0}) :
+-- Teach it to the simplifier
+@[simp]
+lemma add_def (a : MyInt) (b : {x : MyInt // x ≠ 0}) (c : MyInt) (d : {x : MyInt // x ≠ 0}) :
     add (a, b) (c, d) = (a * d + b * c, b * d) := by
   sorry
 
@@ -137,7 +140,7 @@ lemma add_quotient ⦃x x' : MyPrerat⦄ (h : x ≈ x') ⦃y y' : MyPrerat⦄ (h
     add x y ≈ add x' y' := by
   sorry
 
-/-
+/-!
 
 ## Multiplication
 
@@ -146,8 +149,9 @@ lemma add_quotient ⦃x x' : MyPrerat⦄ (h : x ≈ x') ⦃y y' : MyPrerat⦄ (h
 /-- Multiplication on pre-rationals. -/
 def mul (ab cd : MyPrerat) : MyPrerat := (ab.1 * cd.1, ab.2 * cd.2)
 
--- teach it to the simplifier
-@[simp] lemma mul_def (a : MyInt) (b : {x : MyInt // x ≠ 0}) (c : MyInt) (d : {x : MyInt // x ≠ 0}) :
+-- Teach it to the simplifier
+@[simp]
+lemma mul_def (a : MyInt) (b : {x : MyInt // x ≠ 0}) (c : MyInt) (d : {x : MyInt // x ≠ 0}) :
     mul (a, b) (c, d) = (a * c, b * d) := by
   sorry
 
@@ -155,7 +159,7 @@ lemma mul_quotient ⦃x x' : MyPrerat⦄ (h : x ≈ x') ⦃y y' : MyPrerat⦄ (h
     mul x y ≈ mul x' y' := by
   sorry
 
-/-
+/-!
 
 ## Reciprocal
 
@@ -163,9 +167,10 @@ lemma mul_quotient ⦃x x' : MyPrerat⦄ (h : x ≈ x') ⦃y y' : MyPrerat⦄ (h
 
 /-- Reciprocal, or inverse, on pre-rationals. -/
 noncomputable
-def inv (x : MyPrerat) : MyPrerat := if ha : x.1 ≠ 0 then ⟨x.2, x.1, ha⟩ else ⟨0, 1, by simp⟩
+def inv (x : MyPrerat) : MyPrerat :=
+  if ha : x.1 ≠ 0 then ⟨x.2, x.1, ha⟩ else ⟨0, 1, by simp⟩
 
--- teach it to the simplifier
+-- Teach it to the simplifier
 @[simp] lemma inv_def {a : MyInt} (b : {x : MyInt // x ≠ 0}) (ha : a ≠ 0) :
     inv (a, b) = (b.1, ⟨a, ha⟩) := by
   sorry
@@ -220,7 +225,7 @@ lemma neg_def (a : MyInt) (b : {x : MyInt // x ≠ 0}) :
     -(⟦(a, b)⟧ : MyRat) = ⟦(-a, b)⟧ := by
   sorry
 
-/-- Addition on integers. -/
+/-- Addition on rationals. -/
 def add : MyRat → MyRat → MyRat := Quotient.map₂ MyPrerat.add add_quotient
 
 -- `+` notation
@@ -230,8 +235,8 @@ lemma add_def (a : MyInt) (b : {x : MyInt // x ≠ 0}) (c : MyInt) (d : {x : MyI
     (⟦(a, b)⟧ : MyRat) + ⟦(c, d)⟧ = ⟦(a * d + b * c, b * d)⟧ :=
   sorry
 
-/-- Multiplication on integers. -/
-def mul : MyRat → MyRat → MyRat  := Quotient.map₂ MyPrerat.mul mul_quotient
+/-- Multiplication on rationals. -/
+def mul : MyRat → MyRat → MyRat := Quotient.map₂ MyPrerat.mul mul_quotient
 
 -- `*` notation
 instance : Mul MyRat where mul := mul
@@ -240,12 +245,12 @@ lemma mul_def (a : MyInt) (b : {x : MyInt // x ≠ 0}) (c : MyInt) (d : {x : MyI
     (⟦(a, b)⟧ : MyRat) * ⟦(c, d)⟧ = ⟦(a * c, b * d)⟧ :=
   sorry
 
-/-
+/-!
 
 ## Inverse
 
 -/
-/-- reciprocal on nonzero rationals. -/
+/-- Reciprocal on rationals (with `0⁻¹ = 0`). -/
 noncomputable
 def inv : MyRat → MyRat := Quotient.map MyPrerat.inv inv_quotient
 
@@ -422,7 +427,7 @@ lemma j_mul (a b : MyInt) : j (a * b) = j a * j b := by
   sorry
 
 -- The natural map is injective
-lemma j_injective (a b : MyInt) : j a = j b ↔ a = b := by
+lemma j_injective : Function.Injective j := by
   sorry
 
 -- All the proofs were exactly the same as the natural number case.

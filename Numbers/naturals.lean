@@ -3,13 +3,14 @@ import Batteries.CodeAction
 /-!
 
 In this file we define our copy `MyNat` of the natural numbers. To check that we don't cheat
-using results already proved in mathlib we don't import anything. (Note that even if `MyNat` is
+using results already proved in mathlib we don't import any mathematics (the only import
+provides code actions, improving the editor experience). (Note that even if `MyNat` is
 defined here, the simple fact of, say, providing the `Semiring` instance allows to use a lot of
 results in mathlib.)
 
 -/
 
-/-- Our copy of the natural numbers.-/
+/-- Our copy of the natural numbers. -/
 inductive MyNat where
 | zero : MyNat
 | succ : MyNat → MyNat
@@ -48,8 +49,8 @@ theorem one_def : one = 1 := by
 theorem one_eq_succ_zero : 1 = succ 0 := by
   sorry
 
-/-- This is basically an axiom added by Lean when defining natural numbers (feel free to ask more
-details if you want!) -/
+/-- This is basically an axiom added by Lean when defining natural numbers (feel free to ask for
+more details if you want!) -/
 theorem succ_ne_zero : succ a ≠ 0 := by
   sorry
 
@@ -70,10 +71,10 @@ instance : Add MyNat where
 theorem add_zero : a + 0 = a := by
   sorry
 
-theorem add_succ : a + succ b = succ (a + b):= by
+theorem add_succ : a + succ b = succ (a + b) := by
   sorry
 
-@[grind =] --Ignore all tags like this one, same for `@[simp]`
+@[grind =] -- Ignore all tags like this one, same for `@[simp]`
 theorem succ_eq_add_one : succ a = a + 1 := by
   sorry
 
