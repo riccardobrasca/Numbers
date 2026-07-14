@@ -7,8 +7,7 @@ All the original work is by Kevin Buzzard.
 
 # The rationals
 
-In this file we assume all standard facts about the integers, and then build
-the rationals from scratch.
+In this file we build the rationals from scratch.
 
 The strategy is to observe that every rational can be written as `a / b`
 for `a` and `b` integers with `b ≠ 0`, so we define the "pre-rationals" to
@@ -74,16 +73,13 @@ lemma R_def (a : MyInt) (b : {x : MyInt // x ≠ 0}) (c : MyInt) (d : {x : MyInt
     R (a,b) (c,d) ↔ a * d = b * c := by
   rfl
 
--- `linarith` tactic can do all the calculations to prove it's an equiv reln
 lemma R_refl : ∀ x, R x x := by
   rintro ⟨a, b⟩
-  simp only [R_def] at *
-  linarith
+  grind
 
 lemma R_symm : ∀ {x y}, R x y → R y x := by
   rintro ⟨a, b⟩ ⟨c, d⟩ h
-  simp only [R_def] at *
-  linarith
+  grind
 
 lemma R_trans : ∀ {x y z}, R x y → R y z → R x z := by
   rintro ⟨a, b, hb⟩ ⟨c, d, hd⟩ ⟨e, f, hf⟩ h1 h2
@@ -130,8 +126,7 @@ def neg (ab : MyPrerat) : MyPrerat := (-ab.1, ab.2)
 lemma neg_quotient ⦃x x' : MyPrerat⦄ (h : x ≈ x') : neg x ≈ neg x' := by
   rcases x with ⟨a, b⟩
   rcases x' with ⟨a', b'⟩
-  simp at *
-  linarith
+  grind
 
 /-!
 
@@ -155,8 +150,7 @@ lemma add_quotient ⦃x x' : MyPrerat⦄ (h : x ≈ x') ⦃y y' : MyPrerat⦄ (h
   rcases y with ⟨c, d, hd⟩
   rcases y' with ⟨c', d', hd'⟩
   simp [MyPrerat.add] at *
-  -- it's just some random puzzle about polynomials in algebra
-  linear_combination d * d' * h + b * b' * h'
+  grind
 
 /-!
 
@@ -180,7 +174,7 @@ lemma mul_quotient ⦃x x' : MyPrerat⦄ (h : x ≈ x') ⦃y y' : MyPrerat⦄ (h
   rcases y with ⟨c, d, hd⟩
   rcases y' with ⟨c', d', hd'⟩
   simp [MyPrerat.mul] at *
-  linear_combination d * c' * h + a * b' * h'
+  grind
 
 /-!
 
@@ -376,18 +370,18 @@ instance commRing : CommRing MyRat where
   neg := (- ·)
   mul_comm := by quot_proof
   neg_add_cancel := by quot_proof
-  nsmul := nsmulRec
-  zsmul := zsmulRec
+  nsmul := nsmulRec --ignore
+  zsmul := zsmulRec --ignore
 
 @[grind =]
 lemma sub_def (a : MyInt) (b : {x : MyInt // x ≠ 0}) (c : MyInt) (d : {x : MyInt // x ≠ 0}) :
     (⟦(a, b)⟧ : MyRat) - ⟦(c, d)⟧ = ⟦(a * d - b * c, b * d)⟧ := by
-  rw [sub_eq_add_neg, neg_def, add_def, mul_neg, ← sub_eq_add_neg]
+  grind [neg_def, add_def, sub_eq_add_neg]
 
 -- To make the rationals into a field we need to think a little more.
 
 lemma zero_ne_one : (0 : MyRat) ≠ 1 := by
-  simp [zero_def, one_def, Quotient.eq]
+  grind [zero_def, one_def, Quotient.eq]
 
 lemma mul_inv_cancel (x : MyRat) (hx : x ≠ 0) : x * x⁻¹ = 1 := by
   rcases x with ⟨a, b, hb⟩
@@ -410,8 +404,8 @@ instance field : Field MyRat where
   inv_zero := by
     apply Quot.sound
     simp [MyPrerat.inv]
-  qsmul := _
-  nnqsmul := _
+  qsmul := _ --ignore
+  nnqsmul := _ --ignore
 
 /-!
 
@@ -484,11 +478,8 @@ lemma j_injective : Function.Injective j := by
 
 -- All the proofs were exactly the same as the natural number case.
 
--- Finally we check that the `i` and `j` commute with the natural
--- map `↑` from `MyNat` to `MyInt`:
-
 lemma j_comp_eq_i (n : MyNat) : j (MyInt.i n) = i n := by
-  simp [i, j, MyInt.i]
+  grind [i, j, MyInt.i]
 
 -- We can now give a formula for `⟦(a, b)⟧` using `j a` and `j b`.
 
