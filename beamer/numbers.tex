@@ -39,6 +39,8 @@
 \newcommand{\R}{\mathbb R}
 \newcommand{\cl}[2]{\left[(#1,#2)\right]}
 \newcommand{\qcl}[2]{\left[\frac{#1}{#2}\right]}
+\newcommand{\Adic}[1]{\operatorname{Adic}(#1)}
+\newcommand{\Zmod}[1]{\mathbb Z/#1\mathbb Z}
 
 \title{A Journey to the World of Numbers}
 \author{Riccardo Brasca \and Shanwen Wang}
@@ -4255,6 +4257,362 @@
     \item every real Cauchy sequence converges;
     \item the Newton Cauchy sequence defines a positive
       \(\alpha\in\R\) satisfying \(\alpha^2=2\).
+  \end{itemize}
+\end{frame}
+
+\section{\texorpdfstring{The \(n\)-adic numbers}{The n-adic numbers}}
+
+\subsection{Compatible finite approximations}
+
+\begin{frame}{Why introduce the \(n\)-adic numbers?}
+  Fix a natural number \(n\ge2\).  Instead of measuring an integer by its
+  size, record its remainders modulo higher and higher powers of \(n\):
+  \[
+    \cdots,\qquad a\bmod n^3,\qquad a\bmod n^2,
+    \qquad a\bmod n.
+  \]
+  Each remainder contains more information than the one before it, and the
+  records agree when reduced to a smaller modulus.
+
+  \begin{alertblock}{Construction}
+    An \(n\)-adic number will be a sequence of residues
+    \[
+      x_k\in\Zmod{n^k}\qquad(k\in\N)
+    \]
+    whose entries are compatible under reduction.  In other words, it is a
+    coherent choice of an integer modulo every power of \(n\).
+  \end{alertblock}
+
+  Passing to compatible records lets the finite precision grow without bound.
+\end{frame}
+
+\begin{frame}{The tower of reductions}
+  Since \(n^k\mid n^{k+1}\), reduction of representatives defines a map
+  \[
+    \rho_k\colon\Zmod{n^{k+1}}\longrightarrow\Zmod{n^k},
+    \qquad
+    \rho_k([a]_{n^{k+1}})=[a]_{n^k}.
+  \]
+  It respects all the ring operations:
+  \begin{align*}
+    \rho_k(0)&=0, & \rho_k(1)&=1,\\
+    \rho_k(u+v)&=\rho_k(u)+\rho_k(v), &
+    \rho_k(uv)&=\rho_k(u)\rho_k(v).
+  \end{align*}
+  Thus every \(\rho_k\) is a ring homomorphism, and we obtain the tower
+  \[
+    \cdots\longrightarrow\Zmod{n^{k+1}}
+      \xrightarrow{\rho_k}\Zmod{n^k}
+      \longrightarrow\cdots\longrightarrow
+      \Zmod n\longrightarrow\Zmod1.
+  \]
+  The last ring is trivial because \(n^0=1\).
+\end{frame}
+
+\begin{frame}{Compatible sequences}
+  \begin{block}{Definition}
+    A sequence
+    \[
+      x=(x_k)_{k\in\N},
+      \qquad x_k\in\Zmod{n^k},
+    \]
+    is \alert{compatible} if
+    \[
+      \boxed{\rho_k(x_{k+1})=x_k\qquad\text{for every }k\in\N.}
+    \]
+  \end{block}
+
+  By composing adjacent reductions, compatibility also gives
+  \[
+    x_j\bmod n^k=x_k
+    \qquad\text{whenever }k\le j.
+  \]
+
+  So a later component determines every earlier one.  The sequence is not an
+  arbitrary product of residue classes: its entries must describe the same
+  number at every finite level of precision.
+\end{frame}
+
+\begin{frame}{Two examples of compatible sequences}
+  Every integer \(a\) gives a compatible sequence
+  \[
+    x_k=[a]_{n^k}.
+  \]
+  Indeed, reducing \([a]_{n^{k+1}}\) modulo \(n^k\) gives \([a]_{n^k}\).
+
+  For \(n=10\), the integer \(-1\) appears as
+  \[
+    0,\qquad 9,\qquad 99,\qquad 999,\qquad\ldots
+  \]
+  in the rings
+  \[
+    \Zmod1,\qquad\Zmod{10},\qquad\Zmod{10^2},
+    \qquad\Zmod{10^3},\qquad\ldots
+  \]
+  because \(10^k-1\) reduces to \(10^{k-1}-1\) at the preceding level.
+
+  The constant zero and constant one sequences are also compatible, where
+  ``constant'' means the corresponding residue class at each level.
+\end{frame}
+
+\subsection{The ring of compatible sequences}
+
+\begin{frame}{Compatibility survives arithmetic}
+  Let \(x\) and \(y\) be compatible.  Define operations componentwise:
+  \[
+    (x+y)_k=x_k+y_k,
+    \qquad
+    (xy)_k=x_ky_k,
+    \qquad
+    (-x)_k=-x_k.
+  \]
+
+  Since reduction is a ring homomorphism,
+  \begin{align*}
+    \rho_k((x+y)_{k+1})
+      &=\rho_k(x_{k+1})+\rho_k(y_{k+1})=x_k+y_k,\\
+    \rho_k((xy)_{k+1})
+      &=\rho_k(x_{k+1})\rho_k(y_{k+1})=x_ky_k,\\
+    \rho_k((-x)_{k+1})&=-\rho_k(x_{k+1})=-x_k.
+  \end{align*}
+  Hence compatible sequences are closed under addition, multiplication, and
+  negation; they also contain \(0\) and \(1\).
+\end{frame}
+
+\begin{frame}{Definition of the \(n\)-adic numbers}
+  \begin{block}{Definition}
+    The ring of \(n\)-adic numbers is
+    \[
+      \boxed{
+      \Adic n=
+      \left\{x\in\prod_{k\in\N}\Zmod{n^k}
+      \;\middle|\;
+      \rho_k(x_{k+1})=x_k\text{ for every }k\right\}.}
+    \]
+  \end{block}
+
+  The product is a commutative ring under componentwise operations.  The
+  closure properties just proved show that \(\Adic n\) is a subring.
+
+  \begin{alertblock}{Conclusion}
+    For every base \(n\), the compatible sequences form a commutative ring.
+    When \(p\) is prime, this is the usual ring of \(p\)-adic integers.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Finite-level projections}
+  For each \(k\), evaluation at the \(k\)-th component defines
+  \[
+    \pi_k\colon\Adic n\longrightarrow\Zmod{n^k},
+    \qquad
+    \pi_k(x)=x_k.
+  \]
+  Because arithmetic is componentwise, \(\pi_k\) is a ring homomorphism:
+  \begin{align*}
+    \pi_k(0)&=0, & \pi_k(1)&=1,\\
+    \pi_k(x+y)&=\pi_k(x)+\pi_k(y), &
+    \pi_k(xy)&=\pi_k(x)\pi_k(y).
+  \end{align*}
+
+  Compatibility says that these projections commute with reduction:
+  \[
+    \begin{array}{ccc}
+      \Adic n & \xrightarrow{\pi_{k+1}} & \Zmod{n^{k+1}}\\
+      \big\Vert && \big\downarrow{\rho_k}\\
+      \Adic n & \xrightarrow{\pi_k} & \Zmod{n^k}.
+    \end{array}
+  \]
+\end{frame}
+
+\begin{frame}{Reducing through several levels}
+  Reduction is transitive.  If \(a\mid b\mid c\), then for
+  \(u\in\Zmod c\),
+  \[
+    \bigl(u\bmod b\bigr)\bmod a=u\bmod a.
+  \]
+  Applying this repeatedly to a compatible sequence gives the following
+  useful form of compatibility.
+
+  \begin{block}{All-level compatibility}
+    If \(x\in\Adic n\) and \(k\le j\), then
+    \[
+      \boxed{x_j\bmod n^k=x_k.}
+    \]
+  \end{block}
+
+  In particular, if \(x_j=0\), then \(x_k=0\) for every \(k\le j\).
+  Equivalently, once one component is nonzero, all later components are
+  nonzero.
+\end{frame}
+
+\subsection{Prime bases and valuations}
+
+\begin{frame}{The first nonzero component}
+  Let \(p\) be prime and take a nonzero \(x\in\Adic p\).
+
+  The component \(x_0\) lies in
+  \[
+    \Zmod{p^0}=\Zmod1,
+  \]
+  so \(x_0=0\).  On the other hand, some component must be nonzero: if every
+  \(x_k\) vanished, then the whole sequence would be zero.
+
+  Hence there is a least index
+  \[
+    m=\min\{k\in\N:x_k\ne0\}.
+  \]
+  It satisfies
+  \[
+    m\ge1,
+    \qquad
+    x_{m-1}=0,
+    \qquad
+    x_m\ne0.
+  \]
+  By all-level compatibility, \(x_j\ne0\) for every \(j\ge m\).
+\end{frame}
+
+\begin{frame}{Vanishing means divisibility}
+  For \(j\ge k\), let \(\widetilde{x_j}\) be the canonical representative
+  of \(x_j\), so
+  \[
+    0\le\widetilde{x_j}<p^j.
+  \]
+  All-level compatibility identifies \(x_k\) with the reduction of \(x_j\).
+  Therefore
+  \[
+    \boxed{x_k=0
+      \quad\Longleftrightarrow\quad
+      p^k\mid\widetilde{x_j}.}
+  \]
+
+  In particular, if \(m\) is the first nonzero index of \(x\) and \(j\ge m\),
+  then
+  \[
+    p^{m-1}\mid\widetilde{x_j},
+    \qquad
+    p^m\nmid\widetilde{x_j}.
+  \]
+  The representative \(\widetilde{x_j}\) is nonzero because \(x_j\ne0\).
+\end{frame}
+
+\begin{frame}{The valuation stabilizes}
+  For a nonzero natural number \(A\), let \(\nu_p(A)\) be the multiplicity
+  of the prime \(p\) in its factorization.  Then
+  \[
+    p^r\mid A
+    \quad\Longleftrightarrow\quad
+    r\le\nu_p(A).
+  \]
+
+  Let \(m\) be the first nonzero component of \(x\in\Adic p\).  For every
+  \(j\ge m\), the previous divisibility test gives
+  \[
+    m-1\le\nu_p(\widetilde{x_j})
+    \qquad\text{and}\qquad
+    \nu_p(\widetilde{x_j})<m.
+  \]
+  Hence
+  \[
+    \boxed{\nu_p(\widetilde{x_j})=m-1\qquad(j\ge m).}
+  \]
+
+  Although the representatives change with \(j\), their \(p\)-adic
+  valuation is fixed by the first nonzero component.
+\end{frame}
+
+\subsection{No zero divisors in prime base}
+
+\begin{frame}{Two nonzero \(p\)-adic numbers}
+  Let \(a,b\in\Adic p\) be nonzero, and let \(m_a,m_b\) be their first
+  nonzero component indices.  Then
+  \[
+    m_a,m_b\ge1.
+  \]
+  Choose the common level
+  \[
+    \ell=m_a+m_b-1.
+  \]
+  Since \(m_a\le\ell\) and \(m_b\le\ell\), both components at level
+  \(\ell\) are nonzero.  The stabilized valuation formula gives
+  \[
+    \nu_p(\widetilde{a_\ell})=m_a-1,
+    \qquad
+    \nu_p(\widetilde{b_\ell})=m_b-1.
+  \]
+  By uniqueness of prime factorization,
+  \[
+    \nu_p(\widetilde{a_\ell}\widetilde{b_\ell})
+      =(m_a-1)+(m_b-1)=\ell-1.
+  \]
+\end{frame}
+
+\begin{frame}{The product cannot vanish}
+  Suppose for a contradiction that \(ab=0\) in \(\Adic p\).  Projecting to
+  level \(\ell\) gives
+  \[
+    a_\ell b_\ell=0
+    \qquad\text{in }\Zmod{p^\ell}.
+  \]
+  In terms of canonical representatives, this forces
+  \[
+    p^\ell\mid
+      \widetilde{a_\ell}\widetilde{b_\ell}.
+  \]
+  Since both factors are nonzero, the prime-factorization criterion implies
+  \[
+    \ell
+      \le\nu_p(\widetilde{a_\ell}\widetilde{b_\ell})
+      =\ell-1,
+  \]
+  which is impossible.
+
+  \begin{block}{No zero divisors}
+    If \(p\) is prime and \(ab=0\) in \(\Adic p\), then
+    \[
+      \boxed{a=0\quad\text{or}\quad b=0.}
+    \]
+  \end{block}
+\end{frame}
+
+\begin{frame}{The prime-base ring is nontrivial}
+  Consider the projection at level \(1\):
+  \[
+    \pi_1\colon\Adic p\longrightarrow\Zmod p.
+  \]
+  If \(0=1\) in \(\Adic p\), applying this ring homomorphism would give
+  \[
+    0=1\qquad\text{in }\Zmod p.
+  \]
+  But \(p\) is prime, so \(\Zmod p\) is a field and its zero and one are
+  distinct.  Therefore
+  \[
+    \boxed{0\ne1\text{ in }\Adic p.}
+  \]
+
+  Combining nontriviality with the absence of zero divisors proves:
+  \begin{alertblock}{Conclusion}
+    For every prime \(p\), the ring \(\Adic p\) of \(p\)-adic integers is an
+    integral domain.
+  \end{alertblock}
+\end{frame}
+
+\subsection{What we have built}
+
+\begin{frame}{Final picture}
+  We proved that
+  \begin{itemize}
+    \item an \(n\)-adic number is a compatible sequence of residues modulo
+      \(n^k\);
+    \item compatible sequences form a subring of
+      \(\prod_k\Zmod{n^k}\), hence a commutative ring;
+    \item projection to each finite level is a ring homomorphism, and every
+      later component reduces to every earlier one;
+    \item for prime \(p\), the first nonzero component determines the stable
+      \(p\)-adic valuation of all later representatives;
+    \item those valuations add under multiplication, so two nonzero elements
+      of \(\Adic p\) cannot have zero product;
+    \item consequently, \(\Adic p\) is a nontrivial integral domain.
   \end{itemize}
 \end{frame}
 
