@@ -541,8 +541,8 @@ lemma pos_of_isPos {x : MyPrereal} (hx : IsPos x) :
   rcases hx with ⟨δ, hδpos, N, HN⟩
   exact ⟨N, fun n hn ↦ lt_of_lt_of_le hδpos (HN n hn)⟩
 
-@[simp] lemma one_pos : IsPos 1 :=
-  ⟨1, by simp, 0, fun _ _ ↦ by simp⟩
+@[simp] lemma one_pos : IsPos 1 := by
+  exact ⟨1, by simp, 0, fun _ _ ↦ by simp⟩
 
 lemma not_isPos_zero {x : MyPrereal} (hx : x ≈ 0) : ¬ IsPos x := by
   intro ⟨δ, hδpos, N, HN⟩
