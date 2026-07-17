@@ -711,6 +711,14 @@ lemma le_def (x y : MyReal) : x ≤ y ↔ IsNonneg (y - x) := by
 lemma zero_le_iff_isNonneg (x : MyReal) : 0 ≤ x ↔ IsNonneg x := by
   simp [le_def]
 
+lemma le_of_eventually_le {x y : MyPrereal} (N : MyNat)
+    (h : ∀ n, N ≤ n → x n ≤ y n) :
+    (⟦x⟧ : MyReal) ≤ ⟦y⟧ := by
+  rw [le_def, sub_def, isNonneg_def]
+  apply MyPrereal.IsNonneg_of_nonneg N
+  intro n hn
+  simpa [MyPrereal.sub_def] using sub_nonneg.mpr (h n hn)
+
 lemma zero_le_one : (0 : MyReal) ≤ 1 := by
   simp [le_def, one_def, isNonneg_def]
 

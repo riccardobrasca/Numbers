@@ -460,6 +460,11 @@ lemma le_def (x y : MyReal) : x ≤ y ↔ IsNonneg (y - x) := by
 lemma zero_le_iff_isNonneg (x : MyReal) : 0 ≤ x ↔ IsNonneg x := by
   sorry
 
+lemma le_of_eventually_le {x y : MyPrereal} (N : MyNat)
+    (h : ∀ n, N ≤ n → x n ≤ y n) :
+    (⟦x⟧ : MyReal) ≤ ⟦y⟧ := by
+  sorry
+
 lemma zero_le_one : (0 : MyReal) ≤ 1 := by
   sorry
 

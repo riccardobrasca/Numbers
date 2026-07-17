@@ -3853,26 +3853,52 @@
 
 \subsection{Rational density and convergence}
 
+\begin{frame}{A Cauchy tail controls the real distance}
+  Let \(X=[x]\in\R\), let \(\varepsilon\in\Q\) be positive, and suppose \(N\)
+  works in the Cauchy condition for \(x\) at tolerance \(\varepsilon\):
+  \[
+    p,q\ge N
+    \quad\Longrightarrow\quad
+    |x_p-x_q|\le\varepsilon.
+  \]
+  Fixing \(q=N\), we obtain
+  \[
+    -\varepsilon\le x_n-x_N\le\varepsilon
+    \qquad(n\ge N).
+  \]
+
+  Now \(k(x_N)\) is represented by the constant sequence
+  \((x_N,x_N,\ldots)\).  Therefore
+  \[
+    X-k(x_N)=[(x_n-x_N)_{n\in\N}].
+  \]
+  The eventual inequalities pass to the real order, giving
+  \[
+    -k(\varepsilon)\le X-k(x_N)\le k(\varepsilon),
+    \qquad\text{hence}\qquad
+    \boxed{|X-k(x_N)|\le k(\varepsilon).}
+  \]
+\end{frame}
+
 \begin{frame}{A rational approximation to any real}
   Let \(X=[x]\in\R\) and let \(\varepsilon\in\Q\) be positive.  Apply the
-  Cauchy property of \(x\) with \(\varepsilon/2\).  Choose \(N\) such that
+  Cauchy property of \(x\) with the smaller tolerance \(\varepsilon/2\).
+  Choose a corresponding threshold \(N\), and set
   \[
-    |x_n-x_N|\le\frac\varepsilon2
-    \qquad(n\ge N),
+    r=x_N\in\Q.
   \]
-  and set \(r=x_N\).
 
-  The two eventual inequalities
+  The preceding result applies directly:
   \[
-    -\frac\varepsilon2\le x_n-r\le\frac\varepsilon2
+    |X-k(r)|
+      \le k\!\left(\frac\varepsilon2\right)
+      < k(\varepsilon).
   \]
-  say, through the definition of the real order, that
+
+  Thus the single rational term \(r=x_N\), viewed inside \(\R\), lies within
+  the prescribed distance of \(X\):
   \[
-    -k(\varepsilon)<X-k(r)<k(\varepsilon).
-  \]
-  Equivalently,
-  \[
-    \boxed{|X-k(r)|<k(\varepsilon).}
+    \boxed{\exists r\in\Q,\qquad |X-k(r)|<k(\varepsilon).}
   \]
 \end{frame}
 
