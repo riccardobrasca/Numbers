@@ -3854,6 +3854,7 @@
 \subsection{Rational density and convergence}
 
 \begin{frame}{A Cauchy tail controls the real distance}
+  \small
   Let \(X=[x]\in\R\), let \(\varepsilon\in\Q\) be positive, and suppose \(N\)
   works in the Cauchy condition for \(x\) at tolerance \(\varepsilon\):
   \[
@@ -3878,27 +3879,12 @@
     \qquad\text{hence}\qquad
     \boxed{|X-k(x_N)|\le k(\varepsilon).}
   \]
-\end{frame}
 
-\begin{frame}{A rational approximation to any real}
-  Let \(X=[x]\in\R\) and let \(\varepsilon\in\Q\) be positive.  Apply the
-  Cauchy property of \(x\) with the smaller tolerance \(\varepsilon/2\).
-  Choose a corresponding threshold \(N\), and set
+  Taking \(\varepsilon/2\) instead of \(\varepsilon\), we obtain
   \[
-    r=x_N\in\Q.
-  \]
-
-  The preceding result applies directly:
-  \[
-    |X-k(r)|
+    \boxed{|X-k(x_N)|
       \le k\!\left(\frac\varepsilon2\right)
-      < k(\varepsilon).
-  \]
-
-  Thus the single rational term \(r=x_N\), viewed inside \(\R\), lies within
-  the prescribed distance of \(X\):
-  \[
-    \boxed{\exists r\in\Q,\qquad |X-k(r)|<k(\varepsilon).}
+      < k(\varepsilon).}
   \]
 \end{frame}
 
@@ -3917,10 +3903,11 @@
   \[
     0<k(r)<X.
   \]
+  (The positive gap \(\delta/2\) makes \(k(r)<X\) strict.)
 
   Combining this with the preceding rational-error approximation proves the
   full density statement: for every \(E>0\) in \(\R\), choose
-  \(0<k(\varepsilon)<E\), then find \(r\in\Q\) with
+  \(0<k(\varepsilon)<E\), then one can find \(r\in\Q\) with
   \[
     \boxed{|X-k(r)|<E.}
   \]

@@ -815,7 +815,7 @@ lemma mul_pos (a b : MyReal) (ha : 0 < a) (hb : 0 < b) : 0 < a * b := by
 noncomputable instance : IsStrictOrderedRing MyReal :=
   IsStrictOrderedRing.of_mul_pos mul_pos
 
-lemma myRat_dense_rat'' (x : MyReal) {ε : MyRat} (hε : 0 < ε) : ∃ r, |x - k r| ≤ k ε := by
+lemma myRat_dense_rat' (x : MyReal) {ε : MyRat} (hε : 0 < ε) : ∃ r, |x - k r| ≤ k ε := by
   refine Quot.induction_on x ?_
   intro a
   rcases a.prop ε (by linarith) with ⟨N, HN⟩
@@ -826,14 +826,6 @@ lemma myRat_dense_rat'' (x : MyReal) {ε : MyRat} (hε : 0 < ε) : ∃ r, |x - k
     intro n hn
     simp
     linarith [abs_le.1 (HN n N hn le_rfl)] }
-
-lemma myRat_dense_rat' (x : MyReal) {ε : MyRat} (hε : 0 < ε) : ∃ r, |x - k r| < k ε := by
-  rcases myRat_dense_rat'' x (by linarith : 0 < ε / 2) with ⟨r, hr⟩
-  use r
-  rw [abs_le, abs_lt] at *
-  constructor
-  · exact lt_of_lt_of_le (by rw [neg_lt_neg_iff, k_lt_iff]; linarith) hr.1
-  · exact lt_of_le_of_lt hr.2 (by rw [k_lt_iff]; linarith)
 
 lemma myRat_dense_of_pos {x : MyReal} (hx : 0 < x) : ∃ r, 0 < r ∧ k r < x := by
   revert hx
@@ -896,8 +888,8 @@ section completeness
 
 lemma ex_approx_punctual (x : MyReal) (n : MyNat) :
     ∃ (r : MyRat), |x - k r| < k ((MyRat.i (n+1))⁻¹) := by
-  refine myRat_dense_rat' x ?_
-  rw [inv_pos, ← MyRat.i_zero, MyRat.i_lt_iff]
+  refine myRat_dense_rat x ?_
+  rw [← k_zero, k_lt_iff, inv_pos, ← MyRat.i_zero, MyRat.i_lt_iff]
   simp
 
 lemma ex_approx (f : MyNat → MyReal) :
