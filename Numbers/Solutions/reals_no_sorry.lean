@@ -815,21 +815,25 @@ lemma mul_pos (a b : MyReal) (ha : 0 < a) (hb : 0 < b) : 0 < a * b := by
 noncomputable instance : IsStrictOrderedRing MyReal :=
   IsStrictOrderedRing.of_mul_pos mul_pos
 
-lemma myRat_dense_rat' (x : MyReal) {ε : MyRat} (hε : 0 < ε) : ∃ r, |x - k r| < k ε := by
+lemma myRat_dense_rat'' (x : MyReal) {ε : MyRat} (hε : 0 < ε) : ∃ r, |x - k r| ≤ k ε := by
   refine Quot.induction_on x ?_
   intro a
-  rcases a.prop (ε/2) (by linarith) with ⟨N, HN⟩
+  rcases a.prop ε (by linarith) with ⟨N, HN⟩
   refine ⟨a N, ?_⟩
-  rw [Quot_eq_Quotient, abs_lt, neg_lt_sub_iff_lt_add]
+  rw [Quot_eq_Quotient, abs_le, neg_le_sub_iff_le_add]
+  constructor <;>
+  { apply le_of_eventually_le N
+    intro n hn
+    simp
+    linarith [abs_le.1 (HN n N hn le_rfl)] }
+
+lemma myRat_dense_rat' (x : MyReal) {ε : MyRat} (hε : 0 < ε) : ∃ r, |x - k r| < k ε := by
+  rcases myRat_dense_rat'' x (by linarith : 0 < ε / 2) with ⟨r, hr⟩
+  use r
+  rw [abs_le, abs_lt] at *
   constructor
-  · rw [← sub_pos, k, k, add_def, sub_def, ← pos_def]
-    refine ⟨ε/2, by linarith, N, fun n hn ↦ ?_⟩
-    simp only [MyPrereal.sub_def, MyPrereal.add_def, coe_apply]
-    linarith [abs_le.1 (HN n N hn le_rfl)]
-  · rw [← sub_pos, k, k, sub_def, sub_def, ← pos_def]
-    refine ⟨ε/2, by linarith, N, fun n hn ↦ ?_⟩
-    simp only [MyPrereal.sub_def, coe_apply]
-    linarith [abs_le.1 (HN n N hn le_rfl)]
+  · exact lt_of_lt_of_le (by rw [neg_lt_neg_iff, k_lt_iff]; linarith) hr.1
+  · exact lt_of_le_of_lt hr.2 (by rw [k_lt_iff]; linarith)
 
 lemma myRat_dense_of_pos {x : MyReal} (hx : 0 < x) : ∃ r, 0 < r ∧ k r < x := by
   revert hx

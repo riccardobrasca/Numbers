@@ -519,6 +519,9 @@ lemma mul_pos (a b : MyReal) (ha : 0 < a) (hb : 0 < b) : 0 < a * b := by
 noncomputable instance : IsStrictOrderedRing MyReal :=
   IsStrictOrderedRing.of_mul_pos mul_pos
 
+lemma myRat_dense_rat'' (x : MyReal) {ε : MyRat} (hε : 0 < ε) : ∃ r, |x - k r| ≤ k ε := by
+  sorry
+
 lemma myRat_dense_rat' (x : MyReal) {ε : MyRat} (hε : 0 < ε) : ∃ r, |x - k r| < k ε := by
   sorry
 
