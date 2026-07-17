@@ -3853,7 +3853,7 @@
 
 \subsection{Rational density and convergence}
 
-\begin{frame}{A Cauchy tail controls the real distance}
+\begin{frame}[label=cauchy-tail-distance]{A Cauchy tail controls the real distance}
   \small
   Let \(X=[x]\in\R\), let \(\varepsilon\in\Q\) be positive, and suppose \(N\)
   works in the Cauchy condition for \(x\) at tolerance \(\varepsilon\):
@@ -3875,16 +3875,11 @@
   \]
   The eventual inequalities pass to the real order, giving
   \[
-    -k(\varepsilon)\le X-k(x_N)\le k(\varepsilon),
-    \qquad\text{hence}\qquad
-    \boxed{|X-k(x_N)|\le k(\varepsilon).}
+    -k(\varepsilon)\le X-k(x_N)\le k(\varepsilon)
   \]
-
-  Taking \(\varepsilon/2\) instead of \(\varepsilon\), we obtain
+  hence
   \[
-    \boxed{|X-k(x_N)|
-      \le k\!\left(\frac\varepsilon2\right)
-      < k(\varepsilon).}
+\boxed{|X-k(x_N)|\le k(\varepsilon).}
   \]
 \end{frame}
 
@@ -3973,15 +3968,63 @@
   rational Cauchy sequence converges to the class it represents.
 \end{frame}
 
-\begin{frame}{From a pre-real to a sequence of real numbers}
+\begin{frame}{Rational tolerances are enough}
+  Let \(F\colon\N\to\R\) and \(X\in\R\).  Suppose that for every positive
+  rational \(\varepsilon\) we can prove
+  \[
+    \exists N\ \forall n\ge N,
+    \qquad |F_n-X|\le k(\varepsilon).
+  \]
+  Then \(F_n\to X\) for arbitrary positive real tolerances.
+
+  Indeed, given \(E>0\), choose a positive rational \(\delta\) with
+  \[
+    0<k(\delta)<E.
+  \]
+  The hypothesis at \(\delta\) supplies \(N\) such that, for \(n\ge N\),
+  \[
+    |F_n-X|\le k(\delta)<E,
+  \]
+  and in particular \(|F_n-X|\le E\).
+
+ We will repeatedly use this criterion below.
+\end{frame}
+
+\begin{frame}{A representative sequence converges to its class}
+  Let \(x\in\R_{\mathrm{pre}}\) and set \(X=[x]\).  We claim
+  \[
+    k(x_n)\longrightarrow X.
+  \]
+
+  Let us first fix a positive rational \(\varepsilon\).  The Cauchy property
+  supplies \(N\) such that for \(n,m\ge N\),
+  \[
+    |x_n-x_m|\le\varepsilon.
+  \]
+  As explained
+  \hyperlink{cauchy-tail-distance}{\textcolor{blue}{\underline{above}}},
+  this gives
+  \[
+    |k(x_n)-X|\le k(\varepsilon).
+  \]
+
+  We have verified the rational-tolerance hypothesis for every
+  \(\varepsilon>0\) in \(\Q\).  The preceding reduction therefore gives
+  \[
+    \boxed{k(x_n)\longrightarrow X.}
+  \]
+\end{frame}
+
+\begin{frame}{The idea}
   \small
-  Let \(x=(x_n)_{n\in\N}\) be a pre-real.  Applying the rational embedding
-  to each term gives a sequence of real numbers
+  Let \(x=(x_n)_{n\in\N}\) represent \(X=[x]\).  Applying the rational
+  embedding term by term gives the real sequence
   \[
     k(x_0),\ k(x_1),\ k(x_2),\ldots
   \]
-  Each \(k(x_n)\) is represented by the constant row with value \(x_n\):
-
+  Each \(k(x_n)\) is represented by the constant row obtained by
+  \emph{freezing} \(x_n\), whereas \(X\) is represented by the moving bottom
+  row:
   \[
     \begin{array}{c|ccccc}
       \text{real number}
@@ -3997,37 +4040,35 @@
     \end{array}
   \]
 
-  Fix a positive rational \(\varepsilon\).  Since \(x\) is Cauchy, there is
-  \(N\) such that, whenever \(n,m\ge N\),
-  \[
-    |x_n-x_m|\le\varepsilon.
-  \]
-  Thus the \(k(x_n)\)-row and the \(X\)-row differ by at most \(\varepsilon\)
-  at index \(m\) whenever \(n,m\ge N\).
+  Thus \(k(x_n)\to X\) means that, as we freeze terms farther along the
+  sequence, the resulting constant rows get closer to the moving bottom row.
 \end{frame}
 
-\begin{frame}{A representative sequence converges to its class}
-  Let \(x\in\R_{\mathrm{pre}}\) and set \(X=[x]\).  We claim
+\begin{frame}{Why the idea works}
+  \small
+  If \(N\) works for the Cauchy condition at tolerance \(\varepsilon\), then
+  take any \(n\ge N\).  In every sufficiently late column \(m\ge N\), the
+  entries in the \(k(x_n)\)-row and the \(X\)-row are respectively \(x_n\)
+  and \(x_m\), so
   \[
-    k(x_n)\longrightarrow X.
+    |x_n-x_m|\le\varepsilon
+    \qquad(n,m\ge N).
   \]
 
-  Let us first fix a positive rational \(\varepsilon\).  The Cauchy property
-  supplies \(N\) such that for \(n,m\ge N\),
-  \[
-    |x_n-x_m|\le\varepsilon.
-  \]
-  For fixed \(n\ge N\), this tail estimate is exactly the quotient-order
-  statement
+  \begin{center}
+    \(k(x_n)\)-row: \quad \(x_n,\ x_n,\ x_n,\ldots\)\\[3pt]
+    \(X\)-row:      \quad \(x_0,\ x_1,\ x_2,\ldots\)
+  \end{center}
+
+  The rows may be unrelated in the finitely many initial columns.  That does
+  not matter: the quotient order only asks for the bound \emph{eventually}.
+  Hence
   \[
     |k(x_n)-X|\le k(\varepsilon).
   \]
 
-  Now fix a positive real \(E\), and choose a positive rational
-  \(\varepsilon\) with \(0<k(\varepsilon)<E\).  The same threshold then gives
-  \[
-    |k(x_n)-X|<E.
-  \]
+  Since the tolerance \(\varepsilon>0\) can be arbitrarily small, the frozen
+  rows converge to the moving row: \(k(x_n)\to X\).
 \end{frame}
 
 \subsection{Completeness}
@@ -4042,50 +4083,13 @@
 
   Choosing one such rational for each \(n\) defines a sequence
   \[
-    x\colon\N\longrightarrow\Q.
+    x=\operatorname{approx}(F)\colon\N\longrightarrow\Q.
   \]
+
+  We want to prove that \(F_n\) converges to the real number given by the pre-real \(x_n\).
 
   To use \(x\) as a pre-real, we must prove that it is a rational Cauchy
   sequence whenever \(F\) is a real Cauchy sequence.
-\end{frame}
-
-\begin{frame}{A real sequence is a table of rational sequences}
-  \small
-  For every \(n\in\N\), choose a rational Cauchy sequence
-  \(f^{(n)}=(f^{(n)}_m)_{m\in\N}\in\R_{\mathrm{pre}}\), with
-  \(F_n=[(f^{(n)}_m)_{m\in\N}]\).
-  The superscript \(n\) labels the row, while the subscript \(m\) labels a
-  rational term within that row.  Rational density lets us select one
-  rational \(x_n\) from sufficiently far along the \(n\)-th row.
-
-  \[
-    \begin{array}{c|cccc|c}
-      \text{real term}
-        & \multicolumn{4}{c|}{\text{one rational representative}}
-        & \text{selected rational}\\
-      \hline
-      F_0=[(f^{(0)}_m)_{m\in\N}]
-        & f^{(0)}_0 & f^{(0)}_1 & f^{(0)}_2 & \cdots
-        & x_0=f^{(0)}_{m_0}\\
-      F_1=[(f^{(1)}_m)_{m\in\N}]
-        & f^{(1)}_0 & f^{(1)}_1 & f^{(1)}_2 & \cdots
-        & x_1=f^{(1)}_{m_1}\\
-      F_2=[(f^{(2)}_m)_{m\in\N}]
-        & f^{(2)}_0 & f^{(2)}_1 & f^{(2)}_2 & \cdots
-        & x_2=f^{(2)}_{m_2}\\
-      \vdots & \vdots & \vdots & \vdots & & \vdots\\
-      F_n=[(f^{(n)}_m)_{m\in\N}]
-        & f^{(n)}_0 & f^{(n)}_1 & f^{(n)}_2 & \cdots
-        & x_n=f^{(n)}_{m_n}
-    \end{array}
-  \]
-
-  The selected entries form the rational sequence \(x=(x_n)\), with
-  \[
-    |F_n-k(x_n)|<k\!\left(\frac1{n+1}\right).
-  \]
-  The next argument proves that, when \(F\) is Cauchy, \(x\) is a pre-real
-  and the limit of \(F\) is the class \(X=[x]\).
 \end{frame}
 
 \begin{frame}{The rational approximation is Cauchy}
@@ -4095,7 +4099,7 @@
     |F_p-F_q|\le\frac{k(\varepsilon)}3
     \qquad(p,q\ge N),
   \]
-  and choose \(M\) such that
+  and use the Archimedean property to choose \(M\) such that
   \[
     k\!\left(\frac1{M+1}\right)
       \le\frac{k(\varepsilon)}3.
@@ -4116,28 +4120,31 @@
 \end{frame}
 
 \begin{frame}{Every real Cauchy sequence converges}
+  \small
   The rational approximation \(x\) is a pre-real, so let
   \[
     X=[x]\in\R.
   \]
   We already know that \(k(x_n)\to X\).
 
-  Given \(E>0\), choose \(N\) so that
+  Fix a positive real \(\varepsilon\).  Choose \(N\) so that
   \[
-    |k(x_n)-X|\le\frac E2
+    |k(x_n)-X|\le\frac{\varepsilon}{2}
     \qquad(n\ge N),
   \]
-  and choose \(M\) so that \(k(1/(M+1))\le E/2\).  For
-  \(n\ge\max(N,M)\),
+  and use the Archimedean property to choose \(M\) so that
+  \[
+    k\!\left(\frac1{M+1}\right)\le\frac{\varepsilon}{2}.
+  \]
+  For \(n\ge\max(N,M)\), the approximation bound and monotonicity of
+  reciprocals give
   \begin{align*}
     |F_n-X|
       &\le |F_n-k(x_n)|+|k(x_n)-X|\\
-      &\le\frac E2+\frac E2=E.
+      &\le\frac{\varepsilon}{2}+\frac{\varepsilon}{2}
+       =\varepsilon.
   \end{align*}
-
-  \begin{block}{Completeness theorem}
-    Every Cauchy sequence in \(\R\) converges to an element of \(\R\).
-  \end{block}
+  Hence \(F_n\to X\).
 \end{frame}
 
 \subsection{\texorpdfstring{A solution of \(x^2=2\)}{A solution of x squared equals 2}}
