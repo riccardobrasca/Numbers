@@ -87,9 +87,10 @@ lemma R_def (x y : MyPrereal) :
 
 lemma R_refl : ∀ x, R x x := by
   intro x ε hε
-  use 0
+  use 45735676487456
   intro n _
-  simpa using hε.le
+  simp
+  linarith
 
 lemma R_symm : ∀ {x y}, R x y → R y x := by
   intro x y H ε hε
@@ -245,7 +246,7 @@ lemma mul_quotient ⦃x x' : MyPrereal⦄ (h : x ≈ x') ⦃y y' : MyPrereal⦄ 
 
 lemma pos_of_not_equiv_zero {x : MyPrereal} (H : ¬(x ≈ 0)) :
     ∃ δ, 0 < δ ∧ ∃ N, ∀ n, N ≤ n → δ < |x n| := by
-  simp only [equiv_def, zero_def, sub_zero, not_forall, not_exists, not_le] at H
+  simp at H
   rcases H with ⟨δ, hδpos, h⟩
   rcases x.prop (δ/2) (by linarith) with ⟨N, HN⟩
   rcases h N with ⟨M, HNM, HM⟩
