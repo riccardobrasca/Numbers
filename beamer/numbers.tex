@@ -37,14 +37,13 @@
 \newcommand{\Z}{\mathbb Z}
 \newcommand{\Q}{\mathbb Q}
 \newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
 \newcommand{\cl}[2]{\left[(#1,#2)\right]}
 \newcommand{\qcl}[2]{\left[\frac{#1}{#2}\right]}
-\newcommand{\Adic}[1]{\operatorname{Adic}(#1)}
-\newcommand{\Zmod}[1]{\mathbb Z/#1\mathbb Z}
 
 \title{A Journey to the World of Numbers}
 \author{Riccardo Brasca \and Shanwen Wang}
-\institute{Remnim University}
+\institute{Renmin University}
 \date{July 2026}
 
 \AtBeginSection[]{
@@ -112,7 +111,7 @@
 \begin{frame}{The recursion principle}
   \begin{block}{Defining a function on \(\N\)}
     Let \(X\) be a set, choose \(x_0\in X\), and let
-    \(G\colon\N\times X\to X\) be a rule.  There is one and only one function
+    \(G\colon\N\times X\to X\) be a function.  There is one and only one function
     \(f\colon\N\to X\) satisfying
     \[
       f(0)=x_0,
@@ -271,12 +270,12 @@
     \]
     which cannot equal \(0\).  Thus the second possibility is ruled out, and
     \(b=0\); the preceding paragraph then gives \(a=0\).
-
-    Conversely, \(0+0=0\), so in fact
-    \[
-      a+b=0\quad\Longleftrightarrow\quad a=0\text{ and }b=0.
-    \]
   \end{proof}
+
+  Conversely, \(0+0=0\), so in fact
+  \[
+    a+b=0\quad\Longleftrightarrow\quad a=0\text{ and }b=0.
+  \]
 \end{frame}
 
 \begin{frame}{Cancellation for addition}
@@ -414,10 +413,10 @@
     The equality \(1\cdot a=a\) will follow once multiplication is known to be
     commutative.  It can also be proved directly by induction on \(a\).
 
-  The base case is \(1\cdot0=0\).  If \(1\cdot n=n\), then
-  \[
-    1\cdot\suc n=1\cdot n+1=n+1=\suc n.
-  \]
+    The base case is \(1\cdot0=0\).  If \(1\cdot n=n\), then
+    \[
+      1\cdot\suc n=1\cdot n+1=n+1=\suc n.
+    \]
   \end{block}
 \end{frame}
 
@@ -1008,9 +1007,28 @@
   \end{alertblock}
 \end{frame}
 
+\begin{frame}{The pre-integers}
+  \begin{block}{Definition}
+    The set of \alert{pre-integers} is
+    \[
+      \Z_{\mathrm{pre}}=\N^2,
+    \]
+    the set of ordered pairs \((a,b)\) of natural numbers.
+  \end{block}
+
+  The pair \((a,b)\) records the difference we intend to create:
+  \[
+    (a,b)\quad\longleftrightarrow\quad a-b.
+  \]
+
+  Every pair is allowed: a difference makes sense for any \(a,b\in\N\).
+  The only problem, addressed next, is that different pre-integers can
+  represent the same difference.
+\end{frame}
+
 \begin{frame}{Equality of formal differences}
   \begin{block}{Definition}
-    For \(a,b,c,d\in\N\), declare
+    For pre-integers \((a,b),(c,d)\in\Z_{\mathrm{pre}}\), declare
     \[
       (a,b)\sim(c,d)
       \quad\Longleftrightarrow\quad
@@ -1039,7 +1057,7 @@
   \end{block}
 
   \begin{proof}
-    For reflexivity, let \((a,b)\in\N^2\).  The equality \(a+b=b+a\)
+    For reflexivity, let \((a,b)\in\Z_{\mathrm{pre}}\).  The equality \(a+b=b+a\)
     shows directly that \((a,b)\sim(a,b)\).
 
     For symmetry, suppose \((a,b)\sim(c,d)\), so \(a+d=b+c\).  Then
@@ -1080,12 +1098,12 @@
 
 \begin{frame}{The integers}
   Reflexivity, symmetry, and transitivity show that \(\sim\) is an equivalence
-  relation.
+  relation on the pre-integers.
 
   \begin{block}{Definition}
     The set of integers is the set of equivalence classes
     \[
-      \boxed{\Z=\N^2/{\sim}}.
+      \boxed{\Z=\Z_{\mathrm{pre}}/{\sim}}.
     \]
     We write
     \[
@@ -1115,7 +1133,7 @@
     \]
     if and only if it is constant on equivalence classes:
     \[
-      x\sim x'\quad\Longrightarrow\quad f(x)=f(x'),
+      x\sim x'\quad\Longrightarrow\quad f(x)=f(x').
     \]
     When it exists, \(\bar f\) is unique; equivalently,
     \(f=\bar f\circ q\).
@@ -1909,7 +1927,8 @@
 \begin{frame}{Final picture}
   Starting from \(\N\), we constructed \(\Z\) and proved that
   \begin{itemize}
-    \item integers are equivalence classes of formal differences;
+    \item integers are equivalence classes of pre-integers, that is, of
+      formal differences;
     \item addition, negation, and multiplication are independent of
       representatives;
     \item \(\Z\) is a commutative ring with no zero divisors;
@@ -2748,23 +2767,40 @@
 \subsection{What we have built}
 
 \begin{frame}{Final picture}
-  \begin{block}{Algebra}
-    \(\Q\) is a field, and every element has the form \(j(a)j(b)^{-1}\) with
-    \(a,b\in\Z\) and \(b\ne0\).
-  \end{block}
-
-  \begin{block}{Order}
-    \(\Q\) is linearly ordered; addition preserves order, and products of
-    nonnegative elements are nonnegative.
-  \end{block}
-
-  \begin{block}{Compatibility with earlier number systems}
-    The embeddings \(\N\hookrightarrow\Z\hookrightarrow\Q\) preserve and
-    reflect arithmetic and order, and \(\Q\) satisfies the Archimedean bound.
-  \end{block}
+  We proved that
+  \begin{itemize}
+    \item rational numbers are equivalence classes of fractions, under the
+      cross-multiplication criterion;
+    \item \(\Q\) is a field, and every element has the form
+      \(j(a)j(b)^{-1}\) with \(a,b\in\Z\) and \(b\ne0\);
+    \item \(\Q\) is linearly ordered; addition preserves order, and products
+      of nonnegative elements are nonnegative;
+    \item the embeddings \(\N\hookrightarrow\Z\hookrightarrow\Q\) preserve
+      and reflect arithmetic and order;
+    \item \(\Q\) satisfies the Archimedean bound.
+  \end{itemize}
 \end{frame}
 
 \section{\texorpdfstring{Arithmetic in \(\N\)}{Arithmetic in N}}
+
+\begin{frame}{Why study arithmetic in \(\N\)?}
+  The next construction, the real numbers, is motivated by an equation that
+  cannot be solved in \(\Q\):
+  \[
+    x^2=2.
+  \]
+  Proving this impossibility requires genuinely arithmetic tools, which this
+  section develops:
+  \begin{enumerate}
+    \item \alert{Euclidean division}, with a unique quotient and remainder;
+    \item the \alert{greatest common divisor} and Bézout's identity;
+    \item \alert{Euclid's lemma}: a prime dividing a product divides a factor;
+    \item the \alert{fundamental theorem of arithmetic}: every number from
+      \(2\) on is a product of primes in exactly one way.
+  \end{enumerate}
+  Counting the prime factors on both sides of \(A^2=2B^2\) will then produce
+  the desired contradiction.
+\end{frame}
 
 \subsection{Euclidean division}
 
@@ -2800,8 +2836,9 @@
     \qquad
     r<d.
   \]
-  The successor test for strict order gives \(\suc r\le d\).  Hence there
-  are two possibilities:
+  Since \(r<d\), the gap from \(r\) to \(d\) is positive: \(d=r+\suc y\)
+  for some \(y\in\N\).  Moving the successor through the sum gives
+  \(d=\suc r+y\), so \(\suc r\le d\).  Hence there are two possibilities:
   \[
     \suc r<d
     \qquad\text{or}\qquad
@@ -2840,15 +2877,10 @@
     \qquad
     r,r'<d.
   \]
-  If \(q<q'\), write \(q'=q+s\) with \(s>0\).  Then
+  If \(q<q'\), write \(q'=q+s\) with \(s>0\).  Writing \(s=\suc t\) gives
+  \(ds=dt+d\ge d\), while distributivity gives \(dq'=dq+ds\).  Consequently,
   \[
-    dq'=dq+ds,
-    \qquad
-    d\le ds.
-  \]
-  Consequently,
-  \[
-    n=dq+r<dq+d\le dq'+r'=n,
+    n=dq+r<dq+d\le dq+ds=dq'\le dq'+r'=n,
   \]
   a contradiction.  The same argument rules out \(q'<q\), so totality gives
   \(q=q'\).
@@ -2898,8 +2930,11 @@
   \end{block}
 
   Thus \(g\) is a common divisor that is divisible by every common divisor.
-  Since divisibility respects the natural order for positive numbers, it is
-  also the largest common divisor in the usual order.
+  Two numbers with these properties divide each other and are therefore
+  equal, so the two conditions determine \(g\) uniquely; the Euclidean
+  algorithm below produces one.  Since divisibility respects the natural
+  order for positive numbers, \(g\) is also the largest common divisor in
+  the usual order.
 
   For example,
   \[
@@ -2916,9 +2951,10 @@
   \end{align*}
   and continue while the remainder is nonzero.
 
-  A strictly decreasing sequence of natural numbers must terminate.  At each
-  step, the two numbers on one line have exactly the same common divisors as
-  the divisor and remainder on the next line.
+  The remainders strictly decrease, and a strictly decreasing sequence of
+  natural numbers must terminate.  Each step preserves common divisors:
+  since \(a=bq_0+r_0\), every common divisor of \(b\) and \(r_0\) divides
+  \(a\), and every common divisor of \(a\) and \(b\) divides \(r_0=a-bq_0\).
 
   \begin{block}{Conclusion}
     The last nonzero remainder is \(\gcd(a,b)\), the greatest common divisor
@@ -2929,7 +2965,7 @@
 \begin{frame}{Bézout's identity}
   Each line of the Euclidean algorithm can be rearranged in \(\Z\):
   \[
-    r_{i+1}=r_{i-1}-q_i r_i.
+    r_{i+1}=r_{i-1}-q_{i+1}r_i.
   \]
   Starting with the last nonzero remainder and substituting backwards
   expresses it as an integer linear combination of the original inputs.
@@ -3035,6 +3071,10 @@
   common nonzero factor.  Repeating the argument matches and cancels every
   prime on both sides.
 
+  The process cannot exhaust one side first: once every factor on one side
+  is cancelled, the other side is a product of primes equal to \(1\), which
+  is impossible because every prime is at least \(2\).
+
   Therefore the two lists contain exactly the same primes with exactly the
   same multiplicities.  This proves uniqueness up to reordering.
 \end{frame}
@@ -3044,9 +3084,12 @@
 \begin{frame}{Prime multiplicities in a square}
   For a prime \(p\) and a positive natural number \(n\), let
   \(\nu_p(n)\) be the number of times \(p\) occurs in the unique prime
-  factorization of \(n\).
+  factorization of \(n\); the factorization of \(1\) is empty, so
+  \(\nu_p(1)=0\).
 
-  Uniqueness gives
+  Concatenating factorizations of \(m\) and \(n\) yields a factorization of
+  \(mn\); by uniqueness it is \emph{the} factorization, so multiplicities
+  add:
   \[
     \nu_p(mn)=\nu_p(m)+\nu_p(n).
   \]
@@ -3073,14 +3116,32 @@
   \[
     A^2=2B^2
   \]
-  in \(\N\).  Both sides are positive, so their prime multiplicities are
-  defined.  Counting factors of \(2\) yields
+  in \(\N\).  Since \(B>0\), the right side is positive; hence \(A\ne0\)
+  and both sides are positive, so their prime multiplicities are defined.  Counting factors of \(2\) yields
   \[
     2\nu_2(A)=\nu_2(A^2)
       =\nu_2(2B^2)=1+2\nu_2(B).
   \]
   The left side is even and the right side is odd, a contradiction.  Hence
-  \(x^2=2\) has no solution in \(\Q\).
+  \(x^2=2\) has no solutions.
+\end{frame}
+
+\subsection{What we have built}
+
+\begin{frame}{Final picture}
+  We proved that
+  \begin{itemize}
+    \item division with remainder is always possible, and the pair
+      \((q,r)\) is unique;
+    \item the Euclidean algorithm computes greatest common divisors and
+      yields Bézout's identity;
+    \item a prime dividing a product divides one of the factors;
+    \item every natural number from \(2\) on factors into primes, uniquely
+      up to reordering;
+    \item prime multiplicities add on products, so every prime occurs an
+      even number of times in a square;
+    \item consequently, \(x^2=2\) has no solution in \(\Q\).
+  \end{itemize}
 \end{frame}
 
 \section{The real numbers}
@@ -3169,7 +3230,7 @@
   \end{block}
 
   The condition asks the tail of the sequence to have arbitrarily small
-  diameter.  It does not mention a limit, since that limit need not lie in
+  diameter.  It does not mention a limit, since that limit may not lie in
   \(\Q\).
 
   \begin{block}{Definition}
@@ -3899,12 +3960,25 @@
     0<k(r)<X.
   \]
   (The positive gap \(\delta/2\) makes \(k(r)<X\) strict.)
+\end{frame}
 
-  Combining this with the preceding rational-error approximation proves the
-  full density statement: for every \(E>0\) in \(\R\), choose
-  \(0<k(\varepsilon)<E\), then one can find \(r\in\Q\) with
+\begin{frame}{The rationals are dense among the reals}
+  Let \(X\in\R\), and let \(E>0\) be real.  The previous lemma, applied to
+  \(E\), provides a rational \(\varepsilon>0\) with
   \[
-    \boxed{|X-k(r)|<E.}
+    0<k(\varepsilon)<E.
+  \]
+  The
+  \hyperlink{cauchy-tail-distance}{\textcolor{blue}{\underline{Cauchy-tail estimate}}}
+  at tolerance \(\varepsilon\) then provides \(r\in\Q\) with
+  \[
+    |X-k(r)|\le k(\varepsilon)<E.
+  \]
+
+  Thus every real number can be approximated by a rational number with
+  arbitrarily small real error:
+  \[
+    \boxed{\forall E>0\ \exists r\in\Q,\qquad |X-k(r)|<E.}
   \]
 \end{frame}
 
@@ -3914,6 +3988,11 @@
   \[
     |x_m|\le B\qquad\text{for every }m.
   \]
+  \emph{Convention.}  From now on we write \(n\) for the rational number
+  \(i(n)\) whenever a natural number appears inside a rational or real
+  expression; carrying the embeddings explicitly would only clutter the
+  estimates.
+
   The Archimedean property of \(\Q\) gives \(n\in\N\) with \(B\le n+1\).
   Therefore
   \[
@@ -3987,44 +4066,19 @@
   \]
   and in particular \(|F_n-X|\le E\).
 
- We will repeatedly use this criterion below.
+  We will repeatedly use this criterion below.
 \end{frame}
 
-\begin{frame}{A representative sequence converges to its class}
-  Let \(x\in\R_{\mathrm{pre}}\) and set \(X=[x]\).  We claim
-  \[
-    k(x_n)\longrightarrow X.
-  \]
-
-  Let us first fix a positive rational \(\varepsilon\).  The Cauchy property
-  supplies \(N\) such that for \(n,m\ge N\),
-  \[
-    |x_n-x_m|\le\varepsilon.
-  \]
-  As explained
-  \hyperlink{cauchy-tail-distance}{\textcolor{blue}{\underline{above}}},
-  this gives
-  \[
-    |k(x_n)-X|\le k(\varepsilon).
-  \]
-
-  We have verified the rational-tolerance hypothesis for every
-  \(\varepsilon>0\) in \(\Q\).  The preceding reduction therefore gives
-  \[
-    \boxed{k(x_n)\longrightarrow X.}
-  \]
-\end{frame}
-
-\begin{frame}{The idea}
+\begin{frame}{A representative sequence converges: the idea}
   \small
   Let \(x=(x_n)_{n\in\N}\) represent \(X=[x]\).  Applying the rational
   embedding term by term gives the real sequence
   \[
     k(x_0),\ k(x_1),\ k(x_2),\ldots
   \]
-  Each \(k(x_n)\) is represented by the constant row obtained by
-  \emph{freezing} \(x_n\), whereas \(X\) is represented by the moving bottom
-  row:
+  We claim that this sequence converges to \(X\).  Each \(k(x_n)\) is
+  represented by the constant row obtained by \emph{freezing} \(x_n\),
+  whereas \(X\) is represented by the moving bottom row:
   \[
     \begin{array}{c|ccccc}
       \text{real number}
@@ -4041,37 +4095,62 @@
   \]
 
   Thus \(k(x_n)\to X\) means that, as we freeze terms farther along the
-  sequence, the resulting constant rows get closer to the moving bottom row.
+  sequence, the constant rows get closer to the moving bottom row.  The
+  Cauchy property says exactly that late terms stay close to one another,
+  and that is all the claim requires.
 \end{frame}
 
-\begin{frame}{Why the idea works}
+\begin{frame}{A representative sequence converges to its class}
   \small
-  If \(N\) works for the Cauchy condition at tolerance \(\varepsilon\), then
-  take any \(n\ge N\).  In every sufficiently late column \(m\ge N\), the
-  entries in the \(k(x_n)\)-row and the \(X\)-row are respectively \(x_n\)
-  and \(x_m\), so
+  Let \(x\in\R_{\mathrm{pre}}\) and set \(X=[x]\).  We claim
   \[
-    |x_n-x_m|\le\varepsilon
-    \qquad(n,m\ge N).
+    k(x_n)\longrightarrow X.
   \]
 
-  \begin{center}
-    \(k(x_n)\)-row: \quad \(x_n,\ x_n,\ x_n,\ldots\)\\[3pt]
-    \(X\)-row:      \quad \(x_0,\ x_1,\ x_2,\ldots\)
-  \end{center}
-
-  The rows may be unrelated in the finitely many initial columns.  That does
-  not matter: the quotient order only asks for the bound \emph{eventually}.
-  Hence
+  Fix a positive rational \(\varepsilon\).  The Cauchy property
+  supplies \(N\) such that for \(n,m\ge N\),
   \[
-    |k(x_n)-X|\le k(\varepsilon).
+    |x_n-x_m|\le\varepsilon.
+  \]
+  In the table, this says that beyond column \(N\) every frozen row with
+  \(n\ge N\) agrees with the moving row to within \(\varepsilon\); the
+  finitely many earlier columns are irrelevant, because the quotient order
+  only compares tails.  As explained
+  \hyperlink{cauchy-tail-distance}{\textcolor{blue}{\underline{above}}},
+  this gives
+  \[
+    |k(x_n)-X|\le k(\varepsilon)
+    \qquad(n\ge N).
   \]
 
-  Since the tolerance \(\varepsilon>0\) can be arbitrarily small, the frozen
-  rows converge to the moving row: \(k(x_n)\to X\).
+  We have verified the rational-tolerance hypothesis for every
+  \(\varepsilon>0\) in \(\Q\).  The preceding reduction therefore gives
+  \[
+    \boxed{k(x_n)\longrightarrow X.}
+  \]
 \end{frame}
 
 \subsection{Completeness}
+
+\begin{frame}{Completeness: statement and strategy}
+  \begin{block}{Theorem}
+    Every Cauchy sequence of real numbers converges to a real number.
+  \end{block}
+
+  \medskip
+  Let \(F\colon\N\to\R\) be a Cauchy sequence.  The proof has three steps.
+  \begin{enumerate}
+    \item \alert{Approximate.}  Rational density provides, for each \(n\),
+      a rational \(x_n\) with
+      \(\bigl|F_n-k(x_n)\bigr|<k\bigl(\tfrac1{n+1}\bigr)\).
+    \item \alert{Transfer the Cauchy property.}  The rational sequence
+      \(x=(x_n)\) is Cauchy because \(F\) is; it is therefore a pre-real
+      and defines a real number \(X=[x]\).
+    \item \alert{Pass to the limit.}  We already know that
+      \(k(x_n)\to X\), and the approximation errors tend to zero; hence
+      \(F_n\to X\).
+  \end{enumerate}
+\end{frame}
 
 \begin{frame}{Approximating a real sequence term by term}
   Let \(F\colon\N\to\R\).  Rational density gives, for every \(n\), a rational
@@ -4086,13 +4165,18 @@
     x=\operatorname{approx}(F)\colon\N\longrightarrow\Q.
   \]
 
-  We want to prove that \(F_n\) converges to the real number given by the pre-real \(x_n\).
+  Any tolerances shrinking to zero would serve; the choice \(1/(n+1)\)
+  guarantees that the error at stage \(n\) tends to zero, so \(F_n\) and
+  \(k(x_n)\) will have the same limiting behaviour.
 
-  To use \(x\) as a pre-real, we must prove that it is a rational Cauchy
-  sequence whenever \(F\) is a real Cauchy sequence.
+  The goal is to prove that \(F_n\) converges to the real number
+  represented by \(x\).  To speak of that number at all, we must first
+  prove that \(x\) is a rational Cauchy sequence whenever \(F\) is a real
+  Cauchy sequence.
 \end{frame}
 
 \begin{frame}{The rational approximation is Cauchy}
+  \footnotesize
   Assume \(F\) is Cauchy, and fix a positive rational \(\varepsilon\).  Choose
   \(N\) such that
   \[
@@ -4105,8 +4189,17 @@
       \le\frac{k(\varepsilon)}3.
   \]
 
-  If \(p,q\ge\max(M,N)\), monotonicity of reciprocals and the approximation
-  bounds give
+  For \(p\ge M\), we have \(M+1\le p+1\); taking reciprocals reverses this
+  comparison, so the approximation bound gives
+  \[
+    |F_p-k(x_p)|
+      <k\!\left(\frac1{p+1}\right)
+      \le k\!\left(\frac1{M+1}\right)
+      \le\frac{k(\varepsilon)}3.
+  \]
+
+  If \(p,q\ge\max(M,N)\), splitting \(k(x_p)-k(x_q)\) into three
+  differences gives
   \begin{align*}
     |k(x_p)-k(x_q)|
       &\le |k(x_p)-F_p|+|F_p-F_q|+|F_q-k(x_q)|\\
@@ -4120,7 +4213,7 @@
 \end{frame}
 
 \begin{frame}{Every real Cauchy sequence converges}
-  \small
+  \footnotesize
   The rational approximation \(x\) is a pre-real, so let
   \[
     X=[x]\in\R.
@@ -4136,8 +4229,15 @@
   \[
     k\!\left(\frac1{M+1}\right)\le\frac{\varepsilon}{2}.
   \]
-  For \(n\ge\max(N,M)\), the approximation bound and monotonicity of
-  reciprocals give
+  For \(n\ge M\), reciprocals reverse the comparison \(M+1\le n+1\), so the
+  approximation bound gives
+  \[
+    |F_n-k(x_n)|
+      <k\!\left(\frac1{n+1}\right)
+      \le k\!\left(\frac1{M+1}\right)
+      \le\frac{\varepsilon}{2}.
+  \]
+  For \(n\ge\max(N,M)\), combining the two halves,
   \begin{align*}
     |F_n-X|
       &\le |F_n-k(x_n)|+|k(x_n)-X|\\
@@ -4147,32 +4247,60 @@
   Hence \(F_n\to X\).
 \end{frame}
 
+\begin{frame}{The real numbers are complete}
+  \begin{block}{Theorem}
+    Every Cauchy sequence of real numbers converges to a real number.
+  \end{block}
+
+  \medskip
+  Looking back at the three steps:
+  \begin{itemize}
+    \item rational density produced the approximations \(x_n\), with errors
+      controlled by \(1/(n+1)\);
+    \item the Cauchy hypothesis on \(F\) was used exactly once: to prove
+      that the rational approximation \(x\) is itself Cauchy;
+    \item the convergence \(k(x_n)\to X\) came directly from the
+      construction of \(\R\), and the vanishing errors transferred it to
+      \(F\).
+  \end{itemize}
+
+  \medskip
+  The construction has repaired the defect that motivated it: Cauchy
+  sequences that had no limit in \(\Q\) acquire one in \(\R\).
+\end{frame}
+
 \subsection{\texorpdfstring{A solution of \(x^2=2\)}{A solution of x squared equals 2}}
 
 \begin{frame}{Newton's rational approximations}
+  \small
   Define a rational sequence \(a=(a_n)\) recursively by
   \[
     a_0=1,
     \qquad
     a_{n+1}=\frac12\left(a_n+\frac2{a_n}\right).
   \]
+  The idea: if \(a_n^2\) falls short of \(2\), then \((2/a_n)^2\) overshoots
+  it, and vice versa, so the average of \(a_n\) and \(2/a_n\) should
+  approximate the desired number better than either.
 
   The sequence is well defined and positive.  Indeed, \(a_0>0\), and if
   \(a_n>0\), then both \(a_n\) and \(2/a_n\) are positive, so their average
-  is positive.
-
-  The first few terms are
+  is positive.  The first few terms are
   \[
     1,\qquad
     \frac32,\qquad
     \frac{17}{12},\qquad
     \frac{577}{408},\quad\ldots
   \]
-  They are rational, but they are designed so that their squares approach
-  \(2\).
+
+  \begin{alertblock}{The plan}
+    Show that the errors \(a_n^2-2\) tend to zero, deduce that \((a_n)\) is
+    Cauchy, and prove that the real number it represents squares to \(2\).
+  \end{alertblock}
 \end{frame}
 
 \begin{frame}{The exact error formula}
+  \small
   Define the rational error sequence \(e=(e_n)\) by
   \[
     e_n=a_n^2-2.
@@ -4186,7 +4314,9 @@
        =\frac{e_n^2}{4a_n^2}.
   \end{align*}
 
-  Therefore \(e_{n+1}\ge0\), so
+  The right side is a square divided by a positive number, so
+  \(e_{n+1}\ge0\) for every \(n\): from index \(1\) on, the approximations
+  overshoot,
   \[
     a_n^2\ge2\qquad(n\ge1).
   \]
@@ -4194,6 +4324,7 @@
 \end{frame}
 
 \begin{frame}{The errors tend to zero}
+  \small
   For \(n\ge1\), we have \(a_n^2\ge2\), so
   \[
     0\le e_{n+1}
@@ -4209,16 +4340,20 @@
     \boxed{0\le e_n\le\frac1{4\cdot32^{n-1}}\qquad(n\ge1).}
   \]
 
-  These upper bounds tend to zero.  Concretely, \(32^m\ge m+1\) by
-  induction, and the Archimedean property lets us choose \(m\) with
-  \(m+1\ge1/(4\varepsilon)\).  Then
-  \(1/(4\cdot32^m)\le\varepsilon\).
+  These upper bounds tend to zero.  Given a rational \(\varepsilon>0\), the
+  Archimedean property provides \(m\) with \(m+1\ge1/(4\varepsilon)\), and
+  \(32^m\ge m+1\) by induction, so
+  \[
+    e_n\le\frac1{4\cdot32^{m}}\le\frac1{4(m+1)}\le\varepsilon
+    \qquad(n\ge m+1).
+  \]
 \end{frame}
 
 \begin{frame}{The Newton sequence is Cauchy}
-  \small
-  Since \(a_n>0\) and \(a_n^2\ge2\), we have \(a_n\ge1\) for \(n\ge1\).
-  Therefore
+  \footnotesize
+  Since \(a_n>0\) and \(a_n^2\ge2\), we have \(a_n\ge1\) for \(n\ge1\):
+  a number below \(1\) would have square below \(1\).  Hence, from index
+  \(1\) on, the sequence decreases by a controlled amount:
   \[
     0\le a_n-a_{n+1}
       =\frac{a_n^2-2}{2a_n}
@@ -4226,40 +4361,69 @@
       \le\frac{e_n}{2}.
   \]
 
-  If \(q>p\ge1\), telescoping and the geometric error estimate give
+  If \(q>p\ge1\), the differences telescope, and iterating
+  \(e_{j+1}\le e_j/32\) bounds them by a geometric series:
   \begin{align*}
     |a_p-a_q|
-      &=\sum_{j=p}^{q-1}(a_j-a_{j+1})\\
-      &\le\frac12\sum_{j=p}^{q-1}e_j\\
+      &=\sum_{j=p}^{q-1}(a_j-a_{j+1})
+       \le\frac12\sum_{j=p}^{q-1}e_j\\
       &\le\frac{e_p}{2}\sum_{i=0}^{q-p-1}\frac1{32^i}
-       <\frac{16}{31}e_p<e_p.
+       <\frac{16}{31}\,e_p<e_p.
   \end{align*}
-  Since \(e_p\to0\), this proves that \((a_n)\) is Cauchy.
+
+  Given a rational \(\varepsilon>0\), choose \(N\ge1\) with
+  \(e_N\le\varepsilon\).  The errors decrease, so for \(q>p\ge N\),
+  \[
+    |a_p-a_q|<e_p\le e_N\le\varepsilon.
+  \]
+  Thus \((a_n)\) is Cauchy.
 \end{frame}
 
 \begin{frame}{A real number whose square is \(2\)}
+  \small
   The rational sequence \(a=(a_n)\) is a pre-real, so define
   \[
     \alpha=[a]\in\R.
   \]
   Since \(a_n\ge1\), the sequence has a fixed positive gap and \(\alpha>0\).
 
-  Pointwise multiplication gives
+  Pointwise multiplication gives \(\alpha^2=[(a_n^2)]\), so
   \[
     \alpha^2-2=[e].
   \]
-  Given \(\varepsilon>0\), the error estimate supplies \(N\) such that for
-  \(n\ge N\),
+  Given a rational \(\varepsilon>0\), the error estimate supplies
+  \(N\ge1\) such that for \(n\ge N\),
   \[
-    |e_n|=e_n\le\varepsilon.
+    |e_n|=e_n\le\varepsilon,
   \]
-  Thus \(e\sim0\), and therefore
+  the errors being nonnegative from index \(1\) on.  Thus \(e\sim0\), and
+  therefore
   \[
     \boxed{\alpha^2=2.}
   \]
 
   No rational has this property, so \(\alpha\) is a genuinely new number in
   the Cauchy completion of \(\Q\).
+\end{frame}
+
+\begin{frame}{The equation \(x^2+1=0\) in \(\R\)}
+  Suppose that \(x\in\R\).  Since \(\R\) is an ordered field, every square
+  is nonnegative:
+  \[
+    x^2\ge0.
+  \]
+  Adding \(1\) and using \(1>0\) gives
+  \[
+    x^2+1\ge1>0.
+  \]
+  In particular, \(x^2+1\) cannot equal \(0\).  Therefore
+  \[
+    \boxed{x^2+1=0\text{ has no solution in }\R.}
+  \]
+
+  Completeness fills the gaps detected by Cauchy sequences, but it does not
+  guarantee solutions to polynomial equations.  We therefore need to enlarge
+  \(\R\) once more.
 \end{frame}
 
 \subsection{What we have built}
@@ -4276,345 +4440,402 @@
     \item rational points are dense in \(\R\);
     \item every real Cauchy sequence converges;
     \item the Newton Cauchy sequence defines a positive
-      \(\alpha\in\R\) satisfying \(\alpha^2=2\).
+      \(\alpha\in\R\) satisfying \(\alpha^2=2\);
+    \item nevertheless, \(x^2+1=0\) has no solution in \(\R\).
   \end{itemize}
 \end{frame}
 
-\section{\texorpdfstring{The \(n\)-adic numbers}{The n-adic numbers}}
+\section{The complex numbers}
 
-\subsection{Compatible finite approximations}
+\subsection{Definition and field structure}
 
-\begin{frame}{Why introduce the \(n\)-adic numbers?}
-  Fix a natural number \(n\ge2\).  Instead of measuring an integer by its
-  size, record its remainders modulo higher and higher powers of \(n\):
+\begin{frame}{Why introduce the complex numbers?}
+  We have just proved that the equation
   \[
-    \cdots,\qquad a\bmod n^3,\qquad a\bmod n^2,
-    \qquad a\bmod n.
+    x^2+1=0
   \]
-  Each remainder contains more information than the one before it, and the
-  records agree when reduced to a smaller modulus.
+  has no solution in \(\R\).  Equivalently, no real number has square
+  \(-1\), even though \(\R\) is complete.
 
-  \begin{alertblock}{Construction}
-    An \(n\)-adic number will be a sequence of residues
-    \[
-      x_k\in\Zmod{n^k}\qquad(k\in\N)
-    \]
-    whose entries are compatible under reduction.  In other words, it is a
-    coherent choice of an integer modulo every power of \(n\).
-  \end{alertblock}
-
-  Passing to compatible records lets the finite precision grow without bound.
+  We enlarge \(\R\) by adjoining a symbol \(i\) satisfying
+  \[
+    \boxed{i^2=-1.}
+  \]
+  The resulting number system will
+  \begin{itemize}
+    \item be a field containing \(\R\);
+    \item carry an absolute value and be complete;
+    \item contain a root of every nonconstant polynomial with complex
+      coefficients.
+  \end{itemize}
 \end{frame}
 
-\begin{frame}{The tower of reductions}
-  Since \(n^k\mid n^{k+1}\), reduction of representatives defines a map
-  \[
-    \rho_k\colon\Zmod{n^{k+1}}\longrightarrow\Zmod{n^k},
-    \qquad
-    \rho_k([a]_{n^{k+1}})=[a]_{n^k}.
-  \]
-  It respects all the ring operations:
-  \begin{align*}
-    \rho_k(0)&=0, & \rho_k(1)&=1,\\
-    \rho_k(u+v)&=\rho_k(u)+\rho_k(v), &
-    \rho_k(uv)&=\rho_k(u)\rho_k(v).
-  \end{align*}
-  Thus every \(\rho_k\) is a ring homomorphism, and we obtain the tower
-  \[
-    \cdots\longrightarrow\Zmod{n^{k+1}}
-      \xrightarrow{\rho_k}\Zmod{n^k}
-      \longrightarrow\cdots\longrightarrow
-      \Zmod n\longrightarrow\Zmod1.
-  \]
-  The last ring is trivial because \(n^0=1\).
-\end{frame}
-
-\begin{frame}{Compatible sequences}
+\begin{frame}{Definition of the complex numbers}
   \begin{block}{Definition}
-    A sequence
+    The set of complex numbers is
     \[
-      x=(x_k)_{k\in\N},
-      \qquad x_k\in\Zmod{n^k},
+      \boxed{\C=\R^2.}
     \]
-    is \alert{compatible} if
+    We write the pair \((a,b)\) as \(a+bi\), where
     \[
-      \boxed{\rho_k(x_{k+1})=x_k\qquad\text{for every }k\in\N.}
-    \]
-  \end{block}
-
-  By composing adjacent reductions, compatibility also gives
-  \[
-    x_j\bmod n^k=x_k
-    \qquad\text{whenever }k\le j.
-  \]
-
-  So a later component determines every earlier one.  The sequence is not an
-  arbitrary product of residue classes: its entries must describe the same
-  number at every finite level of precision.
-\end{frame}
-
-\begin{frame}{Two examples of compatible sequences}
-  Every integer \(a\) gives a compatible sequence
-  \[
-    x_k=[a]_{n^k}.
-  \]
-  Indeed, reducing \([a]_{n^{k+1}}\) modulo \(n^k\) gives \([a]_{n^k}\).
-
-  For \(n=10\), the integer \(-1\) appears as
-  \[
-    0,\qquad 9,\qquad 99,\qquad 999,\qquad\ldots
-  \]
-  in the rings
-  \[
-    \Zmod1,\qquad\Zmod{10},\qquad\Zmod{10^2},
-    \qquad\Zmod{10^3},\qquad\ldots
-  \]
-  because \(10^k-1\) reduces to \(10^{k-1}-1\) at the preceding level.
-
-  The constant zero and constant one sequences are also compatible, where
-  ``constant'' means the corresponding residue class at each level.
-\end{frame}
-
-\subsection{The ring of compatible sequences}
-
-\begin{frame}{Compatibility survives arithmetic}
-  Let \(x\) and \(y\) be compatible.  Define operations componentwise:
-  \[
-    (x+y)_k=x_k+y_k,
-    \qquad
-    (xy)_k=x_ky_k,
-    \qquad
-    (-x)_k=-x_k.
-  \]
-
-  Since reduction is a ring homomorphism,
-  \begin{align*}
-    \rho_k((x+y)_{k+1})
-      &=\rho_k(x_{k+1})+\rho_k(y_{k+1})=x_k+y_k,\\
-    \rho_k((xy)_{k+1})
-      &=\rho_k(x_{k+1})\rho_k(y_{k+1})=x_ky_k,\\
-    \rho_k((-x)_{k+1})&=-\rho_k(x_{k+1})=-x_k.
-  \end{align*}
-  Hence compatible sequences are closed under addition, multiplication, and
-  negation; they also contain \(0\) and \(1\).
-\end{frame}
-
-\begin{frame}{Definition of the \(n\)-adic numbers}
-  \begin{block}{Definition}
-    The ring of \(n\)-adic numbers is
-    \[
-      \boxed{
-      \Adic n=
-      \left\{x\in\prod_{k\in\N}\Zmod{n^k}
-      \;\middle|\;
-      \rho_k(x_{k+1})=x_k\text{ for every }k\right\}.}
+      i=(0,1).
     \]
   \end{block}
 
-  The product is a commutative ring under componentwise operations.  The
-  closure properties just proved show that \(\Adic n\) is a subring.
-
-  \begin{alertblock}{Conclusion}
-    For every base \(n\), the compatible sequences form a commutative ring.
-    When \(p\) is prime, this is the usual ring of \(p\)-adic integers.
-  \end{alertblock}
-\end{frame}
-
-\begin{frame}{Finite-level projections}
-  For each \(k\), evaluation at the \(k\)-th component defines
+  Equality is componentwise:
   \[
-    \pi_k\colon\Adic n\longrightarrow\Zmod{n^k},
-    \qquad
-    \pi_k(x)=x_k.
-  \]
-  Because arithmetic is componentwise, \(\pi_k\) is a ring homomorphism:
-  \begin{align*}
-    \pi_k(0)&=0, & \pi_k(1)&=1,\\
-    \pi_k(x+y)&=\pi_k(x)+\pi_k(y), &
-    \pi_k(xy)&=\pi_k(x)\pi_k(y).
-  \end{align*}
-
-  Compatibility says that these projections commute with reduction:
-  \[
-    \begin{array}{ccc}
-      \Adic n & \xrightarrow{\pi_{k+1}} & \Zmod{n^{k+1}}\\
-      \big\Vert && \big\downarrow{\rho_k}\\
-      \Adic n & \xrightarrow{\pi_k} & \Zmod{n^k}.
-    \end{array}
-  \]
-\end{frame}
-
-\begin{frame}{Reducing through several levels}
-  Reduction is transitive.  If \(a\mid b\mid c\), then for
-  \(u\in\Zmod c\),
-  \[
-    \bigl(u\bmod b\bigr)\bmod a=u\bmod a.
-  \]
-  Applying this repeatedly to a compatible sequence gives the following
-  useful form of compatibility.
-
-  \begin{block}{All-level compatibility}
-    If \(x\in\Adic n\) and \(k\le j\), then
-    \[
-      \boxed{x_j\bmod n^k=x_k.}
-    \]
-  \end{block}
-
-  In particular, if \(x_j=0\), then \(x_k=0\) for every \(k\le j\).
-  Equivalently, once one component is nonzero, all later components are
-  nonzero.
-\end{frame}
-
-\subsection{Prime bases and valuations}
-
-\begin{frame}{The first nonzero component}
-  Let \(p\) be prime and take a nonzero \(x\in\Adic p\).
-
-  The component \(x_0\) lies in
-  \[
-    \Zmod{p^0}=\Zmod1,
-  \]
-  so \(x_0=0\).  On the other hand, some component must be nonzero: if every
-  \(x_k\) vanished, then the whole sequence would be zero.
-
-  Hence there is a least index
-  \[
-    m=\min\{k\in\N:x_k\ne0\}.
-  \]
-  It satisfies
-  \[
-    m\ge1,
-    \qquad
-    x_{m-1}=0,
-    \qquad
-    x_m\ne0.
-  \]
-  By all-level compatibility, \(x_j\ne0\) for every \(j\ge m\).
-\end{frame}
-
-\begin{frame}{Vanishing means divisibility}
-  For \(j\ge k\), let \(\widetilde{x_j}\) be the canonical representative
-  of \(x_j\), so
-  \[
-    0\le\widetilde{x_j}<p^j.
-  \]
-  All-level compatibility identifies \(x_k\) with the reduction of \(x_j\).
-  Therefore
-  \[
-    \boxed{x_k=0
-      \quad\Longleftrightarrow\quad
-      p^k\mid\widetilde{x_j}.}
-  \]
-
-  In particular, if \(m\) is the first nonzero index of \(x\) and \(j\ge m\),
-  then
-  \[
-    p^{m-1}\mid\widetilde{x_j},
-    \qquad
-    p^m\nmid\widetilde{x_j}.
-  \]
-  The representative \(\widetilde{x_j}\) is nonzero because \(x_j\ne0\).
-\end{frame}
-
-\begin{frame}{The valuation stabilizes}
-  For a nonzero natural number \(A\), let \(\nu_p(A)\) be the multiplicity
-  of the prime \(p\) in its factorization.  Then
-  \[
-    p^r\mid A
+    a+bi=c+di
     \quad\Longleftrightarrow\quad
-    r\le\nu_p(A).
+    a=c\ \text{ and }\ b=d.
+  \]
+  Thus every complex number has a unique \emph{real part} and
+  \emph{imaginary part},
+  \[
+    \operatorname{Re}(a+bi)=a,
+    \qquad
+    \operatorname{Im}(a+bi)=b.
+  \]
+  We identify \(a\in\R\) with \(a+0i\in\C\).
+\end{frame}
+
+\begin{frame}{Addition and multiplication}
+  For \(z=a+bi\) and \(w=c+di\), define
+  \begin{align*}
+    z+w&=(a+c)+(b+d)i,\\
+    zw&=(ac-bd)+(ad+bc)i.
+  \end{align*}
+  The multiplication formula is exactly what formal expansion and
+  \(i^2=-1\) predict:
+  \[
+    (a+bi)(c+di)
+      =ac+(ad+bc)i+bd\,i^2.
   \]
 
-  Let \(m\) be the first nonzero component of \(x\in\Adic p\).  For every
-  \(j\ge m\), the previous divisibility test gives
+  The distinguished elements and additive inverse are
   \[
-    m-1\le\nu_p(\widetilde{x_j})
-    \qquad\text{and}\qquad
-    \nu_p(\widetilde{x_j})<m.
+    0=0+0i,
+    \qquad
+    1=1+0i,
+    \qquad
+    -(a+bi)=(-a)+(-b)i.
+  \]
+  In particular,
+  \[
+    i^2=(0,1)(0,1)=(-1,0)=-1.
+  \]
+  Restricted to the pairs \((a,0)\), both operations reduce to real
+  addition and multiplication, so the identification of \(\R\) inside
+  \(\C\) preserves arithmetic.
+\end{frame}
+
+\begin{frame}{The commutative-ring laws}
+  Addition is componentwise, so its associativity and commutativity follow
+  immediately from the corresponding laws in \(\R\).
+
+  Substituting the multiplication formula shows that
+  \[
+    zw=wz,
+    \qquad
+    (zw)u=z(wu),
+    \qquad
+    z(w+u)=zw+zu,
+    \qquad
+    1z=z.
+  \]
+  Each real and imaginary component reduces to an identity in \(\R\).  For
+  example, writing \(u=e+fi\), both real components in the distributive law
+  are
+  \[
+    a(c+e)-b(d+f)=(ac-bd)+(ae-bf),
+  \]
+  and the imaginary components agree in the same way.
+
+  Also \(0\ne1\), because the pairs \((0,0)\) and \((1,0)\) are distinct.
+  Hence these operations make \(\C\) a nontrivial commutative ring.
+\end{frame}
+
+\begin{frame}{Conjugation and multiplicative inverses}
+  Define the \alert{complex conjugate} of \(z=a+bi\) by
+  \[
+    \overline z=a-bi.
+  \]
+  Direct calculation gives
+  \[
+    z\overline z=(a+bi)(a-bi)=a^2+b^2.
+  \]
+  If \(z\ne0\), then \(a\) and \(b\) are not both zero.  Since squares are
+  nonnegative in \(\R\), this implies
+  \[
+    a^2+b^2>0.
+  \]
+  We may therefore define
+  \[
+    \boxed{z^{-1}=\frac{\overline z}{z\overline z}
+      =\frac{a}{a^2+b^2}-\frac{b}{a^2+b^2}i.}
+  \]
+  Then \(zz^{-1}=1\).  Every nonzero element has an inverse, so
+  \begin{alertblock}{Conclusion}
+    The complex numbers form a field containing \(\R\).
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{The complex field cannot be ordered}
+  Suppose that a linear order made \(\C\) into an ordered field.  In any
+  ordered field every square is nonnegative.  Indeed, if \(x\ge0\), then
+  \(x^2\ge0\); if \(x<0\), then \(-x>0\) and \(x^2=(-x)^2\ge0\).
+
+  Applied to \(i\), this would give
+  \[
+    -1=i^2\ge0.
+  \]
+  Adding \(1\) to both sides yields \(0\ge1\).  But \(1=1^2\ge0\) and
+  \(1\ne0\), so \(0<1\) in any ordered field --- a contradiction.  Therefore
+  \[
+    \boxed{\text{no linear order makes \(\C\) an ordered field}.}
+  \]
+
+  This does not prevent us from measuring the \emph{size} of a complex
+  number; for that we use the real order.
+\end{frame}
+
+\subsection{Absolute value and completeness}
+
+\begin{frame}{The complex absolute value}
+  A standard consequence of the completeness of \(\R\) is that every
+  nonnegative real number \(r\) has a unique nonnegative square root
+  \(\sqrt r\); the Newton iteration used for \(x^2=2\) adapts to any
+  \(r\ge0\).
+
+  \begin{block}{Definition}
+    For \(z=a+bi\in\C\), define
+    \[
+      \boxed{|z|=\sqrt{a^2+b^2} \in\R.}
+    \]
+  \end{block}
+  Equivalently,
+  \[
+    |z|^2=z\overline z,
+    \qquad
+    |z|\ge0.
+  \]
+  It follows at once that
+  \[
+    |z|=0\Longleftrightarrow z=0,
+    \qquad
+    |\overline z|=|z|,
+    \qquad
+    |\operatorname{Re}z|\le|z|,
+    \qquad
+    |\operatorname{Im}z|\le|z|.
+  \]
+\end{frame}
+
+\begin{frame}{Multiplicativity of the absolute value}
+  Conjugation respects multiplication:
+  \[
+    \overline{zw}=\overline z\,\overline w.
   \]
   Hence
+  \begin{align*}
+    |zw|^2
+      &=(zw)\overline{(zw)}\\
+      &=z\overline z\,w\overline w\\
+      &=|z|^2|w|^2
+       =\bigl(|z|\,|w|\bigr)^2.
+  \end{align*}
+  Both \(|zw|\) and \(|z|\,|w|\) are nonnegative, so uniqueness of the
+  nonnegative square root gives
   \[
-    \boxed{\nu_p(\widetilde{x_j})=m-1\qquad(j\ge m).}
+    \boxed{|zw|=|z|\,|w|.}
   \]
-
-  Although the representatives change with \(j\), their \(p\)-adic
-  valuation is fixed by the first nonzero component.
-\end{frame}
-
-\subsection{No zero divisors in prime base}
-
-\begin{frame}{Two nonzero \(p\)-adic numbers}
-  Let \(a,b\in\Adic p\) be nonzero, and let \(m_a,m_b\) be their first
-  nonzero component indices.  Then
+  In particular, for \(z\ne0\),
   \[
-    m_a,m_b\ge1.
-  \]
-  Choose the common level
-  \[
-    \ell=m_a+m_b-1.
-  \]
-  Since \(m_a\le\ell\) and \(m_b\le\ell\), both components at level
-  \(\ell\) are nonzero.  The stabilized valuation formula gives
-  \[
-    \nu_p(\widetilde{a_\ell})=m_a-1,
-    \qquad
-    \nu_p(\widetilde{b_\ell})=m_b-1.
-  \]
-  By uniqueness of prime factorization,
-  \[
-    \nu_p(\widetilde{a_\ell}\widetilde{b_\ell})
-      =(m_a-1)+(m_b-1)=\ell-1.
+    |z^{-1}|=|z|^{-1}.
   \]
 \end{frame}
 
-\begin{frame}{The product cannot vanish}
-  Suppose for a contradiction that \(ab=0\) in \(\Adic p\).  Projecting to
-  level \(\ell\) gives
+\begin{frame}{The triangle inequality}
+  \small
+  For any complex number \(u\), the coordinate formula gives
   \[
-    a_\ell b_\ell=0
-    \qquad\text{in }\Zmod{p^\ell}.
+    \operatorname{Re}(u)\le|u|.
   \]
-  In terms of canonical representatives, this forces
+  Therefore
+  \begin{align*}
+    |z+w|^2
+      &=(z+w)(\overline z+\overline w)\\
+      &=|z|^2+2\operatorname{Re}(z\overline w)+|w|^2\\
+      &\le|z|^2+2|z\overline w|+|w|^2\\
+      &=|z|^2+2|z|\,|w|+|w|^2
+       =\bigl(|z|+|w|\bigr)^2,
+  \end{align*}
+  by multiplicativity: \(|z\overline w|=|z|\,|\overline w|=|z|\,|w|\).
+  Both sides before squaring are nonnegative, so
   \[
-    p^\ell\mid
-      \widetilde{a_\ell}\widetilde{b_\ell}.
+    \boxed{|z+w|\le|z|+|w|.}
   \]
-  Since both factors are nonzero, the prime-factorization criterion implies
+  Thus
   \[
-    \ell
-      \le\nu_p(\widetilde{a_\ell}\widetilde{b_\ell})
-      =\ell-1,
+    d(z,w)=|z-w|
   \]
-  which is impossible.
+  is a metric on \(\C\).
+\end{frame}
 
-  \begin{block}{No zero divisors}
-    If \(p\) is prime and \(ab=0\) in \(\Adic p\), then
+\begin{frame}{Convergent and Cauchy sequences}
+  Let \(z=(z_n)_{n\in\N}\) be a sequence in \(\C\).
+
+  \begin{block}{Convergence}
+    We say that \(z\) \alert{converges} to \(w\in\C\) if
     \[
-      \boxed{a=0\quad\text{or}\quad b=0.}
+      \forall\varepsilon>0\ \exists N\ \forall n\ge N,
+      \qquad |z_n-w|\le\varepsilon.
     \]
   \end{block}
+
+  \begin{block}{Cauchy condition}
+    We say that \(z\) is \alert{Cauchy} if
+    \[
+      \forall\varepsilon>0\ \exists N\ \forall p,q\ge N,
+      \qquad |z_p-z_q|\le\varepsilon.
+    \]
+  \end{block}
+  Here \(\varepsilon\) is always a positive real number.  The field \(\C\)
+  is called \alert{complete} if every complex Cauchy sequence converges in
+  \(\C\).
 \end{frame}
 
-\begin{frame}{The prime-base ring is nontrivial}
-  Consider the projection at level \(1\):
+\begin{frame}{Every convergent sequence is Cauchy}
+  Suppose \(z_n\to z\), and let \(\varepsilon>0\).  There is an
+  \(N\) such that
   \[
-    \pi_1\colon\Adic p\longrightarrow\Zmod p.
+    |z_n-z|\le\frac\varepsilon2
+    \qquad(n\ge N).
   \]
-  If \(0=1\) in \(\Adic p\), applying this ring homomorphism would give
+  If \(p,q\ge N\), the triangle inequality gives
+  \begin{align*}
+    |z_p-z_q|
+      &=|(z_p-z)+(z-z_q)|\\
+      &\le|z_p-z|+|z_q-z|\\
+      &\le\frac\varepsilon2+\frac\varepsilon2
+       =\varepsilon.
+  \end{align*}
+  Hence \((z_n)\) is Cauchy.
+
+  The converse is precisely the completeness question.  We now reduce it to
+  the completeness of the two real coordinates.
+\end{frame}
+
+\begin{frame}{A complex Cauchy sequence has Cauchy coordinates}
+  Let
   \[
-    0=1\qquad\text{in }\Zmod p.
+    z_n=a_n+b_ni
   \]
-  But \(p\) is prime, so \(\Zmod p\) is a field and its zero and one are
-  distinct.  Therefore
+  be Cauchy in \(\C\).  Since
   \[
-    \boxed{0\ne1\text{ in }\Adic p.}
+    |a_p-a_q|
+      \le |z_p-z_q|,
+    \qquad
+    |b_p-b_q|
+      \le |z_p-z_q|,
+  \]
+  the real sequences \((a_n)\) and \((b_n)\) are Cauchy.
+
+  The completeness of \(\R\) supplies real numbers \(a,b\) such that
+  \[
+    a_n\longrightarrow a,
+    \qquad
+    b_n\longrightarrow b.
+  \]
+  The only possible complex limit is therefore
+  \[
+    z=a+bi
+  \]
+  (uniqueness of limits is left as an exercise).
+  It remains to check convergence in the complex absolute value.
+\end{frame}
+
+\begin{frame}{The complex numbers are complete}
+  Fix \(\varepsilon>0\).  The two coordinate convergences give an \(N\) such
+  that, for \(n\ge N\),
+  \[
+    |a_n-a|\le\frac\varepsilon2,
+    \qquad
+    |b_n-b|\le\frac\varepsilon2.
+  \]
+  For such \(n\), the triangle inequality and \(|ri|=|r|\) give
+  \begin{align*}
+    |z_n-(a+bi)|
+      &=|(a_n-a)+(b_n-b)i|\\
+      &\le|a_n-a|+|(b_n-b)i|\\
+      &=|a_n-a|+|b_n-b|\\
+      &\le\varepsilon.
+  \end{align*}
+  Thus \(z_n\to a+bi\).
+
+  \begin{alertblock}{Completeness of \(\C\)}
+    Every complex Cauchy sequence converges: the completeness of \(\R\),
+    applied to the two coordinate sequences, proves the completeness of
+    \(\C\).
+  \end{alertblock}
+\end{frame}
+
+\subsection{Polynomial equations}
+
+\begin{frame}{The equations \(x^2+1=0\) and \(x^4+1=0\)}
+  By construction,
+  \[
+    i^2+1=0,
+  \]
+  so \(x^2+1=0\) has the solutions \(i\) and \(-i\) in \(\C\).
+
+  Set
+  \[
+    \alpha=\frac{1+i}{\sqrt2}.
+  \]
+  Since \((\sqrt2)^2=2\),
+  \[
+    \alpha^2
+      =\frac{(1+i)^2}{2}
+      =\frac{1+2i+i^2}{2}
+      =i,
+    \qquad
+    \alpha^4=i^2=-1.
+  \]
+  Hence \(\alpha^4+1=0\).  In fact the four displayed choices
+  \[
+    \boxed{\frac{1+i}{\sqrt2},\quad
+      \frac{-1-i}{\sqrt2},\quad
+      \frac{1-i}{\sqrt2},\quad
+      \frac{-1+i}{\sqrt2}}
+  \]
+  all satisfy \(x^4+1=0\).
+\end{frame}
+
+\begin{frame}{The Fundamental Theorem of Algebra}
+  Let
+  \[
+    P(z)=a_0+a_1z+\cdots+a_nz^n,
+    \qquad
+    a_n\ne0,
+    \quad n\ge1,
+  \]
+  be a nonconstant polynomial with complex coefficients.  The Fundamental
+  Theorem of Algebra states that there exists \(\zeta\in\C\) such that
+  \[
+    \boxed{P(\zeta)=0.}
   \]
 
-  Combining nontriviality with the absence of zero divisors proves:
-  \begin{alertblock}{Conclusion}
-    For every prime \(p\), the ring \(\Adic p\) of \(p\)-adic integers is an
-    integral domain.
-  \end{alertblock}
+  We state this theorem without proof.  Despite its name it is not a purely
+  algebraic fact: every proof uses the completeness of \(\R\) in an
+  essential way.
+
+  \begin{block}{Consequence}
+    Dividing out one root at a time, every polynomial of degree \(n\)
+    factors completely:
+    \[
+      P(z)=a_n(z-\zeta_1)\cdots(z-\zeta_n).
+    \]
+  \end{block}
 \end{frame}
 
 \subsection{What we have built}
@@ -4622,18 +4843,1066 @@
 \begin{frame}{Final picture}
   We proved that
   \begin{itemize}
-    \item an \(n\)-adic number is a compatible sequence of residues modulo
-      \(n^k\);
-    \item compatible sequences form a subring of
-      \(\prod_k\Zmod{n^k}\), hence a commutative ring;
-    \item projection to each finite level is a ring homomorphism, and every
-      later component reduces to every earlier one;
-    \item for prime \(p\), the first nonzero component determines the stable
-      \(p\)-adic valuation of all later representatives;
-    \item those valuations add under multiplication, so two nonzero elements
-      of \(\Adic p\) cannot have zero product;
-    \item consequently, \(\Adic p\) is a nontrivial integral domain.
+    \item \(\C=\R^2\), with multiplication determined by \(i^2=-1\), is a
+      field containing \(\R\);
+    \item no linear order can make \(\C\) an ordered field;
+    \item \(|a+bi|=\sqrt{a^2+b^2}\) is multiplicative and satisfies the
+      triangle inequality;
+    \item convergence and the Cauchy condition are measured by this absolute
+      value;
+    \item the completeness of \(\R\) in each coordinate proves that \(\C\)
+      is complete;
+    \item \(x^2+1=0\) and \(x^4+1=0\) have explicit complex solutions.
   \end{itemize}
+
+  We also stated, without proof, the Fundamental Theorem of Algebra: every
+  nonconstant complex polynomial has a root in \(\C\).
+\end{frame}
+
+\section{\texorpdfstring{The \(p\)-adic numbers}{The p-adic numbers}}
+
+\subsection{Infinite expansions to the left}
+
+\begin{frame}{How an infinite decimal expansion works}
+  A real number is reached through its truncations.  For example,
+  \[
+    538,\quad
+    538.2,\quad
+    538.21,\quad
+    538.219,\quad
+    538.2194,\quad\ldots
+    \quad\longrightarrow\quad
+    538.21947\ldots
+  \]
+  Each step glues one more digit onto the \emph{right}, changing the value
+  by at most \(9\cdot10^{-k}\) with \(k\) growing.  The truncations form a
+  Cauchy sequence precisely because high \emph{negative} powers of \(10\)
+  are small: digits far to the right barely matter.
+
+  \begin{alertblock}{The question behind this section}
+    That is a choice, not a necessity.  What if we instead decide that
+    digits far to the \emph{left} barely matter?
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Growing to the left instead}
+  Run the same process in the opposite direction:
+  \[
+    3.706,\quad
+    53.706,\quad
+    153.706,\quad
+    4153.706,\quad
+    84153.706,\quad\ldots
+    \quad\longrightarrow\quad
+    \ldots84153.706
+  \]
+  Each step glues one more digit onto the \emph{left}.  Writing \(a_j\)
+  for the digit multiplying \(10^j\), the step from the truncation
+  \(x_k\) to a later truncation \(x_\ell\) adds only digits in positions
+  \(k\le j<\ell\):
+  \[
+    x_\ell-x_k
+      =\sum_{j=k}^{\ell-1}a_j\,10^j
+      =10^k\cdot(\text{an integer}).
+  \]
+
+  \begin{alertblock}{The guiding idea}
+    In a distance where high \emph{positive} powers of \(10\) are small,
+    these truncations also form a Cauchy sequence, and the left-infinite
+    string denotes its limit.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Real versus \(n\)-adic expansions}
+  The same idea works in any base \(n\ge2\), with digits
+  \(0,1,\ldots,n-1\).
+
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.47\textwidth}
+      \begin{block}{Real expansions}
+        A real base-\(n\) expansion has only finitely many digits
+        \emph{left} of the point, but may continue forever to the right:
+        \[
+          \pm a_m\cdots a_1a_0
+          .a_{-1}a_{-2}a_{-3}\cdots
+        \]
+      \end{block}
+    \end{column}
+    \begin{column}{0.47\textwidth}
+      \begin{alertblock}{\(n\)-adic expansions}
+        An \(n\)-adic expansion may continue forever to the
+        \emph{left}, but has only finitely many digits to the right:
+        \[
+          \cdots a_3a_2a_1a_0
+          .a_{-1}\cdots a_{-s}
+        \]
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+
+  Each system allows infinitely many digits on exactly one side of the
+  point.  In base \(10\), compare
+  \[
+    \pm538.21947\ldots
+    \qquad\text{with}\qquad
+    \ldots84153.706.
+  \]
+  Note the missing \(\pm\) on the right: an \(n\)-adic expansion carries
+  no sign.  We will see shortly why none is needed.
+\end{frame}
+
+\begin{frame}{Arithmetic still runs from right to left}
+  In a left-infinite decimal expansion, addition is performed by the usual
+  digit algorithm:
+  \[
+    \begin{array}{r}
+      \ldots84153.706\\
+      {}+\ \ldots70926.153\\ \hline
+      \ldots55079.859
+    \end{array}
+  \]
+
+  Each requested final block of digits depends on only finitely many
+  positions to its right.  Equivalently, for every \(k\), ordinary arithmetic
+  determines the answer modulo \(10^k\).
+
+  Multiplication works in the same way: compute to any chosen finite
+  precision, and increasing the precision does not change the digits already
+  determined near the point.
+
+  \begin{block}{Digit strings behave better than real expansions}
+    Two left-infinite strings are equal exactly when \emph{all} their
+    digits agree; there is no analogue of \(0.999\ldots=1.000\ldots\).
+    Moreover, each digit of a sum or product depends on finitely many
+    digits of the inputs.  For real expansions this fails: in
+    \(0.333\ldots+0.666\ldots\), no finite number of digits decides
+    whether the integer part is \(0\) or \(1\).
+  \end{block}
+\end{frame}
+
+\begin{frame}{Negative numbers acquire infinite left tails}
+  \small
+  The finite decimal strings
+  \[
+    9,\qquad99,\qquad999,\qquad9999,\quad\ldots
+  \]
+  approach \(-1\) in the \(10\)-adic sense.  Indeed,
+  \[
+    (10^k-1)-(-1)=10^k,
+  \]
+  and a high power of \(10\) will have very small \(10\)-adic size.  Thus
+  \[
+    \boxed{-1=\ldots999999.}
+  \]
+  The digit algorithm agrees: adding \(1\) to \(\ldots999999\) launches a
+  carry that travels forever to the left, so
+  \(\ldots999999+1=\ldots000000=0\).
+
+  Similarly,
+  \[
+    83,\qquad983,\qquad9983,\qquad99983,\quad\ldots
+  \]
+  approach \(-17\), because \(10^k-17\) differs from \(-17\) by \(10^k\).
+  Hence
+  \[
+    \boxed{-17=\ldots999983.}
+  \]
+
+  This explains the missing sign: a left-infinite string needs no
+  \(\pm\), because negatives are already ordinary digit strings --- the
+  infinite tail of \(9\)s does the work of the minus sign.
+\end{frame}
+
+\begin{frame}{A rational left-infinite expansion}
+  \small
+  Solving \(7x=3\) modulo successive powers of \(10\) gives
+  \[
+    9,\quad29,\quad429,\quad1429,\quad71429,\quad571429,\quad8571429,\ldots
+  \]
+  For instance, \(7\cdot1429=10003\) and \(7\cdot8571429=60000003\): the
+  products agree with \(3\) in the final four and seven digits.
+
+  These compatible solutions converge \(10\)-adically to
+  \[
+    \boxed{\frac37=\ldots8571428571429.}
+  \]
+  The digit algorithm confirms this: multiplying \(\ldots8571429\) by \(7\)
+  right to left starts with \(7\cdot9=63\), and every later step produces a
+  multiple of \(10\), so the product is \(\ldots0000003=3\).
+
+  Dividing by \(10\) merely shifts the point:
+  \[
+    \frac3{70}=\ldots857142857142.9.
+  \]
+
+  Rational numbers therefore appear as eventually periodic left-infinite
+  expansions, just as they appear as eventually periodic real expansions to
+  the right.
+\end{frame}
+
+\begin{frame}{Which digits control distance?}
+  In the ordinary metric, agreement far to the \emph{right} of the point
+  means closeness.  For example,
+  \[
+    |8.21947\ldots-8.21929\ldots|
+      =0.00018\ldots<10^{-3}.
+  \]
+
+  In the \(10\)-adic metric, closeness means agreement in the fractional
+  digits and in many final digits \emph{left} of the point:
+  \[
+    \begin{aligned}
+      x&=\ldots84153.7,\\
+      y&=\ldots26153.7.
+    \end{aligned}
+    \qquad
+    x-y=\ldots58000.0.
+  \]
+  Their difference is divisible by \(10^3\) and by no higher power of
+  \(10\), so their \(10\)-adic distance will be
+  \[
+    \|x-y\|_{10}=10^{-3}.
+  \]
+
+  This is the bridge from digit strings to the formal definition: count the
+  powers of the base dividing a difference.
+\end{frame}
+
+\subsection{\texorpdfstring{The \(p\)-adic size}{The p-adic size}}
+
+\begin{frame}{From base \(10\) to a prime base}
+  The opening slides used base \(10\) because its digits are familiar.
+  For the formal theory we now fix a \alert{prime} \(p\) and work in base
+  \(p\).
+
+  \begin{block}{Why a prime base?}
+    Everything below can be generalized to an arbitrary base \(n\ge2\),
+    but the prime case is simpler: divisibility is governed by a single
+    prime, and the resulting size is \emph{multiplicative}.
+  \end{block}
+
+  From the arithmetic section: \(\nu_p(m)\) counts the factors \(p\) in
+  the unique prime factorization of \(m\), and
+  \[
+    \nu_p(m_1m_2)=\nu_p(m_1)+\nu_p(m_2).
+  \]
+  We set \(\nu_p(-m)=\nu_p(m)\), so that \(\nu_p\) is defined on all
+  nonzero integers.
+\end{frame}
+
+\begin{frame}{The \(p\)-adic order}
+  \begin{block}{Definition}
+    For \(x\in\Q^\times\), write \(x=a/b\) with nonzero integers \(a,b\)
+    and define the \alert{\(p\)-adic order}
+    \[
+      \boxed{\nu_p(x)=\nu_p(a)-\nu_p(b),
+      \qquad
+      \nu_p(0)=+\infty.}
+    \]
+  \end{block}
+
+  This is well defined: if \(a/b=c/d\), then \(ad=bc\), and additivity
+  gives
+  \[
+    \nu_p(a)+\nu_p(d)=\nu_p(b)+\nu_p(c),
+  \]
+  so the two differences agree.
+
+  Additivity persists on \(\Q^\times\):
+  \[
+    \nu_p(xy)=\nu_p(x)+\nu_p(y).
+  \]
+\end{frame}
+
+\begin{frame}{Order measures common final digits}
+  For a nonzero integer \(a\) and \(k\in\N\), directly from unique
+  factorization,
+  \[
+    \boxed{p^k\mid a\quad\Longleftrightarrow\quad \nu_p(a)\ge k.}
+  \]
+
+  In particular,
+  \[
+    \nu_p(p^k)=k,
+  \]
+  and \(\nu_p(a)\) is exactly the largest exponent \(k\) for which
+  \(p^k\mid a\).
+
+  If two integers have the same final \(k\) base-\(p\) digits, their
+  difference is divisible by \(p^k\), and hence has \(p\)-adic order at
+  least \(k\).
+\end{frame}
+
+\begin{frame}{The \(p\)-adic size}
+  \begin{block}{Definition}
+    For \(x\in\Q\), define
+    \[
+      \boxed{
+      \|x\|_p=
+      \begin{cases}
+        0,&x=0,\\
+        p^{-\nu_p(x)},&x\ne0.
+      \end{cases}}
+    \]
+  \end{block}
+
+  The digit interpretation becomes
+  \[
+    p^k\mid a
+    \quad\Longleftrightarrow\quad
+    \|a\|_p\le p^{-k}
+    \qquad(a\in\Z).
+  \]
+  For example, with \(p=5\),
+  \[
+    \|58000\|_5=5^{-3},
+    \qquad
+    \|5^k\|_5=5^{-k},
+    \qquad
+    \|58001\|_5=1.
+  \]
+
+  This confirms the intuition: adding base-\(p\) digits farther to the
+  left changes a truncation by a \(p\)-adically smaller amount.
+\end{frame}
+
+\begin{frame}{The order laws}
+  If \(p^m\) divides two integers, it divides their sum.  Writing
+  \(x=a/c\) and \(y=b/c\) over a common denominator, this yields
+  \[
+    \boxed{\nu_p(x+y)\ge\min\{\nu_p(x),\nu_p(y)\}.}
+  \]
+  Indeed \(\nu_p(a+b)\ge\min\{\nu_p(a),\nu_p(b)\}\); subtract
+  \(\nu_p(c)\) from both sides.
+
+  Multiplication is even better: additivity is an \emph{equality},
+  \[
+    \boxed{\nu_p(xy)=\nu_p(x)+\nu_p(y).}
+  \]
+\end{frame}
+
+\begin{frame}{Properties of the \(p\)-adic size}
+  Translating the order laws gives
+  \[
+    \|x\|_p\ge0,
+    \qquad
+    \|x\|_p=0\Longleftrightarrow x=0,
+    \qquad
+    \|-x\|_p=\|x\|_p,
+  \]
+  together with the ultrametric inequality
+  \[
+    \boxed{\|x+y\|_p
+      \le\max\{\|x\|_p,\|y\|_p\}}
+  \]
+  and multiplicativity
+  \[
+    \boxed{\|xy\|_p=\|x\|_p\,\|y\|_p.}
+  \]
+
+  The usual triangle and reverse-triangle estimates follow:
+  \[
+    \|x+y\|_p\le\|x\|_p+\|y\|_p,
+    \qquad
+    \bigl|\|x\|_p-\|y\|_p\bigr|\le\|x-y\|_p.
+  \]
+  In particular, \(\|x^{-1}\|_p=\|x\|_p^{-1}\) for \(x\ne0\).
+\end{frame}
+
+\begin{frame}{The dominant term and the metric}
+  The ultrametric inequality has a useful strengthening:
+  \[
+    \|x\|_p\ne\|y\|_p
+    \quad\Longrightarrow\quad
+    \boxed{\|x+y\|_p=\max\{\|x\|_p,\|y\|_p\}.}
+  \]
+  Indeed, suppose \(\nu_p(x)<\nu_p(y)\).  The sum law gives
+  \(\nu_p(x+y)\ge\nu_p(x)\); applied to \(x=(x+y)-y\), it gives
+  \(\nu_p(x)\ge\min\{\nu_p(x+y),\nu_p(y)\}\), and since
+  \(\nu_p(y)>\nu_p(x)\) this forces \(\nu_p(x+y)=\nu_p(x)\).
+
+  Define
+  \[
+    d_p(x,y)=\|x-y\|_p.
+  \]
+  Then \(d_p\) is an ultrametric:
+  \[
+    d_p(x,z)\le\max\{d_p(x,y),d_p(y,z)\}.
+  \]
+
+  We now complete \(\Q\) with respect to this distance.
+\end{frame}
+
+\subsection{Cauchy sequences and the quotient}
+
+\begin{frame}{\(p\)-adic Cauchy sequences}
+  Let \(x=(x_k)_{k\in\N}\) be a sequence of rational numbers.
+
+  \begin{block}{Definition}
+    The sequence \(x\) is \alert{\(p\)-adically Cauchy} if
+    \[
+      \forall\varepsilon>0\ \exists N\ \forall k,\ell\ge N,
+      \qquad \|x_k-x_\ell\|_p\le\varepsilon.
+    \]
+  \end{block}
+
+  Write
+  \[
+    \mathcal C_p
+      =\{x\colon\N\to\Q:x\text{ is \(p\)-adically Cauchy}\}.
+  \]
+
+  The truncations of a left-infinite base-\(p\) string lie in
+  \(\mathcal C_p\): if \(\ell>k\), their difference is divisible by
+  \(p^k\), so
+  \[
+    \|x_\ell-x_k\|_p\le p^{-k}\longrightarrow0.
+  \]
+\end{frame}
+
+\begin{frame}{Cauchy sequences are \(p\)-adically bounded}
+  Let \(x\in\mathcal C_p\).  Choose \(N\ge1\) such that
+  \[
+    \|x_k-x_\ell\|_p\le1
+    \qquad(k,\ell\ge N).
+  \]
+  For \(k\ge N\), the ultrametric inequality gives
+  \[
+    \|x_k\|_p
+      \le\max\{\|x_k-x_N\|_p,\|x_N\|_p\}
+      \le\max\{1,\|x_N\|_p\}.
+  \]
+
+  Taking the maximum of this bound and the finitely many initial sizes gives
+  \(B>0\) such that
+  \[
+    \boxed{\|x_k\|_p\le B\qquad\text{for every }k.}
+  \]
+
+  This is the same boundedness argument used for real Cauchy sequences, with
+  the ultrametric maximum replacing a sum.
+\end{frame}
+
+\begin{frame}{Equivalent Cauchy sequences}
+  \begin{block}{Definition}
+    For \(x,y\in\mathcal C_p\), define
+    \[
+      x\sim_p y
+      \quad\Longleftrightarrow\quad
+      \|x_k-y_k\|_p\longrightarrow0.
+    \]
+  \end{block}
+
+  Reflexivity and symmetry are immediate.  If \(x\sim_p y\) and
+  \(y\sim_p z\), then
+  \[
+    \|x_k-z_k\|_p
+      \le\max\{\|x_k-y_k\|_p,\|y_k-z_k\|_p\}
+      \longrightarrow0.
+  \]
+  Thus \(\sim_p\) is an equivalence relation.
+
+  Two digit strings represent the same class precisely when their
+  truncations eventually agree to every fixed finite precision.
+\end{frame}
+
+\begin{frame}{Definition of the \(p\)-adic numbers}
+  \begin{block}{Definition}
+    The set of \alert{\(p\)-adic numbers} is
+    \[
+      \boxed{\Q_p=\mathcal C_p/{\sim_p}.}
+    \]
+    We write \(X=[x]\) when \(X\) is represented by the \(p\)-adic Cauchy
+    sequence \(x\).
+  \end{block}
+
+  Define constants and arithmetic pointwise:
+  \[
+    (-x)_k=-x_k,
+    \qquad
+    (x+y)_k=x_k+y_k,
+    \qquad
+    (xy)_k=x_ky_k.
+  \]
+  Therefore
+  \[
+    -[x]=[-x],
+    \qquad
+    [x]+[y]=[x+y],
+    \qquad
+    [x][y]=[xy].
+  \]
+\end{frame}
+
+\begin{frame}{Why arithmetic descends to the quotient}
+  Negation and addition preserve Cauchy sequences directly.  For products,
+  boundedness and multiplicativity give
+  \begin{align*}
+    \|x_ky_k-x_\ell y_\ell\|_p
+      \le\max\bigl\{
+        &\|x_k\|_p\,\|y_k-y_\ell\|_p,\\
+        &\|y_\ell\|_p\,\|x_k-x_\ell\|_p
+        \bigr\}.
+  \end{align*}
+  The right side tends to zero as \(k,\ell\to\infty\).
+
+  The same estimate proves that equivalent representatives give equivalent
+  sums and products.  All commutative-ring laws hold pointwise before
+  passing to classes.
+
+  \begin{alertblock}{Conclusion}
+    For every prime \(p\), \(\Q_p\) is a commutative ring.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{The rational numbers inside \(\Q_p\)}
+  A rational number determines a constant Cauchy sequence.  Define
+  \[
+    \iota_p\colon\Q\longrightarrow\Q_p,
+    \qquad
+    \iota_p(r)=[(r,r,r,\ldots)].
+  \]
+  Pointwise arithmetic makes \(\iota_p\) a ring homomorphism.
+
+  If \(\iota_p(r)=\iota_p(s)\), then the constant sequence
+  \(\|r-s\|_p\) tends to zero.  If \(r\ne s\), choosing
+  \[
+    \varepsilon=\frac{\|r-s\|_p}{2}>0
+  \]
+  makes this impossible.  Therefore \(r=s\), and \(\iota_p\) is injective.
+
+  We may consequently regard \(\Q\) as a subring of \(\Q_p\).  In
+  particular, \(\Q_p\) is nontrivial.
+\end{frame}
+
+\subsection{\texorpdfstring{\(\Q_p\) is a field}{Qp is a field}}
+
+\begin{frame}{Reciprocals in \(\Q_p\)}
+  \small
+  Let \(X=[x]\ne0\).  Since \(x\not\sim_p0\), there is \(\delta>0\) with
+  \(\|x_k\|_p>\delta\) for infinitely many \(k\); choose \(N\) such that
+  \(\|x_k-x_\ell\|_p\le\delta\) for \(k,\ell\ge N\).  The dominant-term
+  lemma then freezes the size along the tail: there is \(c>\delta\) with
+  \[
+    \|x_k\|_p=c\qquad(k\ge N).
+  \]
+  In particular \(x_k\ne0\) there, and the tail \(y_k=x_k^{-1}\) is Cauchy,
+  because multiplicativity gives
+  \[
+    \|y_k-y_\ell\|_p
+      =\frac{\|x_k-x_\ell\|_p}{\|x_k\|_p\,\|x_\ell\|_p}
+      =\frac{\|x_k-x_\ell\|_p}{c^2}.
+  \]
+  The finitely many earlier values are irrelevant; since \(x_ky_k=1\) on
+  the tail, the class \(Y=[y]\) satisfies \(XY=1\).
+
+  \begin{alertblock}{Conclusion}
+    Every nonzero \(p\)-adic number is invertible:
+    \(\Q_p\) is a field containing \(\Q\).
+  \end{alertblock}
+\end{frame}
+
+\subsection{\texorpdfstring{The extended size and completeness}{The extended size and completeness}}
+
+\begin{frame}{Extending the \(p\)-adic size to \(\Q_p\)}
+  If \(x\in\mathcal C_p\), the reverse-triangle estimate gives
+  \[
+    \bigl|\|x_k\|_p-\|x_\ell\|_p\bigr|
+      \le\|x_k-x_\ell\|_p.
+  \]
+  Thus \((\|x_k\|_p)\) is a Cauchy sequence of real numbers and has a real
+  limit.
+
+  \begin{block}{Definition}
+    For \(X=[x]\in\Q_p\), define
+    \[
+      \boxed{\|X\|_p=\lim_{k\to\infty}\|x_k\|_p.}
+    \]
+  \end{block}
+
+  If \(x\sim_p y\), the same estimate shows that the two real limits agree.
+  Hence the definition is independent of the representative.
+\end{frame}
+
+\begin{frame}{Size and distance on \(\Q_p\)}
+  Passing the rational identities and inequalities to limits gives
+  \[
+    \|X\|_p\ge0,
+    \qquad
+    \|X\|_p=0\Longleftrightarrow X=0,
+    \qquad
+    \|-X\|_p=\|X\|_p,
+  \]
+  \[
+    \|XY\|_p=\|X\|_p\,\|Y\|_p,
+    \qquad
+    \|X+Y\|_p\le\max\{\|X\|_p,\|Y\|_p\}.
+  \]
+  In particular, multiplicativity survives the limit.
+
+  Thus
+  \[
+    d_p(X,Y)=\|X-Y\|_p
+  \]
+  is an ultrametric on \(\Q_p\).  The rational embedding preserves distance:
+  \[
+    \|\iota_p(r)-\iota_p(s)\|_p=\|r-s\|_p.
+  \]
+\end{frame}
+
+\begin{frame}{The rational numbers are dense in \(\Q_p\)}
+  Let \(X=[x]\in\Q_p\) and fix \(\varepsilon>0\).  Since \(x\) is Cauchy,
+  choose \(N\) such that
+  \[
+    \|x_k-x_N\|_p\le\frac{\varepsilon}{2}
+    \qquad(k\ge N).
+  \]
+  The difference \(X-\iota_p(x_N)\) is represented by
+  \((x_k-x_N)_k\), so
+  \[
+    \|X-\iota_p(x_N)\|_p
+      =\lim_{k\to\infty}\|x_k-x_N\|_p
+      \le\frac{\varepsilon}{2}<\varepsilon.
+  \]
+
+  Therefore
+  \[
+    \boxed{\forall X\in\Q_p\ \forall\varepsilon>0\
+      \exists q\in\Q,\qquad
+      \|X-\iota_p(q)\|_p<\varepsilon.}
+  \]
+\end{frame}
+
+\begin{frame}{Completeness: rational approximations}
+  Let \((X_k)_{k\in\N}\) be a Cauchy sequence in \(\Q_p\), Cauchy and
+  convergent sequences in \(\Q_p\) being defined as in \(\C\), with
+  \(\|\cdot\|_p\) in place of the absolute value.  By rational density,
+  choose \(q_k\in\Q\) such that
+  \[
+    \|X_k-\iota_p(q_k)\|_p<p^{-k}.
+  \]
+
+  The rational sequence \(q=(q_k)\) is \(p\)-adically Cauchy, because
+  \begin{align*}
+    \|q_k-q_\ell\|_p
+      \le\max\bigl\{
+        &\|\iota_p(q_k)-X_k\|_p,\,
+        \|X_k-X_\ell\|_p,\\
+        &\|X_\ell-\iota_p(q_\ell)\|_p
+        \bigr\},
+  \end{align*}
+  and all three terms tend to zero as \(k,\ell\to\infty\).
+
+  Hence \(q\in\mathcal C_p\), and it defines
+  \[
+    X=[q]\in\Q_p.
+  \]
+\end{frame}
+
+\begin{frame}{Every Cauchy sequence converges}
+  Because \(q=(q_k)\) is Cauchy,
+  \[
+    \iota_p(q_k)\longrightarrow[q]=X.
+  \]
+  Indeed, for every \(\varepsilon>0\), all sufficiently large \(k,\ell\)
+  satisfy
+  \[
+    \|q_\ell-q_k\|_p\le\frac{\varepsilon}{2},
+  \]
+  and therefore
+  \[
+    \|X-\iota_p(q_k)\|_p
+      =\lim_{\ell\to\infty}\|q_\ell-q_k\|_p
+      \le\frac{\varepsilon}{2}<\varepsilon.
+  \]
+
+  Finally,
+  \[
+    \|X_k-X\|_p
+      \le\max\bigl\{
+        \|X_k-\iota_p(q_k)\|_p,\,
+        \|\iota_p(q_k)-X\|_p
+        \bigr\}\longrightarrow0.
+  \]
+
+  \begin{alertblock}{Completeness of \(\Q_p\)}
+    Every \(p\)-adic Cauchy sequence in \(\Q_p\) converges in \(\Q_p\).
+  \end{alertblock}
+\end{frame}
+
+\subsection{\texorpdfstring{The \(p\)-adic integers}{The p-adic integers}}
+
+\begin{frame}{The closed unit ball}
+  The field \(\Q_p\) contains elements of arbitrarily large and small
+  \(p\)-adic size.  We single out those of size at most \(1\).
+
+  \begin{block}{Definition}
+    The \alert{\(p\)-adic integers} form the closed unit ball
+    \[
+      \boxed{\Z_p
+        =\{X\in\Q_p:\|X\|_p\le1\}
+        =\overline B(0,1).}
+    \]
+  \end{block}
+
+  For a rational number \(x\), this condition has the familiar description
+  \[
+    x\in\Q\cap\Z_p
+    \quad\Longleftrightarrow\quad
+    \nu_p(x)\ge0.
+  \]
+  Informally, these are the \(p\)-adic numbers whose base-\(p\) expansion
+  has no digits to the right of the point --- a picture made precise at
+  the end of this section.
+\end{frame}
+
+\begin{frame}{Why the unit ball is a ring}
+  Certainly \(0,1\in\Z_p\).  If \(X,Y\in\Z_p\), the ultrametric and
+  multiplicative laws give
+  \[
+    \|X-Y\|_p
+      \le\max\{\|X\|_p,\|Y\|_p\}\le1,
+    \qquad
+    \|XY\|_p=\|X\|_p\|Y\|_p\le1.
+  \]
+  Thus \(X-Y\) and \(XY\) again lie in \(\Z_p\).
+
+  \begin{alertblock}{Conclusion}
+    The unit ball \(\Z_p\) is a subring of the field \(\Q_p\).
+  \end{alertblock}
+
+  This is a genuinely \(p\)-adic phenomenon.  The real unit ball is
+  \[
+    \{x\in\R:|x|\le1\}=[-1,1],
+  \]
+  which is not a ring: it contains \(1\), but not \(1+1=2\).  The ordinary
+  triangle inequality only bounds a sum by \(2\); the ultrametric inequality
+  keeps it inside the same unit ball.
+\end{frame}
+
+\begin{frame}{The ordinary integers inside \(\Z_p\)}
+  If \(n\in\Z\) is nonzero, then \(\nu_p(n)\) counts the copies of \(p\)
+  in its prime factorization.  In particular,
+  \[
+    \nu_p(n)\ge0
+    \qquad\Longrightarrow\qquad
+    \|n\|_p=p^{-\nu_p(n)}\le1.
+  \]
+  The same is immediate for \(n=0\).  Hence the embedding
+  \(\Q\hookrightarrow\Q_p\) restricts to an inclusion
+  \[
+    \boxed{\Z\subseteq\Z_p.}
+  \]
+
+  There are two useful possibilities:
+  \[
+    \|n\|_p=
+    \begin{cases}
+      1,&p\nmid n,\\
+      p^{-k},&p^k\mid n\text{ but }p^{k+1}\nmid n.
+    \end{cases}
+  \]
+  Thus divisibility by higher powers of \(p\) makes an ordinary integer
+  progressively smaller inside \(\Z_p\).
+\end{frame}
+
+\begin{frame}{The rational numbers inside \(\Z_p\)}
+  \small
+  \begin{block}{Definition}
+    Let \(\Z_{(p)}\) be the set of fractions whose denominator is not
+    divisible by \(p\):
+    \[
+      \Z_{(p)}
+        =\left\{\frac ab\in\Q:a,b\in\Z,\ p\nmid b\right\}.
+    \]
+  \end{block}
+  A denominator not divisible by \(p\) has \(\nu_p(b)=0\).  For a nonzero
+  fraction of this form,
+  \[
+    \left\|\frac ab\right\|_p
+      =p^{-(\nu_p(a)-\nu_p(b))}
+      =p^{-\nu_p(a)}\le1,
+  \]
+  and so
+  \[
+    \boxed{\Z\subseteq\Z_{(p)}\subseteq\Z_p.}
+  \]
+
+  In fact these are exactly the rational points of the unit ball:
+  \[
+    \boxed{\Q\cap\Z_p=\Z_{(p)}.}
+  \]
+  Indeed, after a fraction is reduced, a \(p\) in its denominator would
+  give it negative \(p\)-adic order.
+\end{frame}
+
+\begin{frame}{The \(p\)-adic integers are complete}
+  The size map \(X\mapsto\|X\|_p\) is continuous: the reverse-triangle
+  estimate, valid in \(\Q_p\) exactly as in \(\Q\), gives
+  \[
+    \bigl|\|X\|_p-\|Y\|_p\bigr|\le\|X-Y\|_p.
+  \]
+  Consequently,
+  \[
+    \Z_p=\{X\in\Q_p:\|X\|_p\le1\}
+  \]
+  is a closed subspace of \(\Q_p\).
+
+  We already know that \(\Q_p\) is complete, and every closed subspace of a
+  complete metric space is complete.  Therefore
+  \[
+    \boxed{\Z_p\text{ is complete.}}
+  \]
+
+  Concretely, a Cauchy sequence of \(p\)-adic integers has a limit in
+  \(\Q_p\); closedness says that this limit still has size at most \(1\),
+  and hence still belongs to \(\Z_p\).
+\end{frame}
+
+\begin{frame}{The ordinary integers are dense in \(\Z_p\)}
+  \small
+  Let \(X\in\Z_p\) and \(N\in\N\).  Rational density in \(\Q_p\) gives
+  \(q\in\Q\) with \(\|X-q\|_p\le p^{-N}\), and the ultrametric inequality
+  keeps the approximation inside the unit ball:
+  \[
+    \|q\|_p\le\max\{\|X\|_p,\|q-X\|_p\}\le1.
+  \]
+  Hence \(q\in\Q\cap\Z_p=\Z_{(p)}\): write \(q=a/b\) with \(p\nmid b\).
+
+  Since \(b\) and \(p^N\) have no common prime factor, Bézout's identity
+  provides \(u,v\in\Z\) with \(ub+vp^N=1\).  The integer \(c=ua\) then
+  satisfies
+  \[
+    q-c=\frac{a(1-ub)}{b}=\frac{av}{b}\,p^N,
+    \qquad\text{so}\qquad
+    \|q-c\|_p\le p^{-N},
+  \]
+  and one more ultrametric step gives \(\|X-c\|_p\le p^{-N}\).
+
+  \begin{alertblock}{A non-Archimedean surprise}
+    The ordinary integers are dense in \(\Z_p\).  Compare with \(\R\),
+    where \(\Z\) is discrete and closed --- as far from dense as a set
+    can be.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{The canonical remainder at each level}
+  \small
+  Fix \(X\in\Z_p\) and \(N\ge1\).  Among all integer approximations of
+  \(X\) there is a preferred one: exactly one
+  \[
+    r_N\in\{0,1,\ldots,p^N-1\}
+    \qquad\text{satisfies}\qquad
+    \|X-r_N\|_p\le p^{-N}.
+  \]
+
+  \emph{Existence.}  Density gives \(c\in\Z\) with \(\|X-c\|_p\le p^{-N}\);
+  let \(r_N\) be the remainder of \(c\) upon division by \(p^N\).  The
+  discarded multiple of \(p^N\) has size at most \(p^{-N}\), so the
+  ultrametric inequality keeps \(r_N\) within \(p^{-N}\) of \(X\).
+
+  \emph{Uniqueness.}  Two candidates differ by an ordinary integer of size
+  at most \(p^{-N}\), that is, by a multiple of \(p^N\); both lying in
+  \(\{0,\ldots,p^N-1\}\), they are equal.
+
+  Uniqueness also forces \alert{compatibility}: the remainder of
+  \(r_{N+1}\) modulo \(p^N\) approximates \(X\) within \(p^{-N}\) as well,
+  whence
+  \[
+    \boxed{r_{N+1}\equiv r_N\pmod{p^N}.}
+  \]
+\end{frame}
+
+\begin{frame}{From remainders to digits}
+  Compatibility means \(r_{N+1}=r_N+a_Np^N\) for a unique digit
+  \(a_N\in\{0,1,\ldots,p-1\}\).  The canonical remainders therefore unfold
+  digit by digit,
+  \[
+    r_N=a_0+a_1p+a_2p^2+\cdots+a_{N-1}p^{N-1},
+  \]
+  and \(\|X-r_N\|_p\le p^{-N}\longrightarrow0\) says exactly that
+  \[
+    \boxed{X=a_0+a_1p+a_2p^2+a_3p^3+\cdots}
+  \]
+  as a limit of truncations.
+
+  \begin{alertblock}{The opening picture, now justified}
+    Every \(p\)-adic integer is a left-infinite base-\(p\) digit string
+    \(\ldots a_3a_2a_1a_0\), and distinct strings represent distinct
+    \(p\)-adic integers, by the uniqueness of the canonical remainders.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{A purely arithmetic description of \(\Z_p\)}
+  \small
+  Collect the canonical remainders of a \(p\)-adic integer into a single
+  sequence.  This yields a bijection, which we state without proof:
+  \[
+    \boxed{\Z_p\;\longleftrightarrow\;
+      \bigl\{(r_1,r_2,r_3,\ldots):
+        0\le r_n<p^n
+        \text{ and }
+        r_{n+1}\equiv r_n\pmod{p^n}\bigr\},}
+  \]
+  under which sums and products are computed \alert{level by level}: add
+  or multiply the \(n\)-th remainders, then reduce modulo \(p^n\).
+
+  \medskip
+  Why the two sides carry the same information:
+  \begin{itemize}
+    \item two \(p\)-adic integers with the same remainders at every level
+      lie within \(p^{-n}\) of each other for all \(n\), hence coincide;
+    \item any compatible sequence satisfies \(r_m\equiv r_n\pmod{p^n}\)
+      for \(m\ge n\), so it is \(p\)-adically Cauchy, and its limit is a
+      \(p\)-adic integer whose canonical remainders are the given ones;
+    \item level-by-level arithmetic is the digit algorithm of the opening
+      slides: any finite precision of a sum or product needs only
+      finitely many digits of the inputs.
+  \end{itemize}
+
+  \medskip
+  The right-hand side never mentions distances or Cauchy sequences: a
+  \(p\)-adic integer \emph{is} a coherent choice of remainder modulo
+  every power of \(p\).
+\end{frame}
+
+\subsection{\texorpdfstring{Beyond \(\Q_p\): towards \(\C_p\)}{Beyond Qp: towards Cp}}
+
+\begin{frame}{A polynomial without roots in \(\Q_p\)}
+  While constructing reciprocals we saw that for a nonzero \(X=[x]\) the
+  sizes \(\|x_k\|_p\) are eventually constant.  The limit defining
+  \(\|X\|_p\) is therefore one of these rational sizes:
+  \[
+    \boxed{\|X\|_p=p^{-m}\ \text{for some }m\in\Z\qquad(X\ne0).}
+  \]
+  The completion created no new sizes.
+
+  Now suppose \(Y\in\Q_p\) satisfied \(Y^2=p\).  Multiplicativity would
+  give
+  \[
+    \|Y\|_p^2=\|p\|_p=p^{-1},
+    \qquad\text{so}\qquad
+    \|Y\|_p=p^{-1/2},
+  \]
+  which is not an integer power of \(p\) --- impossible.
+
+  \begin{alertblock}{\(\Q_p\) is not algebraically closed}
+    The polynomial \(x^2-p\) has no root in \(\Q_p\).
+  \end{alertblock}
+
+  In \(\R\), the rootless polynomial \(x^2+1\) was detected by the
+  \emph{order}: squares are never negative.  In \(\Q_p\), the rootless
+  polynomial \(x^2-p\) is detected by the \emph{size}.
+\end{frame}
+
+\begin{frame}{Adjoining a square root is not enough}
+  \small
+  Nothing forbids enlarging \(\Q_p\) exactly as we enlarged \(\R\):
+  \[
+    \Q_p(\sqrt p)=\{A+B\sqrt p:A,B\in\Q_p\},
+  \]
+  with multiplication dictated by \((\sqrt p)^2=p\), just as \(i^2=-1\)
+  dictated multiplication in \(\C\).  The conjugate trick
+  \((A+B\sqrt p)(A-B\sqrt p)=A^2-pB^2\) produces reciprocals --- the
+  denominator is nonzero precisely because \(p\) has no square root ---
+  and the size extends, with \(\|\sqrt p\|_p=p^{-1/2}\).  Sizes in
+  \(\Q_p(\sqrt p)\) are now the powers of \(p^{1/2}\).
+
+  In the real case this single step was miraculous: adjoining one root of
+  one polynomial produced \(\C\), where \emph{every} nonconstant
+  polynomial has a root.
+
+  \begin{alertblock}{The miracle does not repeat}
+    The size argument simply moves one level up: a root of \(x^4-p\)
+    would have size \(p^{-1/4}\), which is not a power of \(p^{1/2}\).
+    So \(x^4-p\) has no root in \(\Q_p(\sqrt p)\).
+  \end{alertblock}
+
+  Adjoining a fourth root of \(p\) repairs this and breaks again at
+  \(x^8-p\): no finite number of adjunctions can finish the job.
+\end{frame}
+
+\begin{frame}{A gigantic extension}
+  Repairing every failure at once requires a leap.  One can construct a
+  field \(\overline{\Q_p}\supseteq\Q_p\), gathered from the roots of
+  \emph{all} polynomials, such that
+  \begin{itemize}
+    \item every nonconstant polynomial with coefficients in
+      \(\overline{\Q_p}\) has a root in \(\overline{\Q_p}\) --- the field
+      is \alert{algebraically closed};
+    \item the \(p\)-adic size extends to \(\overline{\Q_p}\), its nonzero
+      values now being \emph{all} powers \(p^r\) with \(r\) rational.
+  \end{itemize}
+  We state its existence without proof.
+
+  \begin{alertblock}{The price of the leap}
+    Unlike the two-dimensional step from \(\R\) to \(\C\), this extension
+    is infinite-dimensional over \(\Q_p\), and it is \alert{not
+    complete}: it contains Cauchy sequences with no limit.
+  \end{alertblock}
+
+  Algebra has been repaired, but analysis is broken again.
+\end{frame}
+
+\begin{frame}{Completing once more: the field \(\C_p\)}
+  We know exactly what to do with an incomplete field carrying a size:
+  run the Cauchy construction a third time, now on \(\overline{\Q_p}\).
+
+  \begin{block}{Definition}
+    The field of \alert{\(p\)-adic complex numbers} is the completion
+    \[
+      \boxed{\C_p
+        =\bigl(\text{Cauchy sequences in }\overline{\Q_p}\bigr)
+        \big/\bigl(\text{differences tending to }0\bigr).}
+    \]
+  \end{block}
+
+  One might fear an endless alternation --- complete, close
+  algebraically, complete again, \(\ldots\)  A remarkable theorem, which
+  we state without proof, says that the process stops here.
+
+  \begin{alertblock}{Theorem (without proof)}
+    \(\C_p\) is complete \emph{and} algebraically closed.
+  \end{alertblock}
+
+  Thus \(\C_p\) stands to \(\Q_p\) as \(\C\) stands to \(\R\): a
+  complete, algebraically closed field, ready for analysis.
+\end{frame}
+
+\subsection{What we have built}
+
+\begin{frame}{Final picture}
+  \small
+  For a fixed prime \(p\), we proved that
+  \begin{itemize}
+    \item left-infinite digit strings are understood through compatible
+      finite truncations;
+    \item \(\nu_p\) counts factors of \(p\), and \(\|x\|_p=p^{-\nu_p(x)}\)
+      measures \(p\)-adic size;
+    \item this size is ultrametric and multiplicative;
+    \item \(\Q_p\) is the quotient of rational \(p\)-adic Cauchy sequences
+      by differences tending to zero;
+    \item pointwise arithmetic makes \(\Q_p\) a complete field containing
+      a dense copy of \(\Q\);
+    \item its closed unit ball \(\Z_p\) is a complete subring containing
+      \(\Z_{(p)}\), and \(\Z\) is dense in \(\Z_p\);
+    \item a \(p\)-adic integer amounts to a compatible choice of
+      remainders modulo every power of \(p\) --- equivalently, a
+      left-infinite base-\(p\) digit string;
+    \item \(x^2-p\) has no root in \(\Q_p\): completeness does not make
+      the field algebraically closed.
+  \end{itemize}
+
+  \medskip
+  We also glimpsed, without proof, the remedy: adjoining the roots of all
+  polynomials and completing once more produces \(\C_p\), a field both
+  complete and algebraically closed --- the \(p\)-adic counterpart of
+  \(\C\).
+
+  \smallskip
+  The construction is the Cauchy completion of \(\Q\) a second time, with
+  the \(p\)-adic size in place of the usual absolute value: one method,
+  two different worlds of numbers.
 \end{frame}
 
 \end{document}
