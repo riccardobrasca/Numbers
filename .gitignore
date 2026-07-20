@@ -35,3 +35,10 @@
 *.synctex.gz
 *.synctex.gz(busy)
 *.pdfsync
+
+## Beamer
+# Keep only presentation sources and rendered PDFs under version control.
+/beamer/**
+!/beamer/**/
+!/beamer/**/*.tex
+!/beamer/**/*.pdf

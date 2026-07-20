@@ -23,6 +23,23 @@
 	"blueprint/src/*.cfg": true,
 	"blueprint/src/latexmkrc": true,
 	"blueprint/src/blueprint.sty": true,
+	"beamer/**/*.aux": true,
+	"beamer/**/*.bbl": true,
+	"beamer/**/*.bcf": true,
+	"beamer/**/*.blg": true,
+	"beamer/**/*.fdb_latexmk": true,
+	"beamer/**/*.fls": true,
+	"beamer/**/*.lof": true,
+	"beamer/**/*.log": true,
+	"beamer/**/*.lot": true,
+	"beamer/**/*.nav": true,
+	"beamer/**/*.out": true,
+	"beamer/**/*.run.xml": true,
+	"beamer/**/*.snm": true,
+	"beamer/**/*.synctex": true,
+	"beamer/**/*.synctex.gz": true,
+	"beamer/**/*.toc": true,
+	"beamer/**/*.vrb": true,
 	"html": true,
 	"lake-packages": true,
 	".gitignore": true,
@@ -53,5 +70,4 @@
     "editor.rulers" : [100],
     "lean4.infoview.showExpectedType": false
 }
-
 
