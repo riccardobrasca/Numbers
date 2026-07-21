@@ -5871,7 +5871,7 @@
 
 \subsection{What we have built}
 
-\begin{frame}{Final picture}
+\begin{frame}{The \(p\)-adic picture}
   \small
   For a fixed prime \(p\), we proved that
   \begin{itemize}
@@ -5898,6 +5898,383 @@
   polynomials and completing once more produces \(\C_p\), a field both
   complete and algebraically closed --- the \(p\)-adic counterpart of
   \(\C\).
+\end{frame}
+
+\section{\texorpdfstring{Arithmetic modulo \(n\)}{Arithmetic modulo n}}
+
+\begin{frame}{Congruence and residue classes}
+  Fix an integer \(n\ge2\).  Two integers are \alert{congruent modulo
+  \(n\)} when they have the same remainder after division by \(n\):
+  \[
+    a\equiv b\pmod n
+    \qquad\Longleftrightarrow\qquad
+    n\mid(a-b).
+  \]
+  This is an equivalence relation.  The equivalence class of \(a\) is
+  \[
+    \overline a
+      =a+n\Z
+      =\{a+kn:k\in\Z\}.
+  \]
+
+  \begin{block}{Definition}
+    The integers modulo \(n\) form the set of residue classes
+    \[
+      \boxed{\Z/n\Z
+        =\{\overline0,\overline1,\ldots,\overline{n-1}\}.}
+    \]
+  \end{block}
+
+  Thus \(\overline a=\overline b\) precisely when
+  \(a\equiv b\pmod n\).  Every class has infinitely many integer
+  representatives, but exactly one in \(\{0,\ldots,n-1\}\).
+\end{frame}
+
+\begin{frame}{Arithmetic modulo \(n\)}
+  \small
+  Define addition and multiplication using representatives:
+  \[
+    \overline a+\overline b=\overline{a+b},
+    \qquad
+    \overline a\,\overline b=\overline{ab}.
+  \]
+  These operations are \alert{well defined}.  Indeed, if
+  \(a\equiv a'\pmod n\) and \(b\equiv b'\pmod n\), then
+  \[
+    (a+b)-(a'+b')=(a-a')+(b-b')
+  \]
+  and
+  \[
+    ab-a'b'=a(b-b')+b'(a-a')
+  \]
+  are both divisible by \(n\).
+
+  \begin{alertblock}{The quotient ring}
+    With these operations, \(\Z/n\Z\) is a commutative ring:
+    \[
+      0=\overline0,\qquad 1=\overline1,
+      \qquad-\overline a=\overline{-a}.
+    \]
+    Its ring laws are inherited from \(\Z\).
+  \end{alertblock}
+
+  The map \(\pi_n\colon\Z\to\Z/n\Z\),
+  \(a\mapsto\overline a\), preserves addition, multiplication, \(0\),
+  and \(1\), and has kernel \(n\Z\).
+\end{frame}
+
+\begin{frame}{Which residue classes are invertible?}
+  \small
+  A class \(\overline a\) is a \alert{unit} if some \(\overline b\)
+  satisfies \(\overline a\,\overline b=\overline1\).
+
+  \begin{block}{Unit criterion}
+    \[
+      \boxed{\overline a\text{ is a unit in }\Z/n\Z
+        \quad\Longleftrightarrow\quad \gcd(a,n)=1.}
+    \]
+  \end{block}
+
+  If \(\gcd(a,n)=1\), B\'ezout's identity gives \(u,v\in\Z\) with
+  \[
+    au+nv=1.
+  \]
+  Reducing modulo \(n\) yields
+  \(\overline a\,\overline u=\overline1\), so
+  \(\overline u=\overline a^{-1}\).
+
+  Conversely, if \(\overline a\,\overline b=\overline1\), then
+  \(ab+kn=1\) for some \(k\in\Z\), and hence \(\gcd(a,n)=1\).
+
+  For example, in \(\Z/10\Z\) the units are
+  \[
+    \overline1,\ \overline3,\ \overline7,\ \overline9;
+    \qquad
+    \overline3^{-1}=\overline7.
+  \]
+\end{frame}
+
+\begin{frame}{Zero divisors}
+  \small
+  A nonzero element \(x\) of a commutative ring is a \alert{zero divisor}
+  if \(xy=0\) for some nonzero \(y\).
+
+  \begin{block}{Zero-divisor criterion}
+    For \(\overline a\ne\overline0\) in \(\Z/n\Z\),
+    \[
+      \boxed{\overline a\text{ is a zero divisor}
+        \quad\Longleftrightarrow\quad \gcd(a,n)>1.}
+    \]
+  \end{block}
+
+  If \(d=\gcd(a,n)>1\), then \(\overline{n/d}\ne\overline0\) and
+  \[
+    \overline a\,\overline{n/d}
+      =\overline{(a/d)n}=\overline0.
+  \]
+  Conversely, if \(\gcd(a,n)=1\) then \(\overline a\) is a unit, and no unit
+  is a zero divisor: multiplying \(\overline a\,\overline y=\overline0\) by
+  \(\overline a^{-1}\) forces \(\overline y=\overline0\).  Hence every class
+  is exactly one of \(\overline0\), a unit, or a zero divisor --- the
+  trichotomy governed by \(\gcd(a,n)\).
+
+  Consequently,
+  \[
+    \boxed{\Z/n\Z\text{ has a nonzero zero divisor}
+      \quad\Longleftrightarrow\quad n\text{ is composite}.}
+  \]
+  For instance, \(\overline2\,\overline3=\overline0\) in
+  \(\Z/6\Z\), although neither factor is zero.
+\end{frame}
+
+\begin{frame}{When is \(\Z/n\Z\) a field?}
+  \begin{block}{The prime-modulus theorem}
+    For \(n\ge2\), the following are equivalent:
+    \[
+      \boxed{
+      \begin{array}{c}
+        \Z/n\Z\text{ is a field}\\[0.2em]
+        \Updownarrow\\[-0.1em]
+        \Z/n\Z\text{ has no nonzero zero divisors}\\[0.2em]
+        \Updownarrow\\[-0.1em]
+        n\text{ is prime.}
+      \end{array}}
+    \]
+  \end{block}
+
+  If \(n=p\) is prime, every nonzero class has a representative
+  \(a\in\{1,\ldots,p-1\}\), so \(\gcd(a,p)=1\); the unit criterion says
+  that every nonzero class is invertible.
+
+  If \(n=rs\) is composite, with \(1<r,s<n\), then
+  \[
+    \overline r\ne\overline0,\qquad
+    \overline s\ne\overline0,\qquad
+    \overline r\,\overline s=\overline0.
+  \]
+  A field cannot contain such zero divisors.
+\end{frame}
+
+\begin{frame}{Prime modulus: \(\Z/p\Z\) and \(\mathbb F_p\)}
+  When \(p\) is prime, the field
+  \[
+    \Z/p\Z=\{\overline0,\overline1,\ldots,\overline{p-1}\}
+  \]
+  is usually denoted by
+  \[
+    \boxed{\mathbb F_p=\Z/p\Z.}
+  \]
+  It has \(p\) elements and characteristic \(p\):
+  \[
+    p\,\overline1=\overline0.
+  \]
+
+  \begin{alertblock}{A notation warning}
+    Some texts also write \(\Z_p\) for the finite field
+    \(\Z/p\Z\).  In these slides, \(\Z_p\) already means the ring of
+    \emph{\(p\)-adic integers}: it is infinite and has characteristic
+    \(0\).  We therefore use \(\mathbb F_p\) for the finite field.
+  \end{alertblock}
+
+  These objects are closely related, but they are not equal:
+  \[
+    \mathbb F_p=\Z/p\Z,
+    \qquad
+    \Z_p=\{X\in\Q_p:\|X\|_p\le1\}.
+  \]
+\end{frame}
+
+\begin{frame}{The group of units \((\Z/n\Z)^\times\)}
+  \small
+  Gather the invertible classes into a single set:
+  \[
+    \boxed{(\Z/n\Z)^\times
+      =\{\overline a:\gcd(a,n)=1\}.}
+  \]
+  A product of units is a unit, \(\overline1\) is a unit, and every unit has
+  an inverse.  Hence \((\Z/n\Z)^\times\) is a finite \alert{abelian group}
+  under multiplication.
+
+  \begin{block}{Euler's totient}
+    Its order is the number of residues coprime to \(n\):
+    \[
+      \varphi(n)
+        =\#\{a:1\le a\le n,\ \gcd(a,n)=1\}.
+    \]
+  \end{block}
+
+  For a prime power the multiples of \(p\) are the only residues to discard:
+  \[
+    \varphi(p)=p-1,
+    \qquad
+    \varphi(p^k)=p^k-p^{k-1}.
+  \]
+  For example \(\varphi(10)=4\), matching the four units
+  \(\overline1,\overline3,\overline7,\overline9\).
+\end{frame}
+
+\begin{frame}{Fermat's little theorem and Euler's theorem}
+  \small
+  Recall Lagrange's theorem: in a finite group of order \(N\), every element
+  \(x\) satisfies \(x^{N}=e\).  Applied to \((\Z/n\Z)^\times\), whose order is
+  \(\varphi(n)\), it reads as follows.
+
+  \begin{alertblock}{Euler's theorem}
+    If \(\gcd(a,n)=1\), then
+    \[
+      \boxed{a^{\varphi(n)}\equiv1\pmod n.}
+    \]
+  \end{alertblock}
+
+  For a prime modulus \(n=p\) we have \(\varphi(p)=p-1\), giving the special
+  case found by Fermat.
+
+  \begin{block}{Fermat's little theorem}
+    For \(p\) prime,
+    \[
+      a^{p-1}\equiv1\pmod p\ \ (\gcd(a,p)=1),
+      \qquad
+      a^{p}\equiv a\pmod p\ \ (\text{all }a).
+    \]
+  \end{block}
+
+  For instance \(3^{4}=81\equiv1\pmod{10}\) and
+  \(2^{10}=1024\equiv1\pmod{11}\).
+\end{frame}
+
+\begin{frame}{The Chinese remainder theorem}
+  \small
+  When the moduli are coprime, arithmetic modulo a product splits into
+  independent pieces.
+
+  \begin{block}{Theorem}
+    If \(\gcd(m,n)=1\), then reduction modulo \(m\) and modulo \(n\) gives a
+    ring isomorphism
+    \[
+      \boxed{\Z/mn\Z\;\xrightarrow{\ \sim\ }\;\Z/m\Z\times\Z/n\Z,
+        \qquad
+        \overline a\longmapsto(\overline a,\overline a).}
+    \]
+  \end{block}
+
+  The map is a ring homomorphism.  It is injective: if \(m\mid a\) and
+  \(n\mid a\) with \(\gcd(m,n)=1\), then \(mn\mid a\).  Both sides have
+  \(mn\) elements, so it is a bijection.
+
+  Equivalently, the simultaneous congruences
+  \[
+    x\equiv a\pmod m,
+    \qquad
+    x\equiv b\pmod n
+  \]
+  have a unique solution modulo \(mn\).  For example \(x\equiv2\pmod3\) and
+  \(x\equiv3\pmod5\) give \(x\equiv8\pmod{15}\).
+\end{frame}
+
+\begin{frame}{Splitting into prime powers}
+  \small
+  Comparing units on both sides of the isomorphism,
+  \[
+    (\Z/mn\Z)^\times\cong(\Z/m\Z)^\times\times(\Z/n\Z)^\times
+    \qquad(\gcd(m,n)=1),
+  \]
+  so Euler's totient is \alert{multiplicative}:
+  \(\varphi(mn)=\varphi(m)\varphi(n)\).
+
+  Iterating over the prime factorization
+  \(n=p_1^{e_1}\cdots p_k^{e_k}\) supplied by the fundamental theorem of
+  arithmetic,
+  \[
+    \boxed{\Z/n\Z\;\cong\;\prod_{i=1}^{k}\Z/p_i^{e_i}\Z,}
+    \qquad
+    \varphi(n)=n\prod_{p\mid n}\Bigl(1-\tfrac1p\Bigr).
+  \]
+
+  \begin{alertblock}{A bridge to the \(p\)-adics}
+    Every modulus thus dissolves into \alert{prime-power} moduli
+    \(\Z/p^{e}\Z\).  These are exactly the finite quotients of the
+    \(p\)-adic integers \(\Z_p\) --- the objects of the next two slides.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Reducing a \(p\)-adic integer modulo \(p^m\)}
+  \small
+  Recall that \(X\in\Z_p\) has a unique canonical remainder
+  \(r_m\in\{0,\ldots,p^m-1\}\) at every level.  Hence there is a
+  surjective ring map
+  \[
+    \operatorname{red}_m\colon\Z_p\longrightarrow\Z/p^m\Z,
+    \qquad
+    X\longmapsto\overline{r_m}.
+  \]
+  Its kernel consists of the \(p\)-adic integers divisible by \(p^m\):
+  \[
+    \ker(\operatorname{red}_m)=p^m\Z_p.
+  \]
+  The quotient therefore recovers the finite ring at level \(m\):
+  \[
+    \boxed{\Z_p/p^m\Z_p\cong\Z/p^m\Z.}
+  \]
+
+  At the first level we obtain the \alert{residue field}
+  \[
+    \boxed{\Z_p/p\Z_p\cong\Z/p\Z=\mathbb F_p.}
+  \]
+  Thus \(\mathbb F_p\) is a quotient of \(\Z_p\), not a subring of it.
+  Indeed, \(\Z_p\) has characteristic \(0\), whereas \(\mathbb F_p\)
+  has characteristic \(p\).
+\end{frame}
+
+\begin{frame}{All finite levels determine \(\Z_p\)}
+  Reduction gives a tower of finite rings
+  \[
+    \cdots\longrightarrow\Z/p^3\Z
+      \longrightarrow\Z/p^2\Z
+      \longrightarrow\Z/p\Z,
+  \]
+  where every arrow reduces a residue class to the preceding level.
+
+  A \(p\)-adic integer determines one class \(x_m\in\Z/p^m\Z\) for
+  every \(m\), and the classes are compatible:
+  \[
+    x_{m+1}\equiv x_m\pmod{p^m}.
+  \]
+  Conversely, every such compatible family determines one \(p\)-adic
+  integer.  In compact notation,
+  \[
+    \boxed{\Z_p\cong\varprojlim_m\Z/p^m\Z.}
+  \]
+
+  \begin{alertblock}{A useful contrast}
+    The ring \(\Z_p\) has no nonzero zero divisors because it sits inside
+    the field \(\Q_p\), but it is not a field: \(p\) has no inverse in
+    \(\Z_p\).  Its finite quotients \(\Z/p^m\Z\) have zero divisors as
+    soon as \(m\ge2\).
+  \end{alertblock}
+\end{frame}
+
+\subsection{What we have built}
+
+\begin{frame}{Arithmetic modulo \(n\)}
+  \small
+  Fixing \(n\ge2\), we found:
+  \begin{itemize}
+    \item congruence \(a\equiv b\pmod n\) is an equivalence relation, and its
+      classes form the quotient ring \(\Z/n\Z\), with all ring laws inherited
+      from \(\Z\);
+    \item a class \(\overline a\) is a unit exactly when \(\gcd(a,n)=1\), by
+      B\'ezout, and a nonzero zero divisor otherwise;
+    \item the units form a group \((\Z/n\Z)^\times\) of order \(\varphi(n)\),
+      yielding Euler's theorem and, for a prime modulus, Fermat's little
+      theorem;
+    \item \(\Z/n\Z\) is a field if and only if \(n\) is prime, giving the
+      finite fields \(\mathbb F_p\);
+    \item the Chinese remainder theorem splits \(\Z/n\Z\) into its
+      prime-power parts \(\Z/p^{e}\Z\);
+    \item these prime-power rings are the finite quotients of \(\Z_p\), and
+      \(\Z_p\cong\varprojlim_m\Z/p^m\Z\) reassembles them --- closing the
+      circle with the \(p\)-adic numbers.
+  \end{itemize}
 \end{frame}
 
 \end{document}
